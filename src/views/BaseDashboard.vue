@@ -9,6 +9,8 @@
           <v-col cols="3" class="bg-black">
             <UserSidebar></UserSidebar>
           </v-col>
+          <!-- This will eventually be a v-slot that will change based on the LoginUser's roles -->
+          <!-- For now, just add whatever dashboard is being worked on and comment out the other -->
           <v-col cols="8">
             <StudentHomeDashboard></StudentHomeDashboard>
           </v-col>

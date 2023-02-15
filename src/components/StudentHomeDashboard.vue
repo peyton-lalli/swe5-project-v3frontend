@@ -1,4 +1,5 @@
 <template>
+  <!-- The bg-colors can be removed, I just have them here to be able to make sure the containers were correct  -->
   <v-row class="fill-height">
     <v-col cols="8" class="bg-yellow">
       <v-row class="fill-height">

@@ -1,7 +1,7 @@
 import axios from "axios";
 import Utils from "@/config/utils.js";
 import AuthServices from "./authServices.js";
-import Router from "../router.js";
+import Router from "../router";
 
 var baseurl = "";
 if (process.env.NODE_ENV === "development") {

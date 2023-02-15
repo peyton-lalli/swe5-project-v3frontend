@@ -3,20 +3,14 @@
     <v-row class="fill-height">
       <v-col>
         <v-row class="fill-height">
-          <v-col cols="1" class="bg-white"></v-col>
+          <v-col cols="1" class="bg-white">
+            <MenuSidebar></MenuSidebar>
+          </v-col>
           <v-col cols="3" class="bg-black">
             <UserSidebar></UserSidebar>
           </v-col>
           <v-col cols="8">
-            <v-row class="fill-height">
-              <v-col cols="8" class="bg-yellow">
-                <v-row class="fill-height">
-                  <v-col cols="12" class="bg-blue"> </v-col>
-                  <v-col cols="12" class="bg-purple"> </v-col>
-                </v-row>
-              </v-col>
-              <v-col cols="4" class="bg-red"> </v-col>
-            </v-row>
+            <StudentHomeDashboard></StudentHomeDashboard>
           </v-col>
         </v-row>
       </v-col>
@@ -25,11 +19,12 @@
 </template>
 
 <script>
-  // import NotificationItem from "./NotificationItem.vue";
+  import MenuSidebar from "../components/MenuSidebar.vue";
   import UserSidebar from "../components/ UserSidebar.vue";
+  import StudentHomeDashboard from "../components/StudentHomeDashboard.vue";
   export default {
-    name: "StudentHomeDashboard",
-    components: { UserSidebar },
+    name: "BaseDashboard",
+    components: { MenuSidebar, UserSidebar, StudentHomeDashboard },
     data() {},
   };
 </script>

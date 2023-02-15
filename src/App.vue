@@ -2,7 +2,7 @@
   <v-app>
     <v-main>
       <!-- <StudentHomeDashboard></StudentHomeDashboard> -->
-      <router-view :key="$route.fullPath"></router-view>
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>

@@ -1,23 +1,22 @@
-import Vue from "vue";
-import Router from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
+import BaseDashboard from "../views/BaseDashboard.vue";
 
-import StudentHomeDashboard from "./views/StudentHomeDashboard";
+const routes = [
+  {
+    path: "/",
+    component: BaseDashboard,
+    name: "baseDashboard",
+  },
+];
 
-Vue.use(Router);
-
-const router = new Router({
+const router = createRouter({
   mode: "hash",
   linkExactActiveClass: "active",
   base:
     //    process.env.NODE_ENV === 'development'? "/" : "/schedule-t3/", - for AWS
     process.env.NODE_ENV === "development" ? "/" : "/",
-  routes: [
-    {
-      path: "/",
-      component: StudentHomeDashboard,
-      name: "studentHomeDashboard",
-    },
-  ],
+  history: createWebHistory(),
+  routes,
 });
 
 router.beforeEach((to, from, next) => {

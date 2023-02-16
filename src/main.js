@@ -50,7 +50,7 @@ library.add(faStarRegular);
 library.add(faStarSolid);
 library.add(faCalendarSolid);
 
-import router from "./router";
+import router from "./router/index";
 
 loadFonts();
 

@@ -8,9 +8,9 @@
         alt="OC Logo"
         class="shrink mr-4"
         contain
-        src="../assets/OC_LOGO_BLUE.svg"
+        src="/OC_LOGO_BLUE.svg"
         transition="scale-transition"
-        fill="#627985"
+        fill="#558CCB"
       />
       <v-toolbar-title class="font-weight-bold darkBlue--text"
         >MUSIC PERFORMANCE MANAGEMENT SYSTEM</v-toolbar-title
@@ -23,11 +23,11 @@
 </template>
 
 <script>
-import AuthServices from "@/services/authServices";
-import Utils from "@/config/utils.js";
+import AuthServices from "../services/AuthServices.js";
+import Utils from "../config/Utils.js";
 
 export default {
-  name: "login_signup_social",
+  name: "LoginPage",
   data() {
     return {
       fName: "",
@@ -42,16 +42,16 @@ export default {
   },
   methods: {
     async loginWithGoogle() {
-      global.handleCredentialResponse = this.handleCredentialResponse;
-      const client = process.env.VUE_APP_CLIENT_ID;
+      window.handleCredentialResponse = this.handleCredentialResponse;
+      const client = import.meta.env.VITE_APP_CLIENT_ID;
       console.log(client);
-      global.google.accounts.id.initialize({
+      window.google.accounts.id.initialize({
         client_id: client,
         cancel_on_tap_outside: false,
         auto_select: true,
-        callback: global.handleCredentialResponse,
+        callback: window.handleCredentialResponse,
       });
-      global.google.accounts.id.renderButton(
+      window.google.accounts.id.renderButton(
         document.getElementById("parent_id"),
         {
           type: "standard",
@@ -73,7 +73,7 @@ export default {
           Utils.setStore("user", this.user);
           this.fName = this.user.fName;
           this.lName = this.user.lName;
-          this.$router.push({ name: "studentHomeDashboard" });
+          this.$router.push({ name: "baseDashboard" });
         })
         .catch((error) => {
           console.log("error", error);

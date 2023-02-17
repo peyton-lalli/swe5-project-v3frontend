@@ -1,9 +1,8 @@
 <template>
-  <!-- The bg-colors can be removed, I just have them here to be able to make sure the containers were correct  -->
   <v-container fluid class="studentHomeMainGrid">
     <v-container fluid class="eventsRepPane studentHomeLeftGrid noPadMarg">
-      <v-card class="mainBlur rounded-lg"> </v-card>
-      <v-card class="mainBlur rounded-lg"> </v-card>
+      <v-card class="eventsPane mainBlur rounded-lg"> </v-card>
+      <v-card class="repertoirePane mainBlur rounded-lg"> </v-card>
     </v-container>
     <v-card class="critiquesPane mainBlur rounded-lg"> </v-card>
   </v-container>
@@ -39,5 +38,21 @@
       "eventsPane"
       "repertoirePane";
     grid-gap: 1.5rem;
+  }
+
+  .eventsRepPane {
+    grid-area: eventsRepPane;
+  }
+
+  .critiquesPane {
+    grid-area: critiquesPane;
+  }
+
+  .eventsPane {
+    grid-area: eventsPane;
+  }
+
+  .repertoirePane {
+    grid-area: repertoirePane;
   }
 </style>

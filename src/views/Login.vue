@@ -4,23 +4,38 @@
     <br /><br />
     <br /><br />
     <v-row justify="center">
-      <v-img
-        alt="OC Logo"
-        class="shrink mr-4"
-        contain
-        src="/OC_LOGO_BLUE.svg"
-        transition="scale-transition"
-        fill="#558CCB"
-      />
-      <v-toolbar-title class="font-weight-bold darkBlue--text"
-        >MUSIC PERFORMANCE MANAGEMENT SYSTEM</v-toolbar-title
-      >
-    </v-row>
-    <v-row justify="center">
-      <div display="flex" id="parent_id"></div>
+      <table>
+        <tr>
+          <th>
+            <v-toolbar-title class="font-weight-bold mediumBlue--text"
+              ><v-img
+                alt="OC Logo"
+                width="400"
+                src="/OC_LOGO_BLUE.svg"
+              /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MUSIC
+              DEPARTMENT</v-toolbar-title
+            >
+            <br />
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <div id="parent_id"></div>
+          </td>
+        </tr>
+      </table>
     </v-row>
   </div>
 </template>
+
+<style>
+table {
+  padding-right: 25px;
+}
+td {
+  padding-left: 105px;
+}
+</style>
 
 <script>
 import AuthServices from "../services/AuthServices.js";
@@ -55,10 +70,12 @@ export default {
         document.getElementById("parent_id"),
         {
           type: "standard",
-          theme: "outline",
+          theme: "filled_black",
           size: "large",
-          text: "signup_with",
-          width: 400,
+          shape: "pill",
+          logo_alignment: "left",
+          text: "signin_with",
+          width: 230,
         }
       );
     },

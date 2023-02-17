@@ -1,22 +1,8 @@
 <template>
-  <v-container fluid class="fill-height">
-    <v-row class="fill-height">
-      <v-col>
-        <v-row class="fill-height">
-          <v-col cols="1" class="bg-white">
-            <MenuSidebar></MenuSidebar>
-          </v-col>
-          <v-col cols="3" class="bg-black">
-            <UserSidebar></UserSidebar>
-          </v-col>
-          <!-- This will eventually be a v-slot that will change based on the LoginUser's roles -->
-          <!-- For now, just add whatever dashboard is being worked on and comment out the other -->
-          <v-col cols="8">
-            <StudentHomeDashboard></StudentHomeDashboard>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+  <v-container fluid class="baseDashboardGrid pl-0">
+    <MenuSidebar class="menuBarPane"></MenuSidebar>
+    <UserSidebar class="userSidebarPane"></UserSidebar>
+    <StudentHomeDashboard class="dashboardSlot"></StudentHomeDashboard>
   </v-container>
 </template>
 
@@ -32,8 +18,24 @@
 </script>
 
 <style scoped>
-  * {
-    padding: 0 !important;
-    margin: 0 !important;
+  .baseDashboardGrid {
+    /* padding: 15px !important; */
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 8fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "menuBarPane userSidebarPane dashboardSlot";
+    grid-gap: 1.5rem;
+  }
+
+  .menuBarPane {
+    grid-area: menuBarPane;
+  }
+
+  .userSidebarPane {
+    grid-area: userSidebarPane;
+  }
+
+  .dashboardSlot {
+    grid-area: dashboardSlot;
   }
 </style>

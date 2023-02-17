@@ -6,7 +6,7 @@
 }
 
 * {
-  font-family: inter, sans-serif;
+  font-family: Inter, sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -18,7 +18,7 @@
       rgba(227, 238, 247, 0.41) 112.78%,
       rgba(184, 211, 234, 0.41) 125.53%
     ),
-    #ffffff;
+    #ffffff !important;
 }
 
 .eventsGradient {
@@ -42,6 +42,10 @@
 /* This is the main blur used on all items that have it. Use this inplace of Vuetify bluring */
 .mainBlur {
   box-shadow: 8px 10px 34px rgb(0 0 0 / 0.19) !important;
+}
+
+.lighterBlur {
+  box-shadow: 8px 10px 34px 2px rgba(0, 0, 0, 0.1) !important;
 }
 
 .rightBorderCurve {

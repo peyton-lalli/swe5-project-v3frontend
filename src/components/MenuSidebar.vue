@@ -1,9 +1,7 @@
 <template>
-  <v-row class="fill-height">
-    <v-col cols="12">
-      <!-- Add MenuSidebar code here -->
-    </v-col>
-  </v-row>
+  <v-container fluid class="menuBarGrid">
+    <v-card class="menuBarPane rounded-s-0 rounded-e-lg mainBlur"></v-card>
+  </v-container>
 </template>
 
 <script>
@@ -17,3 +15,19 @@
     },
   };
 </script>
+
+<style scoped>
+  .menuBarGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "menuBarPane";
+    grid-gap: 1.5rem;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .menuBarPane {
+    grid-area: menuBarPane;
+  }
+</style>

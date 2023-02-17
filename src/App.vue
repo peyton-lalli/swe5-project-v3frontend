@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-main>
+    <v-main class="appGrid">
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -13,3 +13,11 @@
     data: () => ({}),
   };
 </script>
+
+<style>
+  .appGrid {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+  }
+</style>

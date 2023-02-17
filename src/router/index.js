@@ -13,7 +13,7 @@ const router = createRouter({
   mode: "hash",
   linkExactActiveClass: "active",
   base:
-    //    process.env.NODE_ENV === 'development'? "/" : "/schedule-t3/", - for AWS
+    //    process.env.NODE_ENV === 'development'? "/" : "/performance/t3/", - for AWS
     process.env.NODE_ENV === "development" ? "/" : "/",
   history: createWebHistory(),
   routes,

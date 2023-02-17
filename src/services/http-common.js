@@ -1,11 +1,11 @@
 import axios from "axios";
-import Utils from "@/config/utils.js";
+import Utils from "../config/utils.js";
 import AuthServices from "./authServices.js";
 import Router from "../router";
 
 var baseurl = "";
 if (process.env.NODE_ENV === "development") {
-  baseurl = "http://localhost:3013/";
+  baseurl = "http://localhost:3023/";
 } else {
   baseurl = "/";
 }
@@ -45,7 +45,6 @@ const apiClient = axios.create({
         .catch((error) => {
           console.log("error", error);
         });
-      // Utils.removeItem("user")
     }
     console.log(Utils.getStore("user"));
     return data;

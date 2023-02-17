@@ -1,22 +1,20 @@
 import { createRouter, createWebHistory } from "vue-router";
 import BaseDashboard from "../views/BaseDashboard.vue";
-
-const routes = [
-  {
-    path: "/",
-    component: BaseDashboard,
-    name: "baseDashboard",
-  },
-];
+import LoginPage from "../views/Login.vue";
 
 const router = createRouter({
   mode: "hash",
   linkExactActiveClass: "active",
-  base:
-    //    process.env.NODE_ENV === 'development'? "/" : "/performance/t3/", - for AWS
-    process.env.NODE_ENV === "development" ? "/" : "/",
+  base: process.env.NODE_ENV === "development" ? "/" : "/",
   history: createWebHistory(),
-  routes,
+  routes: [
+    {
+      path: "/dashboard",
+      component: BaseDashboard,
+      name: "baseDashboard",
+    },
+    { path: "/", component: LoginPage, name: "loginPage" },
+  ],
 });
 
 router.beforeEach((to, from, next) => {

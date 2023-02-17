@@ -3,39 +3,23 @@
     <br /><br />
     <br /><br />
     <br /><br />
-    <v-row justify="center">
-      <table>
-        <tr>
-          <th>
-            <v-toolbar-title class="font-weight-bold mediumBlue--text"
-              ><v-img
-                alt="OC Logo"
-                width="400"
-                src="/OC_LOGO_BLUE.svg"
-              /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MUSIC
-              DEPARTMENT</v-toolbar-title
-            >
-            <br />
-          </th>
-        </tr>
-        <tr>
-          <td>
-            <div id="parent_id"></div>
-          </td>
-        </tr>
-      </table>
-    </v-row>
+    <v-container fill-height fluid
+      ><v-row align="center" justify="center">
+        <v-col align="center" justify="center"
+          ><v-toolbar-title class="font-weight-bold text-mediumBlue"
+            ><v-img
+              alt="OC Logo"
+              width="400"
+              src="/OC_LOGO_BLUE.svg"
+            /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MUSIC
+            DEPARTMENT</v-toolbar-title
+          >
+          <br />
+          <div id="parent_id" style="padding-left: 45px"></div
+        ></v-col> </v-row
+    ></v-container>
   </div>
 </template>
-
-<style>
-table {
-  padding-right: 25px;
-}
-td {
-  padding-left: 105px;
-}
-</style>
 
 <script>
 import AuthServices from "../services/AuthServices.js";

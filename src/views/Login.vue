@@ -63,11 +63,11 @@ export default {
         }
       );
     },
-    handleCredentialResponse(response) {
+    async handleCredentialResponse(response) {
       let token = {
         credential: response.credential,
       };
-      AuthServices.loginUser(token)
+      await AuthServices.loginUser(token)
         .then((response) => {
           console.log(response.data);
           this.user = response.data;

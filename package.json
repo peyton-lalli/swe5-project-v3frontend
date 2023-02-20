@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "serve": "vite preview",
-    "build": "vite build",
+    "build": "APP_ENV=production vite build",
     "lint": "vue-cli-service lint",
-    "dev": "vite"
+    "dev": "APP_ENV=development vite"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.3.0",

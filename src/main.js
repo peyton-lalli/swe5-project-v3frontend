@@ -28,6 +28,7 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
 import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
 import { faCalendar as faCalendarSolid } from "@fortawesome/free-solid-svg-icons";
+import { faVideo } from "@fortawesome/free-solid-svg-icons";
 
 // Add individual icons to the FontAwesome library
 library.add(faLocationDot);
@@ -49,6 +50,7 @@ library.add(faUser);
 library.add(faStarRegular);
 library.add(faStarSolid);
 library.add(faCalendarSolid);
+library.add(faVideo);
 
 import router from "./router";
 

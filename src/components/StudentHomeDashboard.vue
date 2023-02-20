@@ -7,9 +7,10 @@
             <v-col> Your Events </v-col>
             <v-col class="text-right">
               <v-btn
+                elevation="0"
                 size="small"
                 rounded="pill"
-                class="buttonGradient text-white">
+                class="buttonGradient text-white font-weight-bold">
                 Upcoming
               </v-btn>
             </v-col>
@@ -32,15 +33,17 @@
             <v-col> Repertoire </v-col>
             <v-col class="text-right">
               <v-btn
+                elevation="0"
                 size="small"
                 rounded="pill"
-                class="buttonGradient mr-3 text-white">
+                class="buttonGradient mr-3 text-white font-weight-bold">
                 Add New
               </v-btn>
               <v-btn
+                elevation="0"
                 size="small"
                 rounded="pill"
-                class="buttonGradient text-white">
+                class="buttonGradient text-white font-weight-bold">
                 View All
               </v-btn>
             </v-col>

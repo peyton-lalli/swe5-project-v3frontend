@@ -5,7 +5,7 @@
         <v-row>
           <v-col>{{ title }}</v-col>
           <v-col>
-            <v-btn class="outlined" rounded="pill" size="small">{{
+            <v-btn class="outlined" rounded="pill" size="small" elevation="0">{{
               type
             }}</v-btn>
           </v-col>
@@ -17,7 +17,7 @@
       <v-card-title class="font-weight-bold text-darkBlue pt-5">
         Jurors
       </v-card-title>
-      <v-card-text>
+      <v-card-text class="pl-0">
         <v-row justify="center" class="pl-5 mt-0">
           <v-col cols="1" align-self="center">
             <v-avatar class="bg-darkBlue">
@@ -55,11 +55,11 @@
           </v-col>
         </v-row>
       </v-card-text>
-      <v-card class="ma-5 outlined">
+      <v-card class="ma-5 outlined" elevation="0">
         <v-card-title class="font-weight-bold text-darkBlue">
           Musical Selection
         </v-card-title>
-        <v-card-text>
+        <v-card-text class="pl-0">
           <v-row justify="center">
             <v-col align-self="center">
               <v-card-title class="pb-0 font-weight-bold">

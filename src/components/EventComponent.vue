@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="eventComponent">
-    <v-card class="eventsGradient fullBorderCurve">
-      <v-card class="ma-3 fullBorderCurve">
+    <v-card class="eventsGradient fullBorderCurve mainblur">
+      <v-card class="ma-3 fullBorderCurve" elevation="0">
         <v-card-title class="font-weight-black text-darkGray">
           <v-row>
             <v-col>
@@ -9,9 +9,10 @@
             </v-col>
             <v-col class="text-right">
               <v-btn
+                elevation="0"
                 rounded="pill"
                 size="small"
-                class="buttonGradient text-white"
+                class="buttonGradient text-white font-weight-bold"
                 >Edit</v-btn
               >
             </v-col>

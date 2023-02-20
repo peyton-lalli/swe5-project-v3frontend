@@ -17,16 +17,16 @@
             </v-card-subtitle>
           </v-col>
           <v-col cols="1" align-self="center" class="pl-0">
-            <v-btn variant="plain" size="x-large" class="pl-0">
+            <v-icon size="x-large">
               <font-awesome-icon icon="fa-solid fa-video" class="text-white" />
-            </v-btn>
+            </v-icon>
           </v-col>
           <v-col cols="1" align-self="center" class="pl-0">
-            <v-btn variant="plain" size="x-large" class="pl-0">
+            <v-icon size="x-large">
               <font-awesome-icon
                 icon="fa-solid fa-calendar"
                 class="text-white" />
-            </v-btn>
+            </v-icon>
           </v-col>
         </v-row>
       </v-card-text>

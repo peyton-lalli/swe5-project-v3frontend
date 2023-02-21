@@ -26,7 +26,7 @@
     101.14deg,
     rgba(46, 103, 153, 0.41) 6.13%,
     rgba(184, 211, 234, 0.41) 69.22%
-  );
+  ) !important;
 }
 
 .repertoireItemGradient {
@@ -36,7 +36,11 @@
       rgba(227, 238, 247, 0.43) 122.79%,
       rgba(184, 211, 234, 0.43) 127.06%
     ),
-    #ffffff;
+    #ffffff !important;
+}
+
+.buttonGradient {
+  background: linear-gradient(90deg, #3f86c5 29.2%, #b8d3ea 150%) !important;
 }
 
 /* This is the main blur used on all items that have it. Use this inplace of Vuetify bluring */

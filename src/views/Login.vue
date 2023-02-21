@@ -43,7 +43,6 @@ export default {
     async loginWithGoogle() {
       window.handleCredentialResponse = this.handleCredentialResponse;
       const client = import.meta.env.VITE_APP_CLIENT_ID;
-      console.log(client);
       window.google.accounts.id.initialize({
         client_id: client,
         cancel_on_tap_outside: false,
@@ -69,7 +68,6 @@ export default {
       };
       await AuthServices.loginUser(token)
         .then((response) => {
-          console.log(response.data);
           this.user = response.data;
           Utils.setStore("user", this.user);
           this.fName = this.user.fName;

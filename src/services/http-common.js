@@ -20,12 +20,11 @@ const apiClient = axios.create({
     crossDomain: true,
   },
   transformRequest: (data, headers) => {
-    let user = Utils.getStore("user");
-    if (user != null) {
-      let token = user.token;
-      let authHeader = "";
-      if (token != null && token != "") authHeader = "Bearer " + token;
-      headers.common["Authorization"] = authHeader;
+    let token = localStorage.getItem("token");
+    let authHeader = "";
+    if (token != null && token != "") {
+      authHeader = "Bearer " + token;
+      headers["Authorization"] = authHeader;
     }
     return JSON.stringify(data);
   },
@@ -46,7 +45,6 @@ const apiClient = axios.create({
           console.log("error", error);
         });
     }
-    console.log(Utils.getStore("user"));
     return data;
   },
 });

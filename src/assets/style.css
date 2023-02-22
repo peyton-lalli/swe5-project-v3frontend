@@ -53,6 +53,10 @@
   background: linear-gradient(90deg, #3f86c5 29.2%, #b8d3ea 150%) !important;
 }
 
+.buttonWhite {
+  background: #ffffff !important;
+}
+
 /* This is the main blur used on all items that have it. Use this inplace of Vuetify bluring */
 .mainBlur {
   box-shadow: 8px 10px 34px rgb(0 0 0 / 0.19) !important;

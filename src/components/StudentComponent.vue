@@ -12,8 +12,11 @@
             <v-card-title class="pb-0 font-weight-bold">
               {{ students.at(0).name }}
             </v-card-title>
-            <v-card-subtitle class="text-darkBlue font-weight-bold pb-2">
+            <v-card-subtitle class="text-darkBlue font-weight-bold pb-0">
               {{ students.at(0).classification }}
+            </v-card-subtitle>
+            <v-card-subtitle class="text-darkBlue font-weight-bold pb-0">
+              Level: {{ students.at(0).level }}
             </v-card-subtitle>
           </v-col>
           <v-col cols="auto" align-self="center" justify="right">
@@ -41,6 +44,7 @@ export default {
         {
           name: "Chloe Sheasby",
           classification: "Senior",
+          level: "3",
         },
       ],
     };

@@ -3,10 +3,10 @@
 </IfModule>
 <IfModule mod_rewrite.c>
   RewriteEngine On 
-  RewriteBase /performance/t3/ 
+  RewriteBase /perform-t3/ 
   RewriteRule ^index\.html$ - [L] 
   RewriteCond %{REQUEST_FILENAME} !-f 
   RewriteCond %{REQUEST_FILENAME} !-d 
-  RewriteRule . /tutorial-frontend-vue2/index.html [L]
+  RewriteRule . /perform-t3/index.html [L]
 </IfModule>
  

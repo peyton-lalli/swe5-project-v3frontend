@@ -7,18 +7,18 @@
 </template>
 
 <script>
-export default {
-  name: "App",
-  components: {},
-  data: () => ({}),
-};
+  export default {
+    name: "App",
+    components: {},
+    data: () => ({}),
+  };
 </script>
 
 <style>
   .appGrid {
     display: grid;
-    grid-template-columns: auto;
-    grid-template-rows: auto;
+    grid-template-columns: minmax(auto, 1fr);
+    grid-template-rows: minmax(auto, 1fr);
     grid-template-areas: "mainSlot";
   }
 

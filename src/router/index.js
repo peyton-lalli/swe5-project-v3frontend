@@ -16,9 +16,10 @@ const router = createRouter({
     },
     { path: "/", component: LoginPage, name: "loginPage" },
     {
-      path: "/facultydashboard",
+      path: "/facultydashboard/:userId",
       component: FacultyDashboard,
       name: "facultyDashboard",
+      props: true,
     },
   ],
 });

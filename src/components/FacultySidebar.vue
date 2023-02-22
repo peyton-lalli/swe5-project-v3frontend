@@ -34,15 +34,41 @@
 
 <script>
 import NotificationItem from "./NotificationItem.vue";
+import InstructorsDataService from "../services/instructors.js";
+
 export default {
   name: "FacultySidebar",
+  props: {
+    userId: {
+      type: Number,
+      default: 0,
+    },
+  },
   components: { NotificationItem },
   data() {
     return {
-      userId: 2,
-      facultyName: "Kyle Pullen",
-      facultyTitle: "Director of Music",
+      facultyName: "Nothing",
+      facultyTitle: "No Title Found",
     };
+  },
+  mounted() {
+    this.retrieveInfo();
+    //this.testing();
+  },
+  methods: {
+    //testing() {},
+    async retrieveInfo() {
+      await InstructorsDataService.getAll(
+        window.localStorage.getItem(this.userId)
+      )
+        .then((response) => {
+          this.facultyName = response.data.fName + " " + response.data.lName;
+          this.facultyTitle = response.data.title;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
   },
 };
 </script>

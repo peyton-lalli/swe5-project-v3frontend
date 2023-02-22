@@ -9,6 +9,9 @@ class InstructorsDataService {
   getAll() {
     return http.get("/performance-t3/instructors");
   }
+  getTitle(id) {
+    return http.get(`/performance-t3/instructors/title/${id}`);
+  }
   getGoogleId(id) {
     return http.get(`/performance-t3/instructors/googleid/${id}`);
   }

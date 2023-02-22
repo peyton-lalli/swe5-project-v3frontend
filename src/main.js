@@ -30,6 +30,13 @@ import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
 import { faCalendar as faCalendarSolid } from "@fortawesome/free-solid-svg-icons";
 import { faVideo } from "@fortawesome/free-solid-svg-icons";
 
+// FontAwesome Icons for Dashboard
+import { faHouseChimney } from "@fortawesome/free-solid-svg-icons";
+import { faMusic } from "@fortawesome/free-solid-svg-icons";
+import { faComments } from "@fortawesome/free-solid-svg-icons";
+import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { faRightFromBracket as faLogout } from "@fortawesome/free-solid-svg-icons";
+
 // Add individual icons to the FontAwesome library
 library.add(faLocationDot);
 library.add(faUserGroup);
@@ -51,6 +58,13 @@ library.add(faStarRegular);
 library.add(faStarSolid);
 library.add(faCalendarSolid);
 library.add(faVideo);
+
+// FontAwesome Icons for Dashboard
+library.add(faHouseChimney);
+library.add(faMusic);
+library.add(faComments);
+library.add(faGear);
+library.add(faLogout);
 
 import router from "./router";
 

@@ -69,10 +69,16 @@ export default {
       await AuthServices.loginUser(token)
         .then((response) => {
           this.user = response.data;
+          console.log(this.user);
           Utils.setStore("user", this.user);
           this.fName = this.user.fName;
           this.lName = this.user.lName;
-          this.$router.push({ name: "baseDashboard" });
+          console.log("user", this.user.role);
+          if (this.user.role == "faculty") {
+            this.$router.push({ name: "facultyDashboard" });
+          } else {
+            this.$router.push({ name: "baseDashboard" });
+          }
         })
         .catch((error) => {
           console.log("error", error);

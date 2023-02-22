@@ -1,25 +1,25 @@
 <template>
-  <v-container fluid class="baseDashboardGrid pl-0">
+  <v-container fluid class="facultyDashboardGrid pl-0">
     <MenuSidebar class="menuBarPane"></MenuSidebar>
-    <UserSidebar class="userSidebarPane"></UserSidebar>
-    <StudentHomeDashboard class="dashboardSlot"></StudentHomeDashboard>
+    <FacultySidebar class="facultySidebarPane"></FacultySidebar>
+    <FacultyHomeDashboard class="dashboardSlot"></FacultyHomeDashboard>
   </v-container>
 </template>
 
 <script>
 import MenuSidebar from "../components/MenuSidebar.vue";
-import UserSidebar from "../components/UserSidebar.vue";
-import StudentHomeDashboard from "../components/StudentHomeDashboard.vue";
+import FacultySidebar from "../components/FacultySidebar.vue";
+import FacultyHomeDashboard from "../components/FacultyHomeDashboard.vue";
 
 export default {
-  name: "BaseDashboard",
-  components: { MenuSidebar, UserSidebar, StudentHomeDashboard },
+  name: "FacultyDashboard",
+  components: { MenuSidebar, FacultySidebar, FacultyHomeDashboard },
   data() {},
 };
 </script>
 
 <style scoped>
-.baseDashboardGrid {
+.facultyDashboardGrid {
   /* padding: 15px !important; */
   display: grid;
   grid-template-columns: 0.5fr 2fr 8fr;
@@ -32,7 +32,7 @@ export default {
   grid-area: menuBarPane;
 }
 
-.userSidebarPane {
+.facultySidebarPane {
   grid-area: userSidebarPane;
 }
 

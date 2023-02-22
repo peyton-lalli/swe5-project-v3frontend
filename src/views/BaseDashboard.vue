@@ -22,7 +22,7 @@
     /* padding: 15px !important; */
     display: grid;
     grid-template-columns: 0.5fr 2fr 8fr;
-    grid-template-rows: 1fr;
+    grid-template-rows: minmax(auto, 1fr);
     grid-template-areas: "menuBarPane userSidebarPane dashboardSlot";
     grid-gap: 1.5rem;
   }

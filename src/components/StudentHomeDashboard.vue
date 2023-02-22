@@ -93,15 +93,15 @@
   .studentHomeMainGrid {
     display: grid;
     grid-template-columns: 3fr 2fr;
-    grid-template-rows: auto;
+    grid-template-rows: minmax(auto, 1fr);
     grid-template-areas: "eventsRepPane critiquesPane";
     grid-gap: 1.5rem;
     padding-left: 0;
   }
   .studentHomeLeftGrid {
     display: grid;
-    grid-template-columns: auto;
-    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(auto, 1fr), minmax(auto, 1fr);
     grid-template-areas:
       "eventsPane"
       "repertoirePane";

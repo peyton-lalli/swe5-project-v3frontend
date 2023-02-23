@@ -112,7 +112,6 @@ export default {
           this.loginStore.setLoginUser(response.data);
           this.fName = this.user.fName;
           this.lName = this.user.lName;
-          console.log(this.loginStore.loginUser.picture);
           if (this.user.role == "faculty") {
             this.$router.push({
               name: "facultyDashboard",

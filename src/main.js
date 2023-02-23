@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import piniaPluginPersistedState from "pinia-plugin-persistedstate";
 import App from "./App.vue";
 import vuetify from "./plugins/vuetify";
 import { loadFonts } from "./plugins/webfontloader";
@@ -73,6 +74,7 @@ import router from "./router";
 loadFonts();
 
 const pinia = createPinia();
+pinia.use(piniaPluginPersistedState);
 const app = createApp(App);
 
 app.component("font-awesome-icon", FontAwesomeIcon);

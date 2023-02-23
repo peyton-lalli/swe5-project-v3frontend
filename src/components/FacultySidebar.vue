@@ -3,11 +3,12 @@
     <v-card class="userProfilePane mainBlur rounded-lg">
       <v-card-title class="pt-4">
         <v-avatar size="56" class="bg-darkBlue">
-          <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
+          <v-img :src="loginStore.getPicture"></v-img>
         </v-avatar>
       </v-card-title>
       <v-card-title class="font-weight-black text-darkGray">
         {{ facultyName.toUpperCase() }}
+        <!-- {{ loginStore.getFullName.toUpperCase() }} -->
       </v-card-title>
       <v-card-subtitle class="font-weight-bold text-darkBlue">
         {{ facultyTitle }}
@@ -35,21 +36,20 @@
 <script>
 import NotificationItem from "./NotificationItem.vue";
 import InstructorsDataService from "../services/instructors.js";
+import { useLoginStore } from "../stores/LoginStore.js";
+import { mapStores } from "pinia";
 
 export default {
   name: "FacultySidebar",
-  props: {
-    userId: {
-      type: Number,
-      default: 0,
-    },
-  },
   components: { NotificationItem },
   data() {
     return {
-      facultyName: "Nothing",
-      facultyTitle: "No Title Found",
+      facultyName: "LOADING...",
+      facultyTitle: "LOADING...",
     };
+  },
+  computed: {
+    ...mapStores(useLoginStore, ["loginStore"]),
   },
   mounted() {
     this.retrieveInfo();
@@ -57,13 +57,11 @@ export default {
   },
   methods: {
     //testing() {},
-    async retrieveInfo() {
-      await InstructorsDataService.getAll(
-        window.localStorage.getItem(this.userId)
-      )
+    retrieveInfo() {
+      this.facultyName = this.loginStore.getFullName;
+      InstructorsDataService.getSingle(this.loginStore.loginUser.userId)
         .then((response) => {
-          this.facultyName = response.data.fName + " " + response.data.lName;
-          this.facultyTitle = response.data.title;
+          this.facultyTitle = response.data.Instructors[0].title;
         })
         .catch((e) => {
           console.log(e);

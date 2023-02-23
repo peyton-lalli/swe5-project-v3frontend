@@ -5,7 +5,7 @@
         alt="OC Logo"
         class="shrink mx-3 mt-4 mb-15"
         contain
-        src="../public/OC_LOGO_BLUE.svg"
+        src="/OC_LOGO_BLUE.svg"
         transition="scale-transition"
         width="40"
       />

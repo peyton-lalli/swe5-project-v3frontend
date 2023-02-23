@@ -1,10 +1,7 @@
 <template>
   <v-container fluid class="facultyDashboardGrid pl-0">
     <MenuSidebar class="menuBarPane"></MenuSidebar>
-    <FacultySidebar
-      :userId="userId"
-      class="facultySidebarPane"
-    ></FacultySidebar>
+    <FacultySidebar class="facultySidebarPane"></FacultySidebar>
     <FacultyHomeDashboard class="dashboardSlot"></FacultyHomeDashboard>
   </v-container>
 </template>
@@ -17,12 +14,6 @@ import FacultyHomeDashboard from "../components/FacultyHomeDashboard.vue";
 export default {
   name: "FacultyDashboard",
   components: { MenuSidebar, FacultySidebar, FacultyHomeDashboard },
-  props: {
-    userId: {
-      type: Number,
-      default: 0,
-    },
-  },
   data() {},
   mounted() {
     //this.testing();

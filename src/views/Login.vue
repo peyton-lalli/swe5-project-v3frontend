@@ -23,7 +23,8 @@
 
 <script>
 import AuthServices from "../services/AuthServices.js";
-import Utils from "../config/utils.js";
+import { useLoginStore } from "../stores/LoginStore.js";
+import { mapStores } from "pinia";
 
 export default {
   name: "LoginPage",
@@ -36,6 +37,9 @@ export default {
     };
   },
   created() {},
+  computed: {
+    ...mapStores(useLoginStore),
+  },
   mounted() {
     this.loginWithGoogle();
   },
@@ -69,15 +73,12 @@ export default {
       await AuthServices.loginUser(token)
         .then((response) => {
           this.user = response.data;
-          console.log(this.user);
-          Utils.setStore("user", this.user);
+          this.loginStore.setLoginUser(this.user);
           this.fName = this.user.fName;
           this.lName = this.user.lName;
-          console.log("user", this.user.role);
           if (this.user.role == "faculty") {
             this.$router.push({
               name: "facultyDashboard",
-              params: { userId: this.user.userId },
             });
           } else {
             this.$router.push({
@@ -108,14 +109,13 @@ export default {
       await AuthServices.loginUser(token)
         .then((response) => {
           this.user = response.data;
-          Utils.setStore("user", this.user);
+          this.loginStore.setLoginUser(response.data);
           this.fName = this.user.fName;
           this.lName = this.user.lName;
+          console.log(this.loginStore.loginUser.picture);
           if (this.user.role == "faculty") {
-            console.log("Login:", this.user.userId);
             this.$router.push({
               name: "facultyDashboard",
-              params: { userId: this.user.userId },
             });
           } else {
             this.$router.push({ name: "baseDashboard" });

@@ -62,8 +62,20 @@
             <v-card-subtitle class="font-weight-bold text-darkGray">
               Timeslot Selection
             </v-card-subtitle>
-            <v-card-text>
-              <v-chip>Hello</v-chip>
+            <v-card-text
+              v-for="(time, index) in timesToResults(
+                times[0].start_time,
+                times[0].end_time,
+                times[0].interval
+              )"
+              :key="index">
+              <v-btn
+                elevation="0"
+                rounded="lg"
+                size="x-small"
+                class="buttonGradient text-white font-weight-bold"
+                >{{ time }}</v-btn
+              >
             </v-card-text>
           </v-col>
         </v-row>
@@ -78,7 +90,7 @@
     data() {
       return {
         title: "Recital Hearing",
-        date: "02/01/2023",
+        date: "2/1/2023",
         time: "3:30 PM",
         place: "Adams Recital Hall",
         instructors: [
@@ -99,17 +111,38 @@
         ],
         times: [
           {
-            startTime: 900,
-            endTime: 1200,
+            start_time: "09:00:00",
+            end_time: "12:00:00",
             interval: 10,
           },
           {
-            startTime: 100,
-            endTime: 300,
+            start_time: "13:00:00",
+            end_time: "15:00:00",
             interval: 10,
           },
         ],
       };
+    },
+    computed: {},
+    methods: {
+      timesToResults(start_time, end_time, interval) {
+        let results = [];
+        console.log(start_time);
+        let startTime = start_time.split(":");
+        let endTime = end_time.split(":");
+        while (startTime[0] != endTime[0] || startTime[1] != endTime[1]) {
+          results.push(startTime[0] + ":" + startTime[1]);
+          let minute = parseInt(startTime[1]);
+          minute += interval;
+          startTime[1] = minute.toString();
+          if (startTime[1] == "60") {
+            let hour = parseInt(startTime[0]) + 1;
+            startTime[0] = hour.toString();
+            startTime[1] = "00";
+          }
+        }
+        return results;
+      },
     },
   };
 </script>

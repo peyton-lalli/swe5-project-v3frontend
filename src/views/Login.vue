@@ -22,7 +22,8 @@
 
 <script>
   import AuthServices from "../services/AuthServices.js";
-  import Utils from "../config/utils.js";
+  import { useLoginStore } from "../stores/LoginStore.js";
+  import { mapStores } from "pinia";
 
   export default {
     name: "LoginPage",
@@ -35,6 +36,9 @@
       };
     },
     created() {},
+    computed: {
+      ...mapStores(useLoginStore),
+    },
     mounted() {
       this.loginWithGoogle();
     },
@@ -67,12 +71,19 @@
         };
         await AuthServices.loginUser(token)
           .then((response) => {
-            console.log(response.data);
             this.user = response.data;
-            Utils.setStore("user", this.user);
+            this.loginStore.setLoginUser(this.user);
             this.fName = this.user.fName;
             this.lName = this.user.lName;
-            this.$router.push({ name: "baseDashboard" });
+            if (this.user.role == "faculty") {
+              this.$router.push({
+                name: "facultyDashboard",
+              });
+            } else {
+              this.$router.push({
+                name: "baseDashboard",
+              });
+            }
           })
           .catch((error) => {
             console.log("error", error);
@@ -96,12 +107,17 @@
         };
         await AuthServices.loginUser(token)
           .then((response) => {
-            console.log(response.data);
             this.user = response.data;
-            Utils.setStore("user", this.user);
+            this.loginStore.setLoginUser(response.data);
             this.fName = this.user.fName;
             this.lName = this.user.lName;
-            this.$router.push({ name: "baseDashboard" });
+            if (this.user.role == "faculty") {
+              this.$router.push({
+                name: "facultyDashboard",
+              });
+            } else {
+              this.$router.push({ name: "baseDashboard" });
+            }
           })
           .catch((error) => {
             console.log("error", error);

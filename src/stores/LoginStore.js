@@ -1,23 +1,20 @@
 import { defineStore } from "pinia";
-import Utils from "@/config/utils";
-
-const user = Utils.getStore("user");
 
 export const useLoginStore = defineStore("login", {
-  state: () => {
-    return {
-      loginUser: user,
-    };
-  },
+  state: () => ({ loginUser: "" }),
+  persist: true,
   getters: {
-    getLoginUserInfo(state) {
-      return state.loginUser;
+    getFullName(state) {
+      return state.loginUser.fName + " " + state.loginUser.lName;
     },
+    getPicture(state) {
+      return state.loginUser.picture;
+    },
+    getUserName: (state) => state.loginUser.email.split("@")[0],
   },
   actions: {
-    setLoginUser(state, user) {
-      state.loginUser = user;
-      Utils.setStore("user", user);
+    setLoginUser(user) {
+      this.loginUser = user;
     },
   },
 });

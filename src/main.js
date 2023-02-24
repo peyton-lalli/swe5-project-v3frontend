@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import piniaPluginPersistedState from "pinia-plugin-persistedstate";
 import App from "./App.vue";
 import vuetify from "./plugins/vuetify";
 import { loadFonts } from "./plugins/webfontloader";
@@ -29,6 +30,7 @@ import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
 import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
 import { faCalendar as faCalendarSolid } from "@fortawesome/free-solid-svg-icons";
 import { faVideo } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 
 // FontAwesome Icons for Dashboard
 import { faHouseChimney } from "@fortawesome/free-solid-svg-icons";
@@ -58,6 +60,7 @@ library.add(faStarRegular);
 library.add(faStarSolid);
 library.add(faCalendarSolid);
 library.add(faVideo);
+library.add(faCaretDown);
 
 // FontAwesome Icons for Dashboard
 library.add(faHouseChimney);
@@ -71,6 +74,7 @@ import router from "./router";
 loadFonts();
 
 const pinia = createPinia();
+pinia.use(piniaPluginPersistedState);
 const app = createApp(App);
 
 app.component("font-awesome-icon", FontAwesomeIcon);

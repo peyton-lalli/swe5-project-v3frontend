@@ -1,5 +1,4 @@
 <template>
-  <!-- <v-dialog width="auto"> -->
   <v-card>
     <v-card-title color="darkBlue">Add to Repertoire </v-card-title>
     <v-card-subtitle> Instrument </v-card-subtitle>
@@ -35,7 +34,6 @@
       <v-btn @click="closeDialog()" color="red">Cancel</v-btn>
     </v-card-actions>
   </v-card>
-  <!-- </v-dialog> -->
 </template>
 
 <script>

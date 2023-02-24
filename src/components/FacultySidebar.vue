@@ -49,7 +49,7 @@ export default {
     };
   },
   computed: {
-    ...mapStores(useLoginStore, ["loginStore"]),
+    ...mapStores(useLoginStore),
   },
   mounted() {
     this.retrieveInfo();

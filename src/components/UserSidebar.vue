@@ -1,15 +1,15 @@
 <template>
   <v-container fluid class="sidebarGrid">
-    <v-card class="userProfilePane mainBlur rounded-lg">
+    <v-card class="userProfilePane mainBlur rounded-lg pa-3">
       <v-card-title class="pt-4">
-        <v-avatar size="56" class="bg-darkBlue">
+        <v-avatar size="68" class="bg-darkBlue">
           <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
         </v-avatar>
       </v-card-title>
-      <v-card-title class="font-weight-black text-darkGray">
+      <v-card-title class="text-h5 fontWeightBlackOverride text-darkGray pb-0">
         {{ userName.toUpperCase() }}
       </v-card-title>
-      <v-card-subtitle class="font-weight-bold text-darkBlue">
+      <v-card-subtitle class="font-weight-medium text-darkBlue">
         {{ userMajor }} Major
       </v-card-subtitle>
       <v-card-subtitle class="font-weight-medium text-mediumBlue">
@@ -32,7 +32,7 @@
               height="10"></v-progress-linear>
           </v-col>
           <v-col cols="12">
-            <v-card class="mainBlur bottomRightBorderDeepCurve">
+            <v-card elevation="0" class="rounded-lg privateInstructorGradient">
               <v-row justify="center" class="pl-5 pt-t pb-0">
                 <v-col cols="2" align-self="center">
                   <v-avatar class="bg-darkBlue">
@@ -42,7 +42,7 @@
                   </v-avatar>
                 </v-col>
                 <v-col cols="10" align-self="center">
-                  <v-card-title class="pb-0 font-weight-bold">
+                  <v-card-title class="pb-0 font-weight-semi-bold text-h6">
                     Private Instructor
                   </v-card-title>
                   <v-card-subtitle class="text-darkBlue font-weight-bold pb-2">
@@ -58,8 +58,8 @@
     </v-card>
 
     <v-card
-      class="notificationGradient mainBlur notificationsPane rounded-lg overflow-auto">
-      <v-card-title class="text-white font-weight-black">
+      class="notificationGradient mainBlur notificationsPane rounded-lg overflow-auto pa-3">
+      <v-card-title class="text-white font-weight-bold text-h5 pb-4">
         Notifications
       </v-card-title>
       <v-card-text class="pb-0">
@@ -89,6 +89,9 @@
 </script>
 
 <style scoped>
+  * {
+    font-family: Inter, sans-serif !important;
+  }
   /* Overwrites the opacity filter put on card subtitles */
   .v-card-subtitle {
     opacity: 100%;
@@ -96,6 +99,10 @@
 
   .scroll {
     overflow-y: scroll !important;
+  }
+
+  .fontWeightBlackOverride {
+    font-weight: 900 !important;
   }
 
   .sidebarGrid {

@@ -1,8 +1,8 @@
 <template>
   <v-container fluid class="eventComponent">
-    <v-card class="eventsGradient fullBorderCurve mainblur">
-      <v-card class="ma-3 fullBorderCurve" elevation="0">
-        <v-card-title class="font-weight-black text-darkGray">
+    <v-card elevation="0" class="eventsGradient mainblur rounded-lg">
+      <v-card elevation="0" class="ma-3 rounded-lg lighterBlur">
+        <v-card-title class="font-weight-bold text-h5 text-darkGray pb-0">
           <v-row>
             <v-col>
               {{ title }}
@@ -18,13 +18,13 @@
             </v-col>
           </v-row>
         </v-card-title>
-        <v-card-subtitle class="font-weight-bold text-darkBlue">
+        <v-card-subtitle class="font-weight-semi-bold text-darkBlue pt-0">
           {{ date }}
         </v-card-subtitle>
-        <v-card-subtitle class="font-weight-bold text-darkBlue">
+        <v-card-subtitle class="font-weight-semi-bold text-darkBlue pt-0">
           {{ time }}
         </v-card-subtitle>
-        <v-card-subtitle class="font-weight-medium text-mediumBlue">
+        <v-card-subtitle class="font-weight-medium text-mediumBlue pt-0">
           {{ place }}
         </v-card-subtitle>
 
@@ -38,7 +38,7 @@
             <v-card-title class="pb-0 font-weight-bold">
               {{ instructors.at(0).type }}
             </v-card-title>
-            <v-card-subtitle class="text-darkBlue font-weight-bold pb-2">
+            <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
               {{ instructors.at(0).person }}
             </v-card-subtitle>
           </v-col>
@@ -53,13 +53,13 @@
             <v-card-title class="pb-0 font-weight-bold">
               {{ instructors.at(1).type }}
             </v-card-title>
-            <v-card-subtitle class="text-darkBlue font-weight-bold pb-2">
+            <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
               {{ instructors.at(1).person }}
             </v-card-subtitle>
           </v-col>
         </v-row>
       </v-card>
-      <v-card-subtitle class="ml-2 text-white font-weight-bold">
+      <v-card-subtitle class="ml-2 text-h6 text-white font-weight-bold">
         Musical Selection
       </v-card-subtitle>
       <v-card-text class="pt-0">
@@ -73,7 +73,7 @@
             <v-card-title class="pb-0 font-weight-bold">
               {{ songs.at(0).name }}
             </v-card-title>
-            <v-card-subtitle class="text-darkBlue font-weight-bold pb-2">
+            <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
               {{ songs.at(0).person }}
             </v-card-subtitle>
           </v-col>

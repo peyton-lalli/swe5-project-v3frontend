@@ -1,6 +1,6 @@
 <template>
   <v-card class="fullBorderCurve lighterBlur mb-4">
-    <v-card-title class="font-weight-bold pb-0">
+    <v-card-title class="font-weight-bold pb-0 text-h6">
       Jury Signups Now Open!
     </v-card-title>
     <v-card-text class="text-mediumBlue font-weight-medium">

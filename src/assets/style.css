@@ -6,9 +6,17 @@
 }
 
 * {
-  font-family: Inter, sans-serif;
+  font-family: Inter, sans-serif !important;
   margin: 0;
   padding: 0;
+}
+
+.privateInstructorGradient {
+  background: linear-gradient(
+    101.14deg,
+    rgba(46, 103, 153, 0.41) 6.13%,
+    rgba(184, 211, 234, 0.41) 69.22%
+  ) !important;
 }
 
 .notificationGradient {
@@ -37,6 +45,10 @@
       rgba(184, 211, 234, 0.43) 127.06%
     ),
     #ffffff !important;
+}
+
+.font-weight-semi-bold {
+  font-weight: 600 !important;
 }
 
 .studentItemGradient {

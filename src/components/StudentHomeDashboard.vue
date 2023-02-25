@@ -4,7 +4,7 @@
       <v-card class="eventsPane mainBlur rounded-lg">
         <v-card-title class="font-weight-bold text-darkBlue">
           <v-row>
-            <v-col> Your Events </v-col>
+            <v-col class="text-h5 font-weight-bold"> Your Events </v-col>
             <v-col class="text-right">
               <v-btn
                 elevation="0"
@@ -30,7 +30,7 @@
       <v-card class="repertoirePane mainBlur rounded-lg">
         <v-card-title class="font-weight-bold text-darkBlue">
           <v-row>
-            <v-col> Repertoire </v-col>
+            <v-col class="text-h5 font-weight-bold"> Repertoire </v-col>
             <v-col class="text-right">
               <v-dialog v-model="createDialog" persistent max-width="600px">
                 <template v-slot:activator="{ on, attrs }">
@@ -68,7 +68,7 @@
       </v-card>
     </v-container>
     <v-card class="critiquesPane mainBlur rounded-lg">
-      <v-card-title class="font-weight-bold text-darkBlue">
+      <v-card-title class="font-weight-bold text-h5 text-darkBlue">
         Recent Critiques
       </v-card-title>
       <v-card-text>
@@ -107,6 +107,9 @@
 </script>
 
 <style scoped>
+  * {
+    font-family: Inter, sans-serif !important;
+  }
   .noPadMarg {
     padding: 0 !important;
     margin: 0 !important;

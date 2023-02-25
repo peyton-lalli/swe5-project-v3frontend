@@ -103,9 +103,9 @@
         this.userRole = this.loginStore.loginUser.role;
         this.userName = this.loginStore.getFullName;
         if (this.userRole === "student") {
-          StudentInfoDataService.getMajor(this.loginStore.loginUser.userId)
+          StudentInfoDataService.getUserId(this.loginStore.loginUser.userId)
             .then((response) => {
-              console.log(response.data);
+              console.log(response.data.major);
               // this.userTitleOrMajor = response.data;
             })
             .catch((e) => {

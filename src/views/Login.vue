@@ -10,7 +10,9 @@
             ><v-img
               alt="OC Logo"
               width="400"
-              src="/OC_LOGO_BLUE.svg" /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MUSIC
+              :src="
+                logoUrl
+              " /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MUSIC
             DEPARTMENT</v-toolbar-title
           >
           <br />
@@ -21,21 +23,26 @@
 </template>
 
 <script>
+  import ocLogo from "/OC_LOGO_BLUE.svg";
   import AuthServices from "../services/authServices.js";
   import { useLoginStore } from "../stores/LoginStore.js";
   import { mapStores } from "pinia";
 
   export default {
     name: "LoginPage",
+    components: { ocLogo },
     data() {
       return {
         fName: "",
         lName: "",
         roleCounter: 0,
         user: {},
+        logoUrl: "",
       };
     },
-    created() {},
+    async created() {
+      this.logoUrl = ocLogo;
+    },
     computed: {
       ...mapStores(useLoginStore),
     },

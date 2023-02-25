@@ -32,13 +32,24 @@
           <v-row>
             <v-col> Repertoire </v-col>
             <v-col class="text-right">
-              <v-btn
-                elevation="0"
-                size="small"
-                rounded="pill"
-                class="buttonGradient mr-3 text-white font-weight-bold">
-                Add New
-              </v-btn>
+              <v-dialog v-model="createDialog" persistent max-width="600px">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="createDialog = true"
+                    elevation="0"
+                    size="small"
+                    rounded="pill"
+                    class="buttonGradient mr-3 text-white font-weight-bold">
+                    Add New
+                  </v-btn>
+                </template>
+                <RepertoireCreate
+                  @closeCourseDialogEvent="
+                    closeCreateDialog
+                  "></RepertoireCreate>
+              </v-dialog>
               <v-btn
                 elevation="0"
                 size="small"
@@ -73,14 +84,25 @@
   import EventComponent from "../components/EventComponent.vue";
   import RepertoireComponent from "../components/RepertoireComponent.vue";
   import CritiqueComponent from "../components/CritiqueComponent.vue";
+  import RepertoireCreate from "../components/RepertoireCreate.vue";
   export default {
     name: "StudentHomeDashboard",
     components: {
       EventComponent,
       RepertoireComponent,
       CritiqueComponent,
+      RepertoireCreate,
     },
-    data() {},
+    data() {
+      return {
+        createDialog: false,
+      };
+    },
+    methods: {
+      closeCreateDialog(val) {
+        this.createDialog = val;
+      },
+    },
   };
 </script>
 
@@ -93,15 +115,15 @@
   .studentHomeMainGrid {
     display: grid;
     grid-template-columns: 3fr 2fr;
-    grid-template-rows: auto;
+    grid-template-rows: minmax(auto, 1fr);
     grid-template-areas: "eventsRepPane critiquesPane";
     grid-gap: 1.5rem;
     padding-left: 0;
   }
   .studentHomeLeftGrid {
     display: grid;
-    grid-template-columns: auto;
-    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(auto, 1fr), minmax(auto, 1fr);
     grid-template-areas:
       "eventsPane"
       "repertoirePane";

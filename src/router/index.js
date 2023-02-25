@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import BaseDashboard from "../views/BaseDashboard.vue";
 import LoginPage from "../views/Login.vue";
+import FacultyDashboard from "../views/FacultyDashboard.vue";
 
 const router = createRouter({
   mode: "hash",
@@ -9,11 +10,16 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: "/dashboard",
+      path: "/",
       component: BaseDashboard,
       name: "baseDashboard",
     },
-    { path: "/", component: LoginPage, name: "loginPage" },
+    { path: "/login", component: LoginPage, name: "loginPage" },
+    {
+      path: "/facultydashboard",
+      component: FacultyDashboard,
+      name: "facultyDashboard",
+    },
   ],
 });
 

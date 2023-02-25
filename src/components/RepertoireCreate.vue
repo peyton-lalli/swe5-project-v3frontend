@@ -1,32 +1,36 @@
 <template>
   <v-card>
-    <v-card-title color="darkBlue">Add to Repertoire </v-card-title>
+    <v-card-title class="text-darkBlue">Add to Repertoire </v-card-title>
     <v-card-subtitle> Instrument </v-card-subtitle>
-    <v-card-text>
+   <v-card-text>
       <v-select
-        label="Instrument"
+        bg-color="lightBlue"
+        placeholder="Instrument"
         :items="['Voice', 'Piano', 'Trumpet']"
         variant="solo"></v-select>
-    </v-card-text>
+      </v-card-text>
     <v-card-subtitle> Piece Title </v-card-subtitle>
     <v-card-text>
-      <v-text-field label="Piece Title" variant="solo" color="mediumBlue">
+      <v-text-field 
+        bg-color="lightBlue" placeholder="Piece Title" variant="solo" class="text-mediumBlue">
       </v-text-field>
     </v-card-text>
     <v-card-subtitle> Composer </v-card-subtitle>
     <v-card-text>
       <v-select
-        label="Start typing for suggestions"
+        bg-color="lightBlue"
+        class="text-blue"
+        placeholder="Start typing for suggestions"
         :items="['Beethoven', 'Bach', 'Tchaikovsky']"
         variant="solo"></v-select>
     </v-card-text>
-    <v-spacer></v-spacer>
     <v-card-text>
-      <v-checkbox label="Foreign Piece"></v-checkbox>
+      <v-checkbox label="Foreign Piece" ></v-checkbox>
     </v-card-text>
     <v-card-subtitle> Translation </v-card-subtitle>
     <v-card-text>
-      <v-text-field label="Translation" variant="solo" color="mediumBlue">
+      <v-text-field 
+        bg-color="lightBlue" placeholder="Translation" variant="solo" color="mediumBlue">
       </v-text-field>
     </v-card-text>
     <v-card-actions>
@@ -35,6 +39,9 @@
     </v-card-actions>
   </v-card>
 </template>
+
+<style scoped>
+</style>
 
 <script>
   export default {

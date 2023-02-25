@@ -10,7 +10,7 @@
             ><v-img
               alt="OC Logo"
               width="400"
-              src="/OC_LOGO_BLUE.svg"
+              :src="ocLogo"
             /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MUSIC
             DEPARTMENT</v-toolbar-title
           >
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import ocLogo from "/OC_LOGO_BLUE.svg";
 import AuthServices from "../services/authServices.js";
 import { useLoginStore } from "../stores/LoginStore.js";
 import { mapStores } from "pinia";

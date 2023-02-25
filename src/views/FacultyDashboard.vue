@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import MenuSidebar from "@/components/MenuSidebar.vue";
-import FacultySidebar from "@/components/FacultySidebar.vue";
-import FacultyHomeDashboard from "@/components/FacultyHomeDashboard.vue";
+import MenuSidebar from "../components/MenuSidebar.vue";
+import FacultySidebar from "../components/FacultySidebar.vue";
+import FacultyHomeDashboard from "../components/FacultyHomeDashboard.vue";
 
 export default {
   name: "FacultyDashboard",

@@ -83,10 +83,10 @@
 </template>
 
 <script>
-import EventComponent from "@/components/EventComponent.vue";
-import RepertoireComponent from "@/components/RepertoireComponent.vue";
-import CritiqueComponent from "@/components/CritiqueComponent.vue";
-import RepertoireCreate from "@/components/RepertoireCreate.vue";
+import EventComponent from "../components/EventComponent.vue";
+import RepertoireComponent from "../components/RepertoireComponent.vue";
+import CritiqueComponent from "../components/CritiqueComponent.vue";
+import RepertoireCreate from "../components/RepertoireCreate.vue";
 export default {
   name: "StudentHomeDashboard",
   components: {

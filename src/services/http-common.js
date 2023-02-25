@@ -4,10 +4,10 @@ import AuthServices from "./authServices.js";
 import Router from "../router";
 
 var baseurl = "";
-if (process.env.NODE_ENV === "development") {
+if (import.meta.env.DEV) {
   baseurl = "http://localhost:3023/";
 } else {
-  baseurl = "/";
+  baseurl = "/performance/t3/";
 }
 
 const apiClient = axios.create({

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import AuthServices from "../services/AuthServices.js";
+  import AuthServices from "../services/authServices.js";
   import { useLoginStore } from "../stores/LoginStore.js";
   import { mapStores } from "pinia";
 
@@ -75,15 +75,18 @@
             this.loginStore.setLoginUser(this.user);
             this.fName = this.user.fName;
             this.lName = this.user.lName;
-            if (this.user.role == "faculty") {
-              this.$router.push({
-                name: "facultyDashboard",
-              });
-            } else {
-              this.$router.push({
-                name: "baseDashboard",
-              });
-            }
+            // if (this.user.role == "faculty") {
+            //   this.$router.push({
+            //     name: "facultyDashboard",
+            //   });
+            // } else {
+            //   this.$router.push({
+            //     name: "baseDashboard",
+            //   });
+            // }
+            this.$router.push({
+              name: "baseDashboard",
+            });
           })
           .catch((error) => {
             console.log("error", error);
@@ -111,13 +114,16 @@
             this.loginStore.setLoginUser(response.data);
             this.fName = this.user.fName;
             this.lName = this.user.lName;
-            if (this.user.role == "faculty") {
-              this.$router.push({
-                name: "facultyDashboard",
-              });
-            } else {
-              this.$router.push({ name: "baseDashboard" });
-            }
+            // if (this.user.role == "faculty") {
+            //   this.$router.push({
+            //     name: "facultyDashboard",
+            //   });
+            // } else {
+            //   this.$router.push({ name: "baseDashboard" });
+            // }
+            this.$router.push({
+              name: "baseDashboard",
+            });
           })
           .catch((error) => {
             console.log("error", error);

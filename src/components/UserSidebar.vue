@@ -10,12 +10,14 @@
         {{ userName.toUpperCase() }}
       </v-card-title>
       <v-card-subtitle class="font-weight-medium text-darkBlue">
-        {{ userMajor }} Major
+        {{ userTitleOrMajor }} Major
       </v-card-subtitle>
-      <v-card-subtitle class="font-weight-medium text-mediumBlue">
+      <v-card-subtitle
+        v-if="userRole === 'student'"
+        class="font-weight-medium text-mediumBlue">
         {{ userClassification }}
       </v-card-subtitle>
-      <v-card-text>
+      <v-card-text v-if="userRole === 'student'">
         <v-row>
           <v-col cols="12">
             <v-progress-linear
@@ -71,19 +73,54 @@
 
 <script>
   import NotificationItem from "./NotificationItem.vue";
+  import InstructorsDataService from "../services/instructors.js";
+  import StudentInfoDataService from "../services/studentinfo.js";
+  import { useLoginStore } from "../stores/LoginStore.js";
+  import { mapStores } from "pinia";
   export default {
     name: "UserSidebar",
     components: { NotificationItem },
     data() {
       return {
         userId: 2,
+        userRole: "",
         userName: "John Doe",
-        userMajor: "Vocal Music",
+        userTitleOrMajor: "",
         userClassification: "Senior",
         userVocalLevel: 60,
         userSemesters: 80,
         userInstructor: 1,
       };
+    },
+    computed: {
+      ...mapStores(useLoginStore),
+    },
+    mounted() {
+      this.retrieveInfo();
+    },
+    methods: {
+      retrieveInfo() {
+        this.userRole = this.loginStore.loginUser.role;
+        this.userName = this.loginStore.getFullName;
+        if (this.userRole === "student") {
+          StudentInfoDataService.getMajor(this.loginStore.loginUser.userId)
+            .then((response) => {
+              console.log(response.data);
+              // this.userTitleOrMajor = response.data;
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        } else if (this.userRole === "faculty") {
+          InstructorsDataService.getSingle(this.loginStore.loginUser.userId)
+            .then((response) => {
+              this.userTitleOrMajor = response.data.Instructors[0].title;
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }
+      },
     },
   };
 </script>

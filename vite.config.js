@@ -3,7 +3,8 @@ import vue from "@vitejs/plugin-vue";
 import vuetify from "vite-plugin-vuetify";
 
 export default () => {
-  const baseURL = process.env.APP_ENV === "development" ? "/" : "/perform-t3/";
+  const baseURL =
+    process.env.APP_ENV === "development" ? "/" : "/performance/t3/";
 
   return defineConfig({
     plugins: [vue(), vuetify({ autoImport: true })],

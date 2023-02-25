@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="repertoireComponent">
-    <v-card class="repertoireItemGradient fullBorderCurve">
+    <v-card elevation="0" class="repertoireItemGradient fullBorderCurve">
       <v-card-text class="pt-0">
         <v-row justify="center" class="pl-5 mt-0">
           <v-col cols="1" align-self="center">
@@ -8,11 +8,11 @@
               <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
             </v-avatar>
           </v-col>
-          <v-col cols="9">
-            <v-card-title class="pb-0 font-weight-bold">
+          <v-col cols="9" class="pt-0 pb-0">
+            <v-card-title class="pb-0 font-weight-bold text-h9">
               {{ songs.at(0).name }}
             </v-card-title>
-            <v-card-subtitle class="text-darkBlue font-weight-bold pb-2">
+            <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
               {{ songs.at(0).person }}
             </v-card-subtitle>
           </v-col>

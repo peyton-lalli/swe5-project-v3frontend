@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="eventComponent">
-    <v-card class="fullBorderCurve mainblur">
+    <v-card class="rounded-lg mainblur">
       <v-card-title class="font-weight-bold text-darkBlue">
         {{ title }} Change Request</v-card-title
       >
@@ -108,7 +108,8 @@
                 <v-col cols="6">
                   <v-text-field
                     label="Search your repertoire"
-                    variant="solo"></v-text-field>
+                    variant="solo"
+                    append-icon="mdi-magnify"></v-text-field>
                 </v-col>
                 <v-col cols="2"> or </v-col>
                 <v-col cols="4">
@@ -122,12 +123,12 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <v-card class="eventsGradient fullBorderCurve mainblur">
+                  <v-card class="eventsGradient rounded-lg mainblur">
                     <v-card-title class="font-weight-bold text-white pl-5">
                       Selected
                     </v-card-title>
                     <v-card-text>
-                      <v-card class="fullBorderCurve">
+                      <v-card class="rounded-lg">
                         <v-card-text class="pt-0">
                           <v-row justify="center" class="pl-1 mt-0">
                             <v-col cols="1" align-self="center">
@@ -175,9 +176,8 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-card class="eventsGradient fullBorderCurve mainblur"
-                  >//Addition Selections Go Here</v-card
-                >
+                <v-card
+                  class="eventsGradient fullBorderCurve mainblur"></v-card>
               </v-col>
             </v-row>
           </v-col>

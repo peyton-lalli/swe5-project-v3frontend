@@ -8,7 +8,7 @@
               {{ title }}
             </v-col>
             <v-col class="text-right">
-              <v-dialog v-model="editDialog" max-width="1000px">
+              <v-dialog v-model="editDialog" persistent max-width="1000px">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
                     elevation="0"

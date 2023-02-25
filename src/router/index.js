@@ -6,7 +6,7 @@ import FacultyDashboard from "../views/FacultyDashboard.vue";
 const router = createRouter({
   mode: "hash",
   linkExactActiveClass: "active",
-  base: process.env.NODE_ENV === "development" ? "/" : "/",
+  base: process.env.NODE_ENV === "development" ? "/" : "/performance/t3/",
   history: createWebHistory(),
   routes: [
     {

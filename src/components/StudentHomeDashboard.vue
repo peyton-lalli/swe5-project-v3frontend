@@ -10,7 +10,8 @@
                 elevation="0"
                 size="small"
                 rounded="pill"
-                class="buttonGradient text-white font-weight-bold">
+                class="buttonGradient text-white font-weight-bold"
+              >
                 Upcoming
               </v-btn>
             </v-col>
@@ -41,20 +42,21 @@
                     elevation="0"
                     size="small"
                     rounded="pill"
-                    class="buttonGradient mr-3 text-white font-weight-bold">
+                    class="buttonGradient mr-3 text-white font-weight-bold"
+                  >
                     Add New
                   </v-btn>
                 </template>
                 <RepertoireCreate
-                  @closeCourseDialogEvent="
-                    closeCreateDialog
-                  "></RepertoireCreate>
+                  @closeCourseDialogEvent="closeCreateDialog"
+                ></RepertoireCreate>
               </v-dialog>
               <v-btn
                 elevation="0"
                 size="small"
                 rounded="pill"
-                class="buttonGradient text-white font-weight-bold">
+                class="buttonGradient text-white font-weight-bold"
+              >
                 View All
               </v-btn>
             </v-col>
@@ -81,71 +83,71 @@
 </template>
 
 <script>
-  import EventComponent from "../components/EventComponent.vue";
-  import RepertoireComponent from "../components/RepertoireComponent.vue";
-  import CritiqueComponent from "../components/CritiqueComponent.vue";
-  import RepertoireCreate from "../components/RepertoireCreate.vue";
-  export default {
-    name: "StudentHomeDashboard",
-    components: {
-      EventComponent,
-      RepertoireComponent,
-      CritiqueComponent,
-      RepertoireCreate,
+import EventComponent from "@/components/EventComponent.vue";
+import RepertoireComponent from "@/components/RepertoireComponent.vue";
+import CritiqueComponent from "@/components/CritiqueComponent.vue";
+import RepertoireCreate from "@/components/RepertoireCreate.vue";
+export default {
+  name: "StudentHomeDashboard",
+  components: {
+    EventComponent,
+    RepertoireComponent,
+    CritiqueComponent,
+    RepertoireCreate,
+  },
+  data() {
+    return {
+      createDialog: false,
+    };
+  },
+  methods: {
+    closeCreateDialog(val) {
+      this.createDialog = val;
     },
-    data() {
-      return {
-        createDialog: false,
-      };
-    },
-    methods: {
-      closeCreateDialog(val) {
-        this.createDialog = val;
-      },
-    },
-  };
+  },
+};
 </script>
 
 <style scoped>
-  * {
-    font-family: Inter, sans-serif !important;
-  }
-  .noPadMarg {
-    padding: 0 !important;
-    margin: 0 !important;
-  }
+* {
+  font-family: Inter, sans-serif !important;
+}
+.noPadMarg {
+  padding: 0 !important;
+  margin: 0 !important;
+}
 
-  .studentHomeMainGrid {
-    display: grid;
-    grid-template-columns: 3fr 2fr;
-    grid-template-rows: minmax(auto, 1fr);
-    grid-template-areas: "eventsRepPane critiquesPane";
-    grid-gap: 1.5rem;
-    padding-left: 0;
-  }
-  .studentHomeLeftGrid {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: minmax(auto, 1fr), minmax(auto, 1fr);
-    grid-template-areas:
-      "eventsPane"
-      "repertoirePane";
-    grid-gap: 1.5rem;
-  }
+.studentHomeMainGrid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  grid-template-rows: minmax(auto, 1fr);
+  grid-template-areas: "eventsRepPane critiquesPane";
+  grid-gap: 1.5rem;
+  padding-left: 0;
+}
+.studentHomeLeftGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: minmax(auto, 1fr), minmax(auto, 1fr);
+  grid-template-areas:
+    "eventsPane"
+    "repertoirePane";
+  grid-gap: 1.5rem;
+}
 
-  .eventsRepPane {
-    grid-area: eventsRepPane;
-  }
+.eventsRepPane {
+  grid-area: eventsRepPane;
+}
 
-  .critiquesPane {
-    grid-area: critiquesPane;
-  }
+.critiquesPane {
+  grid-area: critiquesPane;
+}
 
-  .eventsPane {
-    grid-area: eventsPane;
-  }
+.eventsPane {
+  grid-area: eventsPane;
+}
 
-  .repertoirePane {
-    grid-area: repertoirePane;
-  }
+.repertoirePane {
+  grid-area: repertoirePane;
+}
 </style>

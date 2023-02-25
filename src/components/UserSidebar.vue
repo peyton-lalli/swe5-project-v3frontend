@@ -22,14 +22,16 @@
               rounded
               v-model="userVocalLevel"
               color="darkBlue"
-              height="10"></v-progress-linear>
+              height="10"
+            ></v-progress-linear>
           </v-col>
           <v-col cols="12">
             <v-progress-linear
               rounded
               v-model="userSemesters"
               color="darkBlue"
-              height="10"></v-progress-linear>
+              height="10"
+            ></v-progress-linear>
           </v-col>
           <v-col cols="12">
             <v-card elevation="0" class="rounded-lg privateInstructorGradient">
@@ -38,7 +40,8 @@
                   <v-avatar class="bg-darkBlue">
                     <font-awesome-icon
                       icon="fa-solid fa-user"
-                      class="text-white" />
+                      class="text-white"
+                    />
                   </v-avatar>
                 </v-col>
                 <v-col cols="10" align-self="center">
@@ -58,7 +61,8 @@
     </v-card>
 
     <v-card
-      class="notificationGradient mainBlur notificationsPane rounded-lg overflow-auto pa-3">
+      class="notificationGradient mainBlur notificationsPane rounded-lg overflow-auto pa-3"
+    >
       <v-card-title class="text-white font-weight-bold text-h5 pb-4">
         Notifications
       </v-card-title>
@@ -70,57 +74,57 @@
 </template>
 
 <script>
-  import NotificationItem from "./NotificationItem.vue";
-  export default {
-    name: "UserSidebar",
-    components: { NotificationItem },
-    data() {
-      return {
-        userId: 2,
-        userName: "John Doe",
-        userMajor: "Vocal Music",
-        userClassification: "Senior",
-        userVocalLevel: 60,
-        userSemesters: 80,
-        userInstructor: 1,
-      };
-    },
-  };
+import NotificationItem from "./NotificationItem.vue";
+export default {
+  name: "UserSidebar",
+  components: { NotificationItem },
+  data() {
+    return {
+      userId: 2,
+      userName: "John Doe",
+      userMajor: "Vocal Music",
+      userClassification: "Senior",
+      userVocalLevel: 60,
+      userSemesters: 80,
+      userInstructor: 1,
+    };
+  },
+};
 </script>
 
 <style scoped>
-  * {
-    font-family: Inter, sans-serif !important;
-  }
-  /* Overwrites the opacity filter put on card subtitles */
-  .v-card-subtitle {
-    opacity: 100%;
-  }
+* {
+  font-family: Inter, sans-serif !important;
+}
+/* Overwrites the opacity filter put on card subtitles */
+.v-card-subtitle {
+  opacity: 100%;
+}
 
-  .scroll {
-    overflow-y: scroll !important;
-  }
+.scroll {
+  overflow-y: scroll !important;
+}
 
-  .fontWeightBlackOverride {
-    font-weight: 900 !important;
-  }
+.fontWeightBlackOverride {
+  font-weight: 900 !important;
+}
 
-  .sidebarGrid {
-    display: grid;
-    grid-template-columns: auto;
-    grid-template-rows: auto minmax(auto, 3fr);
-    grid-template-areas:
-      "userProfilePane"
-      "notificationsPane";
-    grid-gap: 1.5rem;
-    padding-left: 0;
-    padding-right: 0;
-  }
-  .userProfilePane {
-    grid-area: userProfilePane;
-  }
+.sidebarGrid {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto minmax(auto, 3fr);
+  grid-template-areas:
+    "userProfilePane"
+    "notificationsPane";
+  grid-gap: 1.5rem;
+  padding-left: 0;
+  padding-right: 0;
+}
+.userProfilePane {
+  grid-area: userProfilePane;
+}
 
-  .notificationsPane {
-    grid-area: notificationsPane;
-  }
+.notificationsPane {
+  grid-area: notificationsPane;
+}
 </style>

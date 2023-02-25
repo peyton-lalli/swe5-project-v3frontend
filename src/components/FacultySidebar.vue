@@ -35,8 +35,8 @@
 
 <script>
 import NotificationItem from "./NotificationItem.vue";
-import InstructorsDataService from "../services/instructors.js";
-import { useLoginStore } from "../stores/LoginStore.js";
+import InstructorsDataService from "@/services/instructors.js";
+import { useLoginStore } from "@/stores/LoginStore.js";
 import { mapStores } from "pinia";
 
 export default {

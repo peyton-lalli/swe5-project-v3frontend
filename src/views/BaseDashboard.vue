@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import MenuSidebar from "../components/MenuSidebar.vue";
-import UserSidebar from "../components/UserSidebar.vue";
-import StudentHomeDashboard from "../components/StudentHomeDashboard.vue";
+import MenuSidebar from "@/components/MenuSidebar.vue";
+import UserSidebar from "@/components/UserSidebar.vue";
+import StudentHomeDashboard from "@/components/StudentHomeDashboard.vue";
 
 export default {
   name: "BaseDashboard",

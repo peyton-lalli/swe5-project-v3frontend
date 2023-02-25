@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import AuthServices from "@/services/authServices.js";
-import { useLoginStore } from "@/stores/LoginStore.js";
+import AuthServices from "../services/authServices.js";
+import { useLoginStore } from "../stores/LoginStore.js";
 import { mapStores } from "pinia";
 
 export default {

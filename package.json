@@ -8,8 +8,7 @@
     "lint": "vue-cli-service lint",
     "dev": "cross-env APP_ENV=development vite",
     "test": "cypress run",
-    "test:open": "cypress open",
-    "bundle": "mv .env dist"
+    "test:open": "cypress open"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.3.0",

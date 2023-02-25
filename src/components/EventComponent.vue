@@ -8,19 +8,20 @@
               {{ title }}
             </v-col>
             <v-col class="text-right">
-              <v-dialog v-model="editDialog" persistent max-width="1000px">
+              <v-dialog v-model="editDialog" max-width="1000px">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
                     elevation="0"
                     rounded="pill"
                     size="small"
                     class="buttonGradient text-white font-weight-bold"
+                    @click="editDialog = true"
                     v-bind="attrs"
                     v-on="on">
                     Edit
                   </v-btn>
                 </template>
-                <EventItemEdit @closeCourseDialogEvent="closeEditDialog">
+                <EventItemEdit @closeEditDialogEvent="closeEditDialog">
                 </EventItemEdit>
               </v-dialog>
             </v-col>
@@ -100,7 +101,7 @@
     },
     data() {
       return {
-        editDialog: true,
+        editDialog: false,
         title: "Recital Hearing",
         date: "02/01/2023",
         time: "3:30 PM",

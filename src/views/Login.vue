@@ -10,7 +10,7 @@
             ><v-img
               alt="OC Logo"
               width="400"
-              :src="ocLogo"
+              :src="logoUrl"
             /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MUSIC
             DEPARTMENT</v-toolbar-title
           >
@@ -29,15 +29,19 @@ import { mapStores } from "pinia";
 
 export default {
   name: "LoginPage",
+  components: { ocLogo },
   data() {
     return {
       fName: "",
       lName: "",
       roleCounter: 0,
       user: {},
+      logoUrl: "",
     };
   },
-  created() {},
+  async created() {
+    this.logoUrl = ocLogo;
+  },
   computed: {
     ...mapStores(useLoginStore),
   },

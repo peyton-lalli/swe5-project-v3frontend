@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import AuthServices from "../services/AuthServices.js";
+import AuthServices from "../services/authServices.js";
 import { useLoginStore } from "../stores/LoginStore.js";
 import { mapStores } from "pinia";
 

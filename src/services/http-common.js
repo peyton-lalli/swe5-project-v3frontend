@@ -7,7 +7,7 @@ var baseurl = "";
 if (import.meta.env.DEV) {
   baseurl = "http://localhost:3023/";
 } else {
-  baseurl = "/performance/t3/";
+  baseurl = "/";
 }
 
 const apiClient = axios.create({

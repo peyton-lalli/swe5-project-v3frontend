@@ -9,6 +9,9 @@ class UsersDataService {
   getAll() {
     return http.get("/performance-t3/users");
   }
+  getSingle(id) {
+    return http.get(`/performance-t3/users/id/${id}`);
+  }
   getEmail(id) {
     return http.get(`/performance-t3/users/email/${id}`);
   }

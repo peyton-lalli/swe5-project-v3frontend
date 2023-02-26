@@ -3,14 +3,14 @@
     <v-card class="userProfilePane mainBlur rounded-lg pa-3">
       <v-card-title class="pt-4">
         <v-avatar size="68" class="bg-darkBlue">
-          <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
+          <v-img :src="userPicture"></v-img>
         </v-avatar>
       </v-card-title>
       <v-card-title class="text-h5 fontWeightBlackOverride text-darkGray pb-0">
         {{ userName.toUpperCase() }}
       </v-card-title>
       <v-card-subtitle class="font-weight-medium text-darkBlue">
-        {{ userTitleOrMajor }} Major
+        {{ userTitleOrMajor }}
       </v-card-subtitle>
       <v-card-subtitle
         v-if="userRole === 'student'"
@@ -22,14 +22,14 @@
           <v-col cols="12">
             <v-progress-linear
               rounded
-              v-model="userVocalLevel"
+              v-model="userLevelPercent"
               color="darkBlue"
               height="10"></v-progress-linear>
           </v-col>
           <v-col cols="12">
             <v-progress-linear
               rounded
-              v-model="userSemesters"
+              v-model="userSemestersPercent"
               color="darkBlue"
               height="10"></v-progress-linear>
           </v-col>
@@ -38,18 +38,16 @@
               <v-row justify="center" class="pl-5 pt-t pb-0">
                 <v-col cols="2" align-self="center">
                   <v-avatar class="bg-darkBlue">
-                    <font-awesome-icon
-                      icon="fa-solid fa-user"
-                      class="text-white" />
+                    <v-img :src="userInstructor.picture"></v-img>
                   </v-avatar>
                 </v-col>
                 <v-col cols="10" align-self="center">
                   <v-card-title class="pb-0 font-weight-semi-bold text-h6">
-                    Private Instructor
+                    {{ userInstructor.title }}
                   </v-card-title>
                   <v-card-subtitle class="text-darkBlue font-weight-bold pb-2">
                     <!-- This will eventually be a store call passing the userInstuctor value -->
-                    Jane Doe
+                    {{ userInstructor.name }}
                   </v-card-subtitle>
                 </v-col>
               </v-row>
@@ -75,6 +73,7 @@
   import NotificationItem from "./NotificationItem.vue";
   import InstructorsDataService from "../services/instructors.js";
   import StudentInfoDataService from "../services/studentinfo.js";
+  import UsersDataService from "../services/users.js";
   import { useLoginStore } from "../stores/LoginStore.js";
   import { mapStores } from "pinia";
   export default {
@@ -83,13 +82,21 @@
     data() {
       return {
         userId: 2,
+        userPicture: "",
         userRole: "",
         userName: "John Doe",
         userTitleOrMajor: "",
         userClassification: "Senior",
-        userVocalLevel: 60,
+        userLevel: 0,
+        userLevelPercent: 0,
+        userSemestersPercent: 0,
         userSemesters: 80,
-        userInstructor: 1,
+        userInstructor: {
+          id: 0,
+          picture: "",
+          name: "",
+          title: "",
+        },
       };
     },
     computed: {
@@ -102,11 +109,17 @@
       retrieveInfo() {
         this.userRole = this.loginStore.loginUser.role;
         this.userName = this.loginStore.getFullName;
+        this.userPicture = this.loginStore.getPicture;
         if (this.userRole === "student") {
           StudentInfoDataService.getUserId(this.loginStore.loginUser.userId)
             .then((response) => {
-              console.log(response.data.major);
-              // this.userTitleOrMajor = response.data;
+              const student = response.data.StudentInfo[0];
+              this.userTitleOrMajor = student.major + " Major";
+              this.userClassification = student.classification;
+              this.userSemesters = student.semesters;
+              this.userLevel = student.level;
+              this.setUserLevelPercent(this.userLevel);
+              this.getInstructorData(student.instructorId);
             })
             .catch((e) => {
               console.log(e);
@@ -120,6 +133,28 @@
               console.log(e);
             });
         }
+      },
+      setUserLevelPercent(level) {
+        this.userLevelPercent = level * 10;
+      },
+      setSemestersPercent(level) {
+        this.userSemestersPercent = level * 10;
+      },
+      getInstructorData(instructorId) {
+        InstructorsDataService.getInstructorByInstructorId(instructorId)
+          .then((response) => {
+            const instructor = response.data.Instructors[0];
+            this.userInstructor.title = instructor.title;
+            UsersDataService.getSingle(instructor.userId).then((response) => {
+              const user = response.data.Users[0];
+              this.userInstructor.name = user.fName + " " + user.lName;
+              this.userInstructor.picture = user.picture;
+              this.userInstructor.id = user.id;
+            });
+          })
+          .catch((e) => {
+            console.log(e);
+          });
       },
     },
   };

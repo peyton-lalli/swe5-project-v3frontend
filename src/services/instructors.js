@@ -12,6 +12,9 @@ class InstructorsDataService {
   getSingle(id) {
     return http.get(`/performance-t3/instructors/userid/${id}`);
   }
+  getInstructorByInstructorId(id) {
+    return http.get(`/performance-t3/instructors/id/${id}`);
+  }
   getTitle(id) {
     return http.get(`/performance-t3/instructors/title/${id}`);
   }

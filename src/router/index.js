@@ -3,28 +3,27 @@ import BaseDashboard from "../views/BaseDashboard.vue";
 import LoginPage from "../views/Login.vue";
 
 const router = createRouter({
-  mode: "hash",
-  linkExactActiveClass: "active",
-  history: createWebHistory(import.meta.env.BASE_URL),
+  base: import.meta.env.BASE_URL,
+  history: createWebHistory(),
   routes: [
     {
       path: "/dashboard",
       component: BaseDashboard,
       name: "baseDashboard",
     },
-    { path: "/", component: LoginPage, name: "loginPage" },
+    { path: "/", alias: "/login", component: LoginPage, name: "loginPage" },
   ],
 });
 
-router.beforeEach((to, from, next) => {
-  // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ["/"];
-  const authRequired = !publicPages.includes(to.path);
-  const loggedIn = localStorage.getItem("user");
-  if (authRequired && !loggedIn) {
-    return next("/");
-  }
-  next();
-});
+// router.beforeEach((to, from, next) => {
+//   // redirect to login page if not logged in and trying to access a restricted page
+//   const publicPages = ["/"];
+//   const authRequired = !publicPages.includes(to.path);
+//   const loggedIn = localStorage.getItem("user");
+//   if (authRequired && !loggedIn) {
+//     return next("/");
+//   }
+//   next();
+// });
 
 export default router;

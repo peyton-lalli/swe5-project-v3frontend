@@ -31,9 +31,6 @@ const apiClient = axios.create({
   },
   transformResponse: function (data) {
     data = JSON.parse(data);
-    // if (!data.success && data.code == "expired-session") {
-    //   localStorage.deleteItem("user");
-    // }
     if (data.message !== undefined && data.message.includes("Unauthorized")) {
       AuthServices.logoutUser(Utils.getStore("user"))
         .then((response) => {
@@ -43,6 +40,7 @@ const apiClient = axios.create({
         })
         .catch((error) => {
           console.log("error", error);
+          //this is where we are getting the unexpected token error
         });
     }
     return data;

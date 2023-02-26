@@ -114,11 +114,13 @@
           StudentInfoDataService.getUserId(this.loginStore.loginUser.userId)
             .then((response) => {
               const student = response.data.StudentInfo[0];
+              console.log(student);
               this.userTitleOrMajor = student.major + " Major";
               this.userClassification = student.classification;
               this.userSemesters = student.semesters;
               this.userLevel = student.level;
               this.setUserLevelPercent(this.userLevel);
+              this.setSemestersPercent(this.userSemesters);
               this.getInstructorData(student.instructorId);
             })
             .catch((e) => {
@@ -137,8 +139,8 @@
       setUserLevelPercent(level) {
         this.userLevelPercent = level * 10;
       },
-      setSemestersPercent(level) {
-        this.userSemestersPercent = level * 10;
+      setSemestersPercent(semesters) {
+        this.userSemestersPercent = semesters * 10;
       },
       getInstructorData(instructorId) {
         InstructorsDataService.getInstructorByInstructorId(instructorId)

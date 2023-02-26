@@ -13,8 +13,9 @@ jobs:
       VITE_APP_CLIENT_ID: ${{secrets.VITE_APP_CLIENT_ID}}
       VITE_APP_API_URL: ${{secrets.VITE_APP_API_URL}}
       VITE_APP_CLIENT_URL: perform.eaglesoftwareteam.com
+      VITE_APP_CLIENT_SECRET: ${{secrets.VITE_APP_CLIENT_SECRET}}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: dev
       - uses: actions/setup-node@v3
@@ -32,4 +33,4 @@ jobs:
           SOURCE: "dist/"
           REMOTE_HOST: "perform.eaglesoftwareteam.com"
           REMOTE_USER: ubuntu
-          TARGET: "/var/www/html/performance/t3"
+          TARGET: "/var/www/html/performance/t3/"

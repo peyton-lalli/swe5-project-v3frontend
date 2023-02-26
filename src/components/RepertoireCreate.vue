@@ -40,9 +40,6 @@
   </v-card>
 </template>
 
-<style scoped>
-</style>
-
 <script>
   export default {
     name: "EventComponent",

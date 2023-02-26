@@ -29,6 +29,7 @@ import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
 import { faCalendar as faCalendarSolid } from "@fortawesome/free-solid-svg-icons";
 import { faVideo } from "@fortawesome/free-solid-svg-icons";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 
 // FontAwesome Icons for Dashboard
 import { faHouseChimney } from "@fortawesome/free-solid-svg-icons";
@@ -59,6 +60,7 @@ library.add(faStarSolid);
 library.add(faCalendarSolid);
 library.add(faVideo);
 library.add(faCaretDown);
+library.add(faCircleXmark);
 
 // FontAwesome Icons for Dashboard
 library.add(faHouseChimney);

@@ -8,13 +8,22 @@
               {{ title }}
             </v-col>
             <v-col class="text-right">
-              <v-btn
-                elevation="0"
-                rounded="pill"
-                size="small"
-                class="buttonGradient text-white font-weight-bold"
-                >Edit</v-btn
-              >
+              <v-dialog v-model="editDialog" persistent max-width="1000px">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    elevation="0"
+                    rounded="pill"
+                    size="small"
+                    class="buttonGradient text-white font-weight-bold"
+                    @click="editDialog = true"
+                    v-bind="attrs"
+                    v-on="on">
+                    Edit
+                  </v-btn>
+                </template>
+                <EventItemEdit @closeEditDialogEvent="closeEditDialog">
+                </EventItemEdit>
+              </v-dialog>
             </v-col>
           </v-row>
         </v-card-title>
@@ -84,11 +93,15 @@
 </template>
 
 <script>
+  import EventItemEdit from "./EventItemEdit.vue";
   export default {
     name: "EventComponent",
-    components: {},
+    components: {
+      EventItemEdit,
+    },
     data() {
       return {
+        editDialog: false,
         title: "Recital Hearing",
         date: "02/01/2023",
         time: "3:30 PM",
@@ -110,6 +123,11 @@
           },
         ],
       };
+    },
+    methods: {
+      closeEditDialog(val) {
+        this.editDialog = val;
+      },
     },
   };
 </script>

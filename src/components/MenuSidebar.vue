@@ -47,11 +47,25 @@
       </v-btn>
       <v-spacer></v-spacer>
       <!-- Settings -->
-      <v-btn elevation="0" class="mt-16">
-        <v-icon size="xx-large">
-          <font-awesome-icon icon="fa-solid fa-gear" class="text-darkBlue" />
-        </v-icon>
-      </v-btn>
+      <v-dialog v-model="createDialog" persistent max-width="600px">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            v-on="on"
+            @click="createDialog = true"
+            elevation="0"
+            class="mt-16"
+          >
+            <v-icon size="xx-large">
+              <font-awesome-icon icon="fa-solid fa-gear" class="text-darkBlue" />
+            </v-icon>
+          </v-btn>
+        </template>
+        <ProfileSettings 
+          @closeCourseDialogEvent="
+            closeCreateDialog
+          "></ProfileSettings>
+      </v-dialog>
       <v-spacer></v-spacer>
       <!-- Logout -->
       <v-btn elevation="0" class="mt-5">
@@ -67,15 +81,24 @@
 </template>
 
 <script>
-export default {
-  name: "MenuSidebar",
-  components: {},
-  data() {
-    return {
-      menuItems: [],
-    };
-  },
-};
+  import ProfileSettings from "./ProfileSettings.vue";
+  export default {
+    name: "MenuSidebar",
+    components: {
+      ProfileSettings,
+    },
+    data() {
+      return {
+        menuItems: [],
+        createDialog: false,
+      };
+    },
+    methods: {
+      closeCreateDialog(val) {
+        this.createDialog = val;
+      },
+    },
+  };
 </script>
 
 <style scoped>

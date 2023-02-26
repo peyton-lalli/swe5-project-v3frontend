@@ -1,35 +1,32 @@
 <template>
-  <div class="signup-buttons">
-    <br /><br />
-    <br /><br />
-    <br /><br />
-    <v-container fill-height fluid
-      ><v-row align="center" justify="center">
-        <v-col align="center" justify="center"
-          ><v-toolbar-title
-            class="font-weight-bold text-mediumBlue v-toolbar-title__text"
-            ><v-img
-              class="v-img__image"
-              alt="OC Logo"
-              width="400"
-              :src="logoUrl"
-            /><br />MUSIC DEPARTMENT</v-toolbar-title
+  <v-container fill-height fluid align="center">
+    <v-row>
+      <v-col>
+        <v-col></v-col>
+        <v-col></v-col>
+        <v-col></v-col>
+        <v-col></v-col>
+        <v-col></v-col>
+        <v-col></v-col>
+        <v-col></v-col>
+        <v-col></v-col>
+        <v-row>
+          <v-col>
+            <v-img alt="OC Logo" width="400" :src="logoUrl" />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col class="font-weight-bold text-mediumBlue text-h5 pl-12"
+            >MUSIC DEPARTMENT</v-col
           >
-          <br />
-          <div id="parent_id" style="padding-left: 45px"></div
-        ></v-col> </v-row
-    ></v-container>
-  </div>
+        </v-row>
+        <v-row>
+          <v-col><div id="parent_id" style="padding-left: 45px"></div></v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
-
-<style scoped>
-.v-toolbar-title__text {
-  padding-left: 45px;
-}
-.v-img__image {
-  padding-right: 0px;
-}
-</style>
 
 <script>
 import ocLogo from "/OC_LOGO_BLUE.svg";

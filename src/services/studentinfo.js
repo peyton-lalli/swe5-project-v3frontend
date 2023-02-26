@@ -9,7 +9,7 @@ class StudentInfoDataService {
   getAll() {
     return http.get("/performance-t3/studentinfo");
   }
-  getUserId() {
+  getUserId(id) {
     return http.get(`/performance-t3/studentinfo/userid/${id}`);
   }
   getLevel(id) {

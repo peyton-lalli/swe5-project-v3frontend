@@ -2,8 +2,22 @@
   <v-container fluid class="eventComponent">
     <v-card class="rounded-lg mainblur">
       <v-card-title class="font-weight-bold text-darkBlue">
-        {{ title }} Change Request</v-card-title
-      >
+        <v-row>
+          <v-col class="text-h5 font-weight-bold">
+            {{ title }} Change Request</v-col
+          >
+          <v-col class="text-right">
+            <v-btn elevation="0" @click="closeDialog()">
+              <v-icon>
+                <font-awesome-icon
+                  icon="a-solid fa-circle-xmark"
+                  class="text-lightBlue">
+                </font-awesome-icon>
+              </v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-card-title>
       <v-card-subtitle class="font-weight-bold text-darkBlue">
         {{ date }}
       </v-card-subtitle>

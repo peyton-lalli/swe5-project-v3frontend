@@ -33,13 +33,22 @@
           </v-row>
           <v-row align="center" justify="center">
             <v-col justify="center">
-              <v-btn
-                elevation="0"
-                size="small"
-                rounded="pill"
-                class="buttonGradient text-white font-weight-bold text-capitalize">
-                Signup
-              </v-btn>
+              <v-dialog v-model="signUpDialog" persistent max-width="1000px">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    elevation="0"
+                    size="small"
+                    rounded="pill"
+                    class="buttonGradient text-white font-weight-bold text-capitalize"
+                    @click="signUpDialog = true"
+                    v-bind="attrs"
+                    v-on="on">
+                    Signup
+                  </v-btn>
+                </template>
+                <EventItem @closeEventDialogEvent="closeEventDialog">
+                </EventItem>
+              </v-dialog>
             </v-col>
           </v-row>
         </v-col>
@@ -49,11 +58,15 @@
 </template>
 
 <script>
+  import EventItem from "./EventItem.vue";
   export default {
     name: "EventSignupItem",
-    components: {},
+    components: {
+      EventItem,
+    },
     data() {
       return {
+        signUpDialog: false,
         eventData: {
           type: "Vocal Jury",
           date: "04/22/2023",
@@ -80,6 +93,9 @@
         }
 
         return timesString;
+      },
+      closeEventDialog(val) {
+        this.signUpDialog = val;
       },
     },
   };

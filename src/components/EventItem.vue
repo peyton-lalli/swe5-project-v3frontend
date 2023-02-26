@@ -3,9 +3,7 @@
     <v-card class="rounded-lg mainblur">
       <v-card-title class="font-weight-bold text-darkBlue">
         <v-row>
-          <v-col class="text-h5 font-weight-bold">
-            {{ title }} Change Request</v-col
-          >
+          <v-col class="text-h5 font-weight-bold"> {{ title }} Request</v-col>
           <v-col class="text-right">
             <v-btn elevation="0" @click="closeDialog()">
               <v-icon>
@@ -120,10 +118,13 @@
             <v-card-text>
               <v-row>
                 <v-col cols="6">
-                  <v-text-field
-                    label="Search your repertoire"
+                  <v-select
+                    bg-color="lightBlue"
+                    class="text-blue"
+                    placeholder="Search"
+                    :items="['Bird Upon a Tree', 'Souvenir', 'Cherry Valley']"
                     variant="solo"
-                    append-icon="mdi-magnify"></v-text-field>
+                    text="darkBlue"></v-select>
                 </v-col>
                 <v-col cols="2"> or </v-col>
                 <v-col cols="4">
@@ -275,7 +276,7 @@
         return new Date(dateTime);
       },
       closeDialog() {
-        this.$emit("closeEditDialogEvent", false);
+        this.$emit("closeEventDialogEvent", false);
       },
     },
   };

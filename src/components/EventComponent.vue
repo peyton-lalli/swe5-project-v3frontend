@@ -21,8 +21,8 @@
                     Edit
                   </v-btn>
                 </template>
-                <EventItemEdit @closeEditDialogEvent="closeEditDialog">
-                </EventItemEdit>
+                <EventItem @closeEventDialogEvent="closeEventDialog">
+                </EventItem>
               </v-dialog>
             </v-col>
           </v-row>
@@ -93,11 +93,11 @@
 </template>
 
 <script>
-  import EventItemEdit from "./EventItemEdit.vue";
+  import EventItem from "./EventItem.vue";
   export default {
     name: "EventComponent",
     components: {
-      EventItemEdit,
+      EventItem,
     },
     data() {
       return {
@@ -125,7 +125,7 @@
       };
     },
     methods: {
-      closeEditDialog(val) {
+      closeEventDialog(val) {
         this.editDialog = val;
       },
     },

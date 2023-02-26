@@ -38,7 +38,7 @@
                 size="small"
                 rounded="pill"
                 class="buttonGradient text-white font-weight-bold text-capitalize">
-                Signup
+                Remind Me
               </v-btn>
             </v-col>
           </v-row>
@@ -50,7 +50,7 @@
 
 <script>
   export default {
-    name: "EventSignupItem",
+    name: "EventUpcomingItem",
     components: {},
     data() {
       return {

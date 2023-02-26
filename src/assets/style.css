@@ -109,3 +109,7 @@
   padding: 0 !important;
   margin: 0 !important;
 }
+
+.v-btn {
+  letter-spacing: 0.25px !important;
+}

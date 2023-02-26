@@ -4,11 +4,8 @@
       <v-card-title class="font-weight-bold text-h5 text-darkBlue">
         Open Event Signups
       </v-card-title>
-      <v-card-text v-for="signup in openEventSignups" class="overflow-auto">
+      <v-card-text>
         <v-row>
-          <EventSignupItem />
-          <EventSignupItem />
-          <EventSignupItem />
           <EventSignupItem />
         </v-row>
       </v-card-text>
@@ -18,12 +15,28 @@
         Upcoming Events
       </v-card-title>
       <v-card-text>
-        <v-row> </v-row>
+        <v-row>
+          <EventUpcomingItem />
+        </v-row>
       </v-card-text>
     </v-card>
     <v-card class="yourEventsPane mainBlur rounded-lg">
       <v-card-title class="font-weight-bold text-h5 text-darkBlue">
-        Your Events
+        <v-row>
+          <v-col cols="auto" class="text-h5 font-weight-bold">
+            Your Events
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            <v-btn
+              elevation="0"
+              size="small"
+              rounded="pill"
+              class="buttonGradient text-white font-weight-bold">
+              Upcoming
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-card-title>
       <v-card-text>
         <v-row>
@@ -38,11 +51,13 @@
 <script>
   import EventComponent from "./EventComponent.vue";
   import EventSignupItem from "./EventSignupItem.vue";
+  import EventUpcomingItem from "./EventUpcomingItem.vue";
   export default {
     name: "EventsDashboard",
     components: {
       EventComponent,
       EventSignupItem,
+      EventUpcomingItem,
     },
     data() {
       return {

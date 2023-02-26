@@ -54,7 +54,6 @@
 
 <style scoped>
   .baseDashboardGrid {
-    /* padding: 15px !important; */
     display: grid;
     grid-template-columns: 0.5fr 2fr 8fr;
     grid-template-rows: minmax(auto, 1fr);

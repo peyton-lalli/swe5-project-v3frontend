@@ -1,7 +1,7 @@
 import axios from "axios";
-import Utils from "../config/utils.js";
 import AuthServices from "./authServices.js";
 import Router from "../router";
+import { useLoginStore } from "../stores/LoginStore.js";
 
 var baseurl = "";
 if (import.meta.env.DEV) {
@@ -20,7 +20,9 @@ const apiClient = axios.create({
     crossDomain: true,
   },
   transformRequest: (data, headers) => {
-    let user = Utils.getStore("user");
+    const loginStore = useLoginStore();
+    ``;
+    let user = loginStore.loginUser;
     if (user != null) {
       let token = user.token;
       let authHeader = "";
@@ -30,12 +32,13 @@ const apiClient = axios.create({
     return JSON.stringify(data);
   },
   transformResponse: function (data) {
+    const loginStore = useLoginStore();
     data = JSON.parse(data);
     if (data.message !== undefined && data.message.includes("Unauthorized")) {
-      AuthServices.logoutUser(Utils.getStore("user"))
+      AuthServices.logoutUser(loginStore.loginUser)
         .then((response) => {
           console.log(response);
-          Utils.removeItem("user");
+          this.loginStore.clearLoginUser();
           Router.push({ name: "loginPage" });
         })
         .catch((error) => {

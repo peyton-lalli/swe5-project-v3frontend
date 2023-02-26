@@ -1,6 +1,4 @@
 import { createApp } from "vue";
-import { createPinia } from "pinia";
-import piniaPluginPersistedState from "pinia-plugin-persistedstate";
 import App from "./App.vue";
 import vuetify from "./plugins/vuetify";
 import { loadFonts } from "./plugins/webfontloader";
@@ -70,18 +68,15 @@ library.add(faGear);
 library.add(faLogout);
 
 import router from "./router";
+import "./services/http-common.js";
+import { pinia } from "./stores";
 
 loadFonts();
 
-const pinia = createPinia();
-pinia.use(piniaPluginPersistedState);
-const app = createApp(App);
+const app = createApp(App)
+  .use(pinia)
+  .use(router)
+  .use(vuetify)
+  .component("font-awesome-icon", FontAwesomeIcon);
 
-loadFonts();
-
-app.component("font-awesome-icon", FontAwesomeIcon);
-
-app.use(vuetify);
-app.use(pinia);
-app.use(router);
 app.mount("#app");

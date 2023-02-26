@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import BaseDashboard from "../views/BaseDashboard.vue";
 import LoginPage from "../views/Login.vue";
+import { useLoginStore } from "../stores/LoginStore.js";
 
 const router = createRouter({
   base: import.meta.env.BASE_URL,
@@ -15,15 +16,16 @@ const router = createRouter({
   ],
 });
 
-// router.beforeEach((to, from, next) => {
-//   // redirect to login page if not logged in and trying to access a restricted page
-//   const publicPages = ["/"];
-//   const authRequired = !publicPages.includes(to.path);
-//   const loggedIn = localStorage.getItem("user");
-//   if (authRequired && !loggedIn) {
-//     return next("/");
-//   }
-//   next();
-// });
+router.beforeEach((to, from, next) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const publicPages = ["/"];
+  const loginStore = useLoginStore();
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = loginStore.loginUser;
+  if (authRequired && !loggedIn) {
+    return next("/");
+  }
+  next();
+});
 
 export default router;

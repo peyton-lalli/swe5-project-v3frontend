@@ -64,9 +64,9 @@
             </v-card-subtitle>
             <v-row class="pt-3">
               <v-card-text
-                v-for="(time, index) in timesToResults(
-                  times[0].start_time,
-                  times[0].end_time,
+                v-for="(time, index) in getTimeSlots(
+                  getDates(times[0].start_time),
+                  getDates(times[0].end_time),
                   times[0].interval
                 )"
                 :key="index">
@@ -81,9 +81,9 @@
             </v-row>
             <v-row>
               <v-card-text
-                v-for="(time, index) in timesToResults(
-                  times[1].start_time,
-                  times[1].end_time,
+                v-for="(time, index) in getTimeSlots(
+                  getDates(times[1].start_time),
+                  getDates(times[1].end_time),
                   times[1].interval
                 )"
                 :key="index">
@@ -229,13 +229,13 @@
         ],
         times: [
           {
-            start_time: "09:00:00",
-            end_time: "12:00:00",
+            start_time: "2023-02-01 09:00:00",
+            end_time: "2023-02-01 12:00:00",
             interval: 10,
           },
           {
-            start_time: "13:00:00",
-            end_time: "15:00:00",
+            start_time: "2023-02-01 13:00:00",
+            end_time: "2023-02-01 15:00:00",
             interval: 10,
           },
         ],
@@ -243,27 +243,23 @@
     },
     computed: {},
     methods: {
-      timesToResults(start_time, end_time, interval) {
-        let results = [];
-        console.log(start_time);
-        let startTime = start_time.split(":");
-        let endTime = end_time.split(":");
-        while (startTime[0] != endTime[0] || startTime[1] != endTime[1]) {
-          if (parseInt(startTime[0]) > 12) {
-            results.push(parseInt(startTime[0]) - 12 + ":" + startTime[1]);
-          } else {
-            results.push(parseInt(startTime[0]) + ":" + startTime[1]);
-          }
-          let minute = parseInt(startTime[1]);
-          minute += interval;
-          startTime[1] = minute.toString();
-          if (startTime[1] == "60") {
-            let hour = parseInt(startTime[0]) + 1;
-            startTime[0] = hour.toString();
-            startTime[1] = "00";
-          }
+      /* This returns time slots in x intervals between two times */
+      getTimeSlots(startDate, endDate, interval) {
+        var slots = [];
+
+        var intervalMillis = interval * 60 * 1000;
+
+        while (startDate < endDate) {
+          var mins = (startDate.getMinutes() + "0").slice(0, 2);
+          slots.push(startDate.getHours() + ":" + mins);
+          startDate.setTime(startDate.getTime() + intervalMillis);
         }
-        return results;
+        console.log(slots);
+        return slots;
+      },
+      /* This takes a date and time string and changes to a Date */
+      getDates(dateTime) {
+        return new Date(dateTime);
       },
       closeDialog() {
         this.$emit("closeEditDialogEvent", false);

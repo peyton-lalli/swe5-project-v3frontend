@@ -8,6 +8,12 @@
     <FacultyHomeDashboard
       v-if="userRole === 'faculty'"
       class="dashboardSlot"></FacultyHomeDashboard>
+
+    <!-- Leaving commented out for now, until we figure out how to do it right. -->
+    <!-- To view, just un comment it, and comment the StudentHomeDashboard out (also have a student role) -->
+    <!-- <EventsDashboard
+      v-if="userRole === 'student'"
+      class="dashboardSlot"></EventsDashboard> -->
   </v-container>
 </template>
 
@@ -16,6 +22,7 @@
   import UserSidebar from "../components/UserSidebar.vue";
   import StudentHomeDashboard from "../components/StudentHomeDashboard.vue";
   import FacultyHomeDashboard from "../components/FacultyHomeDashboard.vue";
+  import EventsDashboard from "../components/EventsDashboard.vue";
   import { useLoginStore } from "../stores/LoginStore.js";
   import { mapStores } from "pinia";
 
@@ -26,6 +33,7 @@
       UserSidebar,
       StudentHomeDashboard,
       FacultyHomeDashboard,
+      EventsDashboard,
     },
     data() {
       return {
@@ -49,7 +57,6 @@
 
 <style scoped>
   .baseDashboardGrid {
-    /* padding: 15px !important; */
     display: grid;
     grid-template-columns: 0.5fr 2fr 8fr;
     grid-template-rows: minmax(auto, 1fr);

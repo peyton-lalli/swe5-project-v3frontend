@@ -47,6 +47,14 @@
     #ffffff !important;
 }
 
+.eventsSignupItemGradient {
+  background: linear-gradient(
+    101.14deg,
+    rgba(46, 103, 153, 0.41) 6.13%,
+    rgba(184, 211, 234, 0.41) 69.22%
+  ) !important;
+}
+
 .font-weight-semi-bold {
   font-weight: 600 !important;
 }
@@ -100,4 +108,8 @@
 .clearPadMarg {
   padding: 0 !important;
   margin: 0 !important;
+}
+
+.v-btn {
+  letter-spacing: 0.25px !important;
 }

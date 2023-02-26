@@ -16,5 +16,8 @@ export const useLoginStore = defineStore("login", {
     setLoginUser(user) {
       this.loginUser = user;
     },
+    clearLoginUser() {
+      this.loginUser = "";
+    },
   },
 });

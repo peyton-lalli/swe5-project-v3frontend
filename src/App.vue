@@ -7,22 +7,27 @@
 </template>
 
 <script>
-  export default {
-    name: "App",
-    components: {},
-    data: () => ({}),
-  };
+import { useLoginStore } from "./stores/LoginStore.js";
+export default {
+  name: "App",
+  components: {},
+  data() {
+    return {
+      loginStore: useLoginStore(),
+    };
+  },
+};
 </script>
 
 <style>
-  .appGrid {
-    display: grid;
-    grid-template-columns: minmax(auto, 1fr);
-    grid-template-rows: minmax(auto, 1fr);
-    grid-template-areas: "mainSlot";
-  }
+.appGrid {
+  display: grid;
+  grid-template-columns: minmax(auto, 1fr);
+  grid-template-rows: minmax(auto, 1fr);
+  grid-template-areas: "mainSlot";
+}
 
-  .mainSlot {
-    grid-area: mainSlot;
-  }
+.mainSlot {
+  grid-area: mainSlot;
+}
 </style>

@@ -5,7 +5,7 @@
         alt="OC Logo"
         class="shrink mx-3 mt-4 mb-15"
         contain
-        src="/OC_LOGO_BLUE.svg"
+        :src="logoUrl"
         transition="scale-transition"
         width="40"
       />
@@ -57,14 +57,16 @@
             class="mt-16"
           >
             <v-icon size="xx-large">
-              <font-awesome-icon icon="fa-solid fa-gear" class="text-darkBlue" />
+              <font-awesome-icon
+                icon="fa-solid fa-gear"
+                class="text-darkBlue"
+              />
             </v-icon>
           </v-btn>
         </template>
-        <ProfileSettings 
-          @closeCourseDialogEvent="
-            closeCreateDialog
-          "></ProfileSettings>
+        <ProfileSettings
+          @closeCourseDialogEvent="closeCreateDialog"
+        ></ProfileSettings>
       </v-dialog>
       <v-spacer></v-spacer>
       <!-- Logout -->
@@ -81,24 +83,30 @@
 </template>
 
 <script>
-  import ProfileSettings from "./ProfileSettings.vue";
-  export default {
-    name: "MenuSidebar",
-    components: {
-      ProfileSettings,
+import ocLogo from "/OC_LOGO_BLUE.svg";
+import ProfileSettings from "./ProfileSettings.vue";
+export default {
+  name: "MenuSidebar",
+  components: {
+    ProfileSettings,
+    ocLogo,
+  },
+  data() {
+    return {
+      menuItems: [],
+      createDialog: false,
+      logoUrl: "",
+    };
+  },
+  async created() {
+    this.logoUrl = ocLogo;
+  },
+  methods: {
+    closeCreateDialog(val) {
+      this.createDialog = val;
     },
-    data() {
-      return {
-        menuItems: [],
-        createDialog: false,
-      };
-    },
-    methods: {
-      closeCreateDialog(val) {
-        this.createDialog = val;
-      },
-    },
-  };
+  },
+};
 </script>
 
 <style scoped>

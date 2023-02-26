@@ -2,12 +2,15 @@
   <v-container fluid class="baseDashboardGrid pl-0">
     <MenuSidebar class="menuBarPane"></MenuSidebar>
     <UserSidebar class="userSidebarPane"></UserSidebar>
-    <StudentHomeDashboard
+    <!-- <StudentHomeDashboard
       v-if="userRole === 'student'"
-      class="dashboardSlot"></StudentHomeDashboard>
+      class="dashboardSlot"></StudentHomeDashboard> -->
     <FacultyHomeDashboard
       v-if="userRole === 'faculty'"
       class="dashboardSlot"></FacultyHomeDashboard>
+    <EventsDashboard
+      v-if="userRole === 'student'"
+      class="dashboardSlot"></EventsDashboard>
   </v-container>
 </template>
 
@@ -16,6 +19,7 @@
   import UserSidebar from "../components/UserSidebar.vue";
   import StudentHomeDashboard from "../components/StudentHomeDashboard.vue";
   import FacultyHomeDashboard from "../components/FacultyHomeDashboard.vue";
+  import EventsDashboard from "../components/EventsDashboard.vue";
   import { useLoginStore } from "../stores/LoginStore.js";
   import { mapStores } from "pinia";
 
@@ -26,6 +30,7 @@
       UserSidebar,
       StudentHomeDashboard,
       FacultyHomeDashboard,
+      EventsDashboard,
     },
     data() {
       return {

@@ -4,8 +4,11 @@
       <v-card-title class="font-weight-bold text-h5 text-darkBlue">
         Open Event Signups
       </v-card-title>
-      <v-card-text v-for="signup in openEventSignups">
+      <v-card-text v-for="signup in openEventSignups" class="overflow-auto">
         <v-row>
+          <EventSignupItem />
+          <EventSignupItem />
+          <EventSignupItem />
           <EventSignupItem />
         </v-row>
       </v-card-text>
@@ -15,9 +18,7 @@
         Upcoming Events
       </v-card-title>
       <v-card-text>
-        <v-row>
-          <RepertoireComponent />
-        </v-row>
+        <v-row> </v-row>
       </v-card-text>
     </v-card>
     <v-card class="yourEventsPane mainBlur rounded-lg">

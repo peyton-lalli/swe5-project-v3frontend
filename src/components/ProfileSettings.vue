@@ -56,7 +56,7 @@
         ></v-select>
       </v-card-text>
       <v-card-actions class="mx-auto font-weight-bold">
-          <v-btn color="darkBlue">Save</v-btn>
+          <v-btn @click="closeDialog()" color="darkBlue">Save</v-btn>
           <v-btn @click="closeDialog()" color="red">Cancel</v-btn>
       </v-card-actions>
       </v-card>
@@ -75,7 +75,7 @@
   import { mapStores } from "pinia";
   
   export default {
-    name: "EventComponent",
+    name: "ProfileSettings",
     components: {},
     data() {
       return {

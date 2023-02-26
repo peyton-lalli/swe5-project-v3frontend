@@ -94,40 +94,6 @@ export default {
         .catch((error) => {
           console.log("error", error);
         });
-      window.google.accounts.id.renderButton(
-        document.getElementById("parent_id"),
-        {
-          type: "standard",
-          theme: "filled_black",
-          size: "large",
-          shape: "pill",
-          logo_alignment: "left",
-          text: "signin_with",
-          width: 230,
-        }
-      );
-    },
-    async handleCredentialResponse(response) {
-      let token = {
-        credential: response.credential,
-      };
-      await AuthServices.loginUser(token)
-        .then((response) => {
-          this.user = response.data;
-          this.loginStore.setLoginUser(response.data);
-          this.fName = this.user.fName;
-          this.lName = this.user.lName;
-          if (this.user.role == "faculty") {
-            this.$router.push({
-              name: "facultyDashboard",
-            });
-          } else {
-            this.$router.push({ name: "baseDashboard" });
-          }
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
     },
   },
 };

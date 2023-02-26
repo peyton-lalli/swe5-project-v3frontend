@@ -77,6 +77,8 @@ const pinia = createPinia();
 pinia.use(piniaPluginPersistedState);
 const app = createApp(App);
 
+loadFonts();
+
 app.component("font-awesome-icon", FontAwesomeIcon);
 
 app.use(vuetify);

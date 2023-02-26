@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import BaseDashboard from "../views/BaseDashboard.vue";
 import LoginPage from "../views/Login.vue";
-import FacultyDashboard from "../views/FacultyDashboard.vue";
 
 const router = createRouter({
   base: import.meta.env.BASE_URL,
@@ -13,11 +12,6 @@ const router = createRouter({
       name: "baseDashboard",
     },
     { path: "/", alias: "/login", component: LoginPage, name: "loginPage" },
-    {
-      path: "/facultydashboard",
-      component: FacultyDashboard,
-      name: "facultyDashboard",
-    },
   ],
 });
 

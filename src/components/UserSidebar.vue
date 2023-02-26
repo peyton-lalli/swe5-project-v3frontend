@@ -10,28 +10,28 @@
         {{ userName.toUpperCase() }}
       </v-card-title>
       <v-card-subtitle class="font-weight-medium text-darkBlue">
-        {{ userMajor }} Major
+        {{ userTitleOrMajor }} Major
       </v-card-subtitle>
-      <v-card-subtitle class="font-weight-medium text-mediumBlue">
+      <v-card-subtitle
+        v-if="userRole === 'student'"
+        class="font-weight-medium text-mediumBlue">
         {{ userClassification }}
       </v-card-subtitle>
-      <v-card-text>
+      <v-card-text v-if="userRole === 'student'">
         <v-row>
           <v-col cols="12">
             <v-progress-linear
               rounded
               v-model="userVocalLevel"
               color="darkBlue"
-              height="10"
-            ></v-progress-linear>
+              height="10"></v-progress-linear>
           </v-col>
           <v-col cols="12">
             <v-progress-linear
               rounded
               v-model="userSemesters"
               color="darkBlue"
-              height="10"
-            ></v-progress-linear>
+              height="10"></v-progress-linear>
           </v-col>
           <v-col cols="12">
             <v-card elevation="0" class="rounded-lg privateInstructorGradient">
@@ -40,8 +40,7 @@
                   <v-avatar class="bg-darkBlue">
                     <font-awesome-icon
                       icon="fa-solid fa-user"
-                      class="text-white"
-                    />
+                      class="text-white" />
                   </v-avatar>
                 </v-col>
                 <v-col cols="10" align-self="center">
@@ -61,8 +60,7 @@
     </v-card>
 
     <v-card
-      class="notificationGradient mainBlur notificationsPane rounded-lg overflow-auto pa-3"
-    >
+      class="notificationGradient mainBlur notificationsPane rounded-lg overflow-auto pa-3">
       <v-card-title class="text-white font-weight-bold text-h5 pb-4">
         Notifications
       </v-card-title>
@@ -74,57 +72,92 @@
 </template>
 
 <script>
-import NotificationItem from "./NotificationItem.vue";
-export default {
-  name: "UserSidebar",
-  components: { NotificationItem },
-  data() {
-    return {
-      userId: 2,
-      userName: "John Doe",
-      userMajor: "Vocal Music",
-      userClassification: "Senior",
-      userVocalLevel: 60,
-      userSemesters: 80,
-      userInstructor: 1,
-    };
-  },
-};
+  import NotificationItem from "./NotificationItem.vue";
+  import InstructorsDataService from "../services/instructors.js";
+  import StudentInfoDataService from "../services/studentinfo.js";
+  import { useLoginStore } from "../stores/LoginStore.js";
+  import { mapStores } from "pinia";
+  export default {
+    name: "UserSidebar",
+    components: { NotificationItem },
+    data() {
+      return {
+        userId: 2,
+        userRole: "",
+        userName: "John Doe",
+        userTitleOrMajor: "",
+        userClassification: "Senior",
+        userVocalLevel: 60,
+        userSemesters: 80,
+        userInstructor: 1,
+      };
+    },
+    computed: {
+      ...mapStores(useLoginStore),
+    },
+    mounted() {
+      this.retrieveInfo();
+    },
+    methods: {
+      retrieveInfo() {
+        this.userRole = this.loginStore.loginUser.role;
+        this.userName = this.loginStore.getFullName;
+        if (this.userRole === "student") {
+          StudentInfoDataService.getUserId(this.loginStore.loginUser.userId)
+            .then((response) => {
+              console.log(response.data.major);
+              // this.userTitleOrMajor = response.data;
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        } else if (this.userRole === "faculty") {
+          InstructorsDataService.getSingle(this.loginStore.loginUser.userId)
+            .then((response) => {
+              this.userTitleOrMajor = response.data.Instructors[0].title;
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }
+      },
+    },
+  };
 </script>
 
 <style scoped>
-* {
-  font-family: Inter, sans-serif !important;
-}
-/* Overwrites the opacity filter put on card subtitles */
-.v-card-subtitle {
-  opacity: 100%;
-}
+  * {
+    font-family: Inter, sans-serif !important;
+  }
+  /* Overwrites the opacity filter put on card subtitles */
+  .v-card-subtitle {
+    opacity: 100%;
+  }
 
-.scroll {
-  overflow-y: scroll !important;
-}
+  .scroll {
+    overflow-y: scroll !important;
+  }
 
-.fontWeightBlackOverride {
-  font-weight: 900 !important;
-}
+  .fontWeightBlackOverride {
+    font-weight: 900 !important;
+  }
 
-.sidebarGrid {
-  display: grid;
-  grid-template-columns: auto;
-  grid-template-rows: auto minmax(auto, 3fr);
-  grid-template-areas:
-    "userProfilePane"
-    "notificationsPane";
-  grid-gap: 1.5rem;
-  padding-left: 0;
-  padding-right: 0;
-}
-.userProfilePane {
-  grid-area: userProfilePane;
-}
+  .sidebarGrid {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto minmax(auto, 3fr);
+    grid-template-areas:
+      "userProfilePane"
+      "notificationsPane";
+    grid-gap: 1.5rem;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .userProfilePane {
+    grid-area: userProfilePane;
+  }
 
-.notificationsPane {
-  grid-area: notificationsPane;
-}
+  .notificationsPane {
+    grid-area: notificationsPane;
+  }
 </style>

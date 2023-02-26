@@ -254,7 +254,6 @@
           slots.push(startDate.getHours() + ":" + mins);
           startDate.setTime(startDate.getTime() + intervalMillis);
         }
-        console.log(slots);
         return slots;
       },
       /* This takes a date and time string and changes to a Date */

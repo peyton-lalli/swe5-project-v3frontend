@@ -2,15 +2,18 @@
   <v-container fluid class="baseDashboardGrid pl-0">
     <MenuSidebar class="menuBarPane"></MenuSidebar>
     <UserSidebar class="userSidebarPane"></UserSidebar>
-    <!-- <StudentHomeDashboard
+    <StudentHomeDashboard
       v-if="userRole === 'student'"
-      class="dashboardSlot"></StudentHomeDashboard> -->
+      class="dashboardSlot"></StudentHomeDashboard>
     <FacultyHomeDashboard
       v-if="userRole === 'faculty'"
       class="dashboardSlot"></FacultyHomeDashboard>
-    <EventsDashboard
+
+    <!-- Leaving commented out for now, until we figure out how to do it right. -->
+    <!-- To view, just un comment it, and comment the StudentHomeDashboard out (also have a student role) -->
+    <!-- <EventsDashboard
       v-if="userRole === 'student'"
-      class="dashboardSlot"></EventsDashboard>
+      class="dashboardSlot"></EventsDashboard> -->
   </v-container>
 </template>
 

@@ -4,9 +4,9 @@
       <v-card-title class="font-weight-bold text-h5 text-darkBlue">
         Open Event Signups
       </v-card-title>
-      <v-card-text>
+      <v-card-text v-for="id in openEventIds">
         <v-row>
-          <EventSignupItem />
+          <EventSignupItem :eventId="id" />
         </v-row>
       </v-card-text>
     </v-card>
@@ -14,9 +14,9 @@
       <v-card-title class="font-weight-bold text-darkBlue text-h5">
         Upcoming Events
       </v-card-title>
-      <v-card-text>
+      <v-card-text v-for="event in this.eventsStore.events">
         <v-row>
-          <EventUpcomingItem />
+          <EventUpcomingItem :eventId="event.id" />
         </v-row>
       </v-card-text>
     </v-card>
@@ -55,6 +55,8 @@
   import { useLoginStore } from "../stores/LoginStore.js";
   import { useEventsStore } from "../stores/EventsStore.js";
   import { mapStores } from "pinia";
+  import EventDataService from "../services/event.js";
+
   export default {
     name: "EventsDashboard",
     components: {
@@ -65,26 +67,45 @@
     data() {
       return {
         createDialog: false,
-        openEventSignups: [
-          {
-            eventType: "Vocal Jury",
-            eventDate: "04/22/2023",
-            eventTimes: [
-              { startTime: "9:00AM", endTime: "12:00PM" },
-              { startTime: "1:00pm", endTime: "3:00PM" },
-            ],
-            eventLocation: "Adams Recital Hall",
-            eventTimeslots: { total: 25, filled: 14 },
-          },
-        ],
+        openEventIds: [],
+        upcomingEventIds: [],
       };
     },
     computed: {
       ...mapStores(useLoginStore, useEventsStore),
     },
+    mounted() {
+      this.setEventsStore();
+      this.generateOpenEventIds();
+    },
     methods: {
       closeCreateDialog(val) {
         this.createDialog = val;
+      },
+      setEventsStore() {
+        EventDataService.getAll()
+          .then((response) => {
+            this.eventsStore.setEvents(response.data.Event);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      },
+      generateOpenEventIds() {
+        let ids = [];
+        for (let event in this.eventsStore.events) {
+          ids.push(this.eventsStore.events[event].id);
+        }
+        console.log(ids);
+        this.openEventIds = ids;
+      },
+      generateUpcomingEventIds() {
+        let ids = [];
+        for (let event in this.eventsStore.events) {
+          ids.push(this.eventsStore.events[event].id);
+        }
+        console.log(ids);
+        this.upcomingEventIds = ids;
       },
     },
   };

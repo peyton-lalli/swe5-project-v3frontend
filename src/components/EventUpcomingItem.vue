@@ -10,7 +10,7 @@
             {{ eventData.date }}
           </v-card-subtitle>
           <v-card-subtitle class="font-weight-semi-bold text-darkBlue pl-0">
-            {{ createTimesInfoString() }}
+            {{ timesInfoString }}
           </v-card-subtitle>
           <v-card-subtitle class="font-weight-medium text-mediumBlue pl-0">
             {{ eventData.location }}
@@ -49,37 +49,73 @@
 </template>
 
 <script>
+  import EventItem from "./EventItem.vue";
+  import { useEventsStore } from "../stores/EventsStore.js";
+  import { mapStores } from "pinia";
   export default {
     name: "EventUpcomingItem",
-    components: {},
+    components: {
+      EventItem,
+    },
     data() {
       return {
+        signUpDialog: false,
         eventData: {
-          type: "Vocal Jury",
-          date: "04/22/2023",
-          times: [
-            { startTime: "9:00am", endTime: "12:00pm" },
-            { startTime: "1:00pm", endTime: "3:00pm" },
-          ],
+          type: "",
+          date: "",
+          times: [],
           location: "Adams Recital Hall",
           timeslots: { total: 25, filled: 14 },
         },
+        timesInfoString: "",
       };
+    },
+    computed: {
+      ...mapStores(useEventsStore),
+    },
+    mounted() {
+      this.retrieveInfo();
+    },
+    props: {
+      eventId: 1,
     },
     methods: {
       createTimesInfoString() {
         let timesString = "";
         for (let i = 0; i < this.eventData.times.length; i++) {
           timesString +=
-            this.eventData.times[i].startTime +
+            this.get12HourTimeString(
+              new Date(this.eventData.times[i].startTime)
+            ) +
             " - " +
-            this.eventData.times[i].endTime;
+            this.get12HourTimeString(new Date(this.eventData.times[i].endTime));
           if (i + 1 < this.eventData.times.length) {
             timesString += " & ";
           }
         }
 
         return timesString;
+      },
+      get12HourTimeString(t) {
+        let hours = t.getHours();
+        let suffix = hours >= 12 ? "PM" : "AM";
+        hours = ((hours + 11) % 12) + 1;
+        let minutes = t.getMinutes() === 0 ? "00" : t.getMinutes();
+        return hours + ":" + minutes + suffix;
+      },
+      formatDate(date) {
+        const options = { year: "numeric", month: "numeric", day: "numeric" };
+        return new Date(date).toLocaleDateString("us-EN", options);
+      },
+      closeEventDialog(val) {
+        this.signUpDialog = val;
+      },
+      retrieveInfo() {
+        const event = this.eventsStore.getEventForId(this.eventId);
+        this.eventData.type = event.type;
+        this.eventData.date = this.formatDate(event.date);
+        this.eventData.times = event.times;
+        this.timesInfoString = this.createTimesInfoString();
       },
     },
   };

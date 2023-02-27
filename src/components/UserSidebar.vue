@@ -90,7 +90,7 @@
         userLevel: 0,
         userLevelPercent: 0,
         userSemestersPercent: 0,
-        userSemesters: 80,
+        userSemesters: 8,
         userInstructor: {
           id: 0,
           picture: "",

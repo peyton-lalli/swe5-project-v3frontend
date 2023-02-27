@@ -3,17 +3,23 @@
     <MenuSidebar class="menuBarPane"></MenuSidebar>
     <UserSidebar class="userSidebarPane"></UserSidebar>
     <StudentHomeDashboard
-      v-if="userRole === 'student'"
+      v-if="
+        userDashboard === 'StudentDashboard' &&
+        eventsStore.getEventsPageStatus === false
+      "
       class="dashboardSlot"></StudentHomeDashboard>
     <FacultyHomeDashboard
-      v-if="userRole === 'faculty'"
+      v-if="
+        userDashboard === 'FacultyDashboard' &&
+        eventsStore.getEventsPageStatus === false
+      "
       class="dashboardSlot"></FacultyHomeDashboard>
 
     <!-- Leaving commented out for now, until we figure out how to do it right. -->
     <!-- To view, just un comment it, and comment the StudentHomeDashboard out (also have a student role) -->
-    <!-- <EventsDashboard
-      v-if="userRole === 'student'"
-      class="dashboardSlot"></EventsDashboard> -->
+    <EventsDashboard
+      v-if="eventsStore.getEventsPageStatus"
+      class="dashboardSlot"></EventsDashboard>
   </v-container>
 </template>
 
@@ -24,6 +30,7 @@
   import FacultyHomeDashboard from "../components/FacultyHomeDashboard.vue";
   import EventsDashboard from "../components/EventsDashboard.vue";
   import { useLoginStore } from "../stores/LoginStore.js";
+  import { useEventsStore } from "../stores/EventsStore.js";
   import { mapStores } from "pinia";
 
   export default {
@@ -38,18 +45,30 @@
     data() {
       return {
         userRole: "",
+        userDashboard: "",
       };
     },
     computed: {
-      ...mapStores(useLoginStore),
+      ...mapStores(useLoginStore, useEventsStore),
     },
     mounted() {
       this.retrieveInfo();
+      this.setUserDashboard();
     },
     methods: {
       retrieveInfo() {
         this.userRole = this.loginStore.loginUser.role;
         console.log(this.userRole);
+      },
+      setUserDashboard() {
+        if (this.userRole === "student") {
+          this.userDashboard = "StudentDashboard";
+        } else if (this.userRole === "faculty") {
+          this.userDashboard = "FacultyDashboard";
+        }
+        // else if(this.userRole === 'admin') {
+        //   this.userDashboard = 'AdminDashboard';
+        // }
       },
     },
   };

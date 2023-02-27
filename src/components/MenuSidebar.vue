@@ -7,25 +7,25 @@
         contain
         :src="logoUrl"
         transition="scale-transition"
-        width="40"
-      />
+        width="40" />
       <!-- Home Page -->
-      <v-btn elevation="0" class="mt-16 mb-3">
+      <v-btn
+        elevation="0"
+        class="mt-16 mb-3"
+        @click="eventsStore.hideEventsPage">
         <v-icon size="xx-large">
           <font-awesome-icon
             icon="fa-solid fa-house-chimney"
-            class="text-darkBlue"
-          />
+            class="text-darkBlue" />
         </v-icon>
       </v-btn>
       <v-spacer></v-spacer>
       <!-- Events -->
-      <v-btn elevation="0" class="mt-5">
+      <v-btn elevation="0" class="mt-5" @click="eventsStore.showEventsPage">
         <v-icon size="xx-large">
           <font-awesome-icon
             icon="fa-solid fa-calendar"
-            class="text-darkBlue"
-          />
+            class="text-darkBlue" />
         </v-icon>
       </v-btn>
       <v-spacer></v-spacer>
@@ -41,8 +41,7 @@
         <v-icon size="xx-large">
           <font-awesome-icon
             icon="fa-solid fa-comments"
-            class="text-darkBlue"
-          />
+            class="text-darkBlue" />
         </v-icon>
       </v-btn>
       <v-spacer></v-spacer>
@@ -54,19 +53,16 @@
             v-on="on"
             @click="createDialog = true"
             elevation="0"
-            class="mt-16"
-          >
+            class="mt-16">
             <v-icon size="xx-large">
               <font-awesome-icon
                 icon="fa-solid fa-gear"
-                class="text-darkBlue"
-              />
+                class="text-darkBlue" />
             </v-icon>
           </v-btn>
         </template>
         <ProfileSettings
-          @closeCourseDialogEvent="closeCreateDialog"
-        ></ProfileSettings>
+          @closeCourseDialogEvent="closeCreateDialog"></ProfileSettings>
       </v-dialog>
       <v-spacer></v-spacer>
       <!-- Logout -->
@@ -74,8 +70,7 @@
         <v-icon size="xx-large">
           <font-awesome-icon
             icon="fa-solid fa-right-from-bracket"
-            class="text-darkBlue fa-flip-horizontal"
-          />
+            class="text-darkBlue fa-flip-horizontal" />
         </v-icon>
       </v-btn>
     </v-card>
@@ -83,43 +78,48 @@
 </template>
 
 <script>
-import ocLogo from "/OC_LOGO_BLUE.svg";
-import ProfileSettings from "./ProfileSettings.vue";
-export default {
-  name: "MenuSidebar",
-  components: {
-    ProfileSettings,
-    ocLogo,
-  },
-  data() {
-    return {
-      menuItems: [],
-      createDialog: false,
-      logoUrl: "",
-    };
-  },
-  async created() {
-    this.logoUrl = ocLogo;
-  },
-  methods: {
-    closeCreateDialog(val) {
-      this.createDialog = val;
+  import ocLogo from "/OC_LOGO_BLUE.svg";
+  import ProfileSettings from "./ProfileSettings.vue";
+  import { useEventsStore } from "../stores/EventsStore.js";
+  import { mapStores } from "pinia";
+  export default {
+    name: "MenuSidebar",
+    components: {
+      ProfileSettings,
+      ocLogo,
     },
-  },
-};
+    data() {
+      return {
+        menuItems: [],
+        createDialog: false,
+        logoUrl: "",
+      };
+    },
+    computed: {
+      ...mapStores(useEventsStore),
+    },
+    async created() {
+      this.logoUrl = ocLogo;
+    },
+    methods: {
+      closeCreateDialog(val) {
+        this.createDialog = val;
+      },
+    },
+  };
 </script>
 
 <style scoped>
-.menuBarGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: minmax(auto, 1fr);
-  grid-template-areas: "menuBarPane";
-  grid-gap: 1.5rem;
-  padding-left: 0;
-  padding-right: 0;
-}
-.menuBarPane {
-  grid-area: menuBarPane;
-}
+  .menuBarGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(auto, 1fr);
+    grid-template-areas: "menuBarPane";
+    grid-gap: 1.5rem;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .menuBarPane {
+    grid-area: menuBarPane;
+  }
 </style>

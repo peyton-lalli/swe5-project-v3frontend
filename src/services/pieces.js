@@ -21,6 +21,9 @@ class PiecesDataService {
   getLanguage(id) {
     return http.get(`/performance-t3/pieces/language/${id}`);
   }
+  getRepertoire(id) {
+    return http.get(`/performance-t3/pieces/repertoire/${id}`);
+  }
   delete(id) {
     return http.delete(`/performance-t3/pieces/${id}`);
   }

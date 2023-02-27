@@ -9,6 +9,12 @@ class EventDataService {
   getAll() {
     return http.get("/performance-t3/event");
   }
+  getId(id) {
+    return http.get(`/performance-t3/event/id/${id}`);
+  }
+  getTitle(id) {
+    return http.get(`/performance-t3/event/title/${id}`);
+  }
   getDate(id) {
     return http.get(`/performance-t3/event/date/${id}`);
   }

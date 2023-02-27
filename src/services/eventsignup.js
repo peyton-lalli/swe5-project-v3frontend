@@ -18,6 +18,9 @@ class EventSignUpDataService {
   getStudentId(id) {
     return http.get(`/performance-t3/eventtime/studentid/${id}`);
   }
+  getEnsembleId(id) {
+    return http.get(`/performance-t3/eventtime/ensembleid/${id}`);
+  }
   delete(id) {
     return http.delete(`/performance-t3/event/${id}`);
   }

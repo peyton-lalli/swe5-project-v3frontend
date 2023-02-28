@@ -61,6 +61,7 @@
       return {
         signUpDialog: false,
         eventData: {
+          id: 1,
           type: "",
           date: "",
           times: [],
@@ -112,6 +113,7 @@
       },
       retrieveInfo() {
         const event = this.eventsStore.getEventForId(this.eventId);
+        this.eventData.id = event.id;
         this.eventData.type = event.type;
         this.eventData.date = this.formatDate(event.date);
         this.eventData.times = event.times;

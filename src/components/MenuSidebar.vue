@@ -4,6 +4,7 @@
       <v-img
         alt="OC Logo"
         class="shrink mx-3 mt-4 mb-15"
+        style = "width: 70%; margin: auto;"
         contain
         :src="logoUrl"
         transition="scale-transition"
@@ -12,6 +13,7 @@
       <v-btn
         elevation="0"
         class="mt-16 mb-3"
+        style = "width: 90%; margin: auto;"
         @click="eventsStore.hideEventsPage">
         <v-icon size="xx-large">
           <font-awesome-icon
@@ -21,7 +23,11 @@
       </v-btn>
       <v-spacer></v-spacer>
       <!-- Events -->
-      <v-btn elevation="0" class="mt-5" @click="eventsStore.showEventsPage">
+      <v-btn 
+        elevation="0" 
+        class="mt-5" 
+        style = "width: 90%; margin: auto;"
+        @click="eventsStore.showEventsPage">
         <v-icon size="xx-large">
           <font-awesome-icon
             icon="fa-solid fa-calendar"
@@ -30,14 +36,20 @@
       </v-btn>
       <v-spacer></v-spacer>
       <!-- Repertoire -->
-      <v-btn elevation="0" class="mt-5">
+      <v-btn 
+        elevation="0" 
+        class="mt-5"
+        style = "width: 90%; margin: auto;">
         <v-icon size="xx-large">
           <font-awesome-icon icon="fa-solid fa-music" class="text-darkBlue" />
         </v-icon>
       </v-btn>
       <v-spacer></v-spacer>
       <!-- Comments -->
-      <v-btn elevation="0" class="mt-5 mb-16">
+      <v-btn 
+        elevation="0" 
+        class="mt-5 mb-16"
+        style = "width: 90%; margin: auto;">
         <v-icon size="xx-large">
           <font-awesome-icon
             icon="fa-solid fa-comments"
@@ -53,7 +65,8 @@
             v-on="on"
             @click="createDialog = true"
             elevation="0"
-            class="mt-16">
+            class="mt-16"
+            style = "width: 90%; margin: auto;">
             <v-icon size="xx-large">
               <font-awesome-icon
                 icon="fa-solid fa-gear"
@@ -66,7 +79,13 @@
       </v-dialog>
       <v-spacer></v-spacer>
       <!-- Logout -->
-      <v-btn elevation="0" class="mt-5">
+      <v-btn 
+        elevation="0" 
+        class="mt-5"
+        style = "
+          width: 90%; 
+          margin: auto;"
+        @click="logout()">
         <v-icon size="xx-large">
           <font-awesome-icon
             icon="fa-solid fa-right-from-bracket"
@@ -82,6 +101,7 @@
   import ProfileSettings from "./ProfileSettings.vue";
   import { useEventsStore } from "../stores/EventsStore.js";
   import { mapStores } from "pinia";
+  import { useLoginStore } from "../stores/LoginStore.js";
   export default {
     name: "MenuSidebar",
     components: {
@@ -97,6 +117,7 @@
     },
     computed: {
       ...mapStores(useEventsStore),
+      ...mapStores(useLoginStore),
     },
     async created() {
       this.logoUrl = ocLogo;
@@ -105,7 +126,12 @@
       closeCreateDialog(val) {
         this.createDialog = val;
       },
-    },
+      logout() {
+        this.loginStore.setLoginUser(null);
+        location.reload();
+        console.log(this.loginStore.loginUser);
+      },
+    }
   };
 </script>
 

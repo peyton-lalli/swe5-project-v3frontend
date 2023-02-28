@@ -79,12 +79,12 @@ export default {
     return {
       events: [
         {
-          title: "Jury Critique",
+          title: "Vocal Jury",
           date: "04/22/2023",
           time: "1:00 PM - 5:00 PM",
         },
         {
-          title: "Orchestra Jury",
+          title: "Instrumental Jury",
           date: "04/23/2023",
           time: "9:00 AM - 12:00 PM",
         },

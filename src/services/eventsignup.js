@@ -13,13 +13,13 @@ class EventSignUpDataService {
     return http.get(`/performance-t3/eventsignup/timeslot/${id}`);
   }
   getEventId(id) {
-    return http.get(`/performance-t3/eventtime/eventid/${id}`);
+    return http.get(`/performance-t3/eventsignup/eventid/${id}`);
   }
   getStudentId(id) {
-    return http.get(`/performance-t3/eventtime/studentid/${id}`);
+    return http.get(`/performance-t3/eventsignup/studentid/${id}`);
   }
   getEnsembleId(id) {
-    return http.get(`/performance-t3/eventtime/ensembleid/${id}`);
+    return http.get(`/performance-t3/eventsignup/ensembleid/${id}`);
   }
   delete(id) {
     return http.delete(`/performance-t3/event/${id}`);

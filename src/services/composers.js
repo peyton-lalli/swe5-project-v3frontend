@@ -10,13 +10,16 @@ class ComposersDataService {
     return http.get("/performance-t3/composers");
   }
   getName(id) {
-    return http.get(`/performance-t3/composers/startdate/${id}`);
+    return http.get(`/performance-t3/composers/name/${id}`);
+  }
+  getId(id) {
+    return http.get(`/performance-t3/composers/id/${id}`);
   }
   getBirthYear(id) {
-    return http.get(`/performance-t3/composers/enddate/${id}`);
+    return http.get(`/performance-t3/composers/birthyear/${id}`);
   }
   getDeathYear(id) {
-    return http.get(`/performance-t3/composers/enddate/${id}`);
+    return http.get(`/performance-t3/composers/deathyear/${id}`);
   }
   delete(id) {
     return http.delete(`/performance-t3/composers/${id}`);

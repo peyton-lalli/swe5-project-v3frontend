@@ -82,8 +82,8 @@
       closeCreateDialog(val) {
         this.createDialog = val;
       },
-      setEventsStore() {
-        EventDataService.getAll()
+      async setEventsStore() {
+        await EventDataService.getAll()
           .then((response) => {
             this.eventsStore.setEvents(response.data.Event);
           })

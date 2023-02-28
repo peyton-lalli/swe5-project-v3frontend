@@ -43,6 +43,9 @@ export const useEventsStore = defineStore("events", {
             timesSingle.endTime = new Date(
               event.date + " " + timesResponse[i].endtime
             );
+
+            timesSingle.interval = timesResponse[i].interval;
+
             timesFinal.push(timesSingle);
           }
         })

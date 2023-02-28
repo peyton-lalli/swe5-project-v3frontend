@@ -36,6 +36,7 @@
               <v-dialog v-model="signUpDialog" persistent max-width="1000px">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
+                    v-if="!hasPriorSignup"
                     elevation="0"
                     size="small"
                     rounded="pill"
@@ -45,8 +46,21 @@
                     v-on="on">
                     Signup
                   </v-btn>
+                  <v-btn
+                    v-if="hasPriorSignup"
+                    elevation="0"
+                    size="small"
+                    rounded="pill"
+                    class="buttonGradient text-white font-weight-bold text-capitalize"
+                    @click="editDialog = true"
+                    v-bind="attrs"
+                    v-on="on">
+                    Edit
+                  </v-btn>
                 </template>
-                <EventItem @closeEventDialogEvent="closeEventDialog">
+                <EventItem
+                  @closeEventDialogEvent="closeEventDialog"
+                  :eventData="eventData">
                 </EventItem>
               </v-dialog>
             </v-col>
@@ -60,7 +74,9 @@
 <script>
   import EventItem from "./EventItem.vue";
   import { useEventsStore } from "../stores/EventsStore.js";
+  import { useStudentInfoStore } from "../stores/StudentInfoStore.js";
   import { mapStores } from "pinia";
+  import EventSignUpDataService from "../services/eventsignup.js";
   export default {
     name: "EventSignupItem",
     components: {
@@ -69,7 +85,9 @@
     data() {
       return {
         signUpDialog: false,
+        hasPriorSignup: false,
         eventData: {
+          id: 1,
           type: "",
           date: "",
           times: [],
@@ -80,10 +98,11 @@
       };
     },
     computed: {
-      ...mapStores(useEventsStore),
+      ...mapStores(useEventsStore, useStudentInfoStore),
     },
-    mounted() {
+    async mounted() {
       this.retrieveInfo();
+      await this.getPriorSignup();
     },
     props: {
       eventId: 1,
@@ -116,15 +135,38 @@
         const options = { year: "numeric", month: "numeric", day: "numeric" };
         return new Date(date).toLocaleDateString("us-EN", options);
       },
-      closeEventDialog(val) {
+      async closeEventDialog(val) {
         this.signUpDialog = val;
+        console.log("CLOSED");
+        await this.getPriorSignup();
       },
       retrieveInfo() {
         const event = this.eventsStore.getEventForId(this.eventId);
+        this.eventData.id = event.id;
         this.eventData.type = event.type;
         this.eventData.date = this.formatDate(event.date);
         this.eventData.times = event.times;
         this.timesInfoString = this.createTimesInfoString();
+      },
+      async getPriorSignup() {
+        let oldSignups = 0;
+        await EventSignUpDataService.getEventId(this.eventData.id)
+          .then((response) => {
+            oldSignups = response.data.EventSignUp.filter((es) => {
+              return es.studentinfoId === this.studentInfoStore.studentInfo.id;
+            });
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+
+        console.log(oldSignups);
+
+        if (oldSignups.length >= 1) {
+          this.hasPriorSignup = true;
+        } else {
+          this.hasPriorSignup = false;
+        }
       },
     },
   };

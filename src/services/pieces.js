@@ -22,7 +22,7 @@ class PiecesDataService {
     return http.get(`/performance-t3/pieces/language/${id}`);
   }
   getRepertoire(id) {
-    return http.get(`/performance-t3/pieces/repertoire/${id}`);
+    return http.get(`/performance-t3/pieces/repertoireId/${id}`);
   }
   delete(id) {
     return http.delete(`/performance-t3/pieces/${id}`);

@@ -31,6 +31,8 @@
   import EventsDashboard from "../components/EventsDashboard.vue";
   import { useLoginStore } from "../stores/LoginStore.js";
   import { useEventsStore } from "../stores/EventsStore.js";
+  import { useStudentRepertoireStore } from "../stores/StudentRepertoireStore.js";
+  import { useStudentInfoStore } from "../stores/StudentInfoStore.js";
   import { mapStores } from "pinia";
 
   export default {
@@ -49,16 +51,26 @@
       };
     },
     computed: {
-      ...mapStores(useLoginStore, useEventsStore),
+      ...mapStores(
+        useLoginStore,
+        useEventsStore,
+        useStudentRepertoireStore,
+        useStudentInfoStore
+      ),
     },
     mounted() {
       this.retrieveInfo();
       this.setUserDashboard();
     },
     methods: {
-      retrieveInfo() {
+      async retrieveInfo() {
         this.userRole = this.loginStore.loginUser.role;
-        console.log(this.userRole);
+        await this.studentInfoStore.setStudentInfo(
+          this.loginStore.loginUser.userId
+        );
+        await this.studentRepertoireStore.setRepertoire(
+          this.studentInfoStore.studentInfo.id
+        );
       },
       setUserDashboard() {
         if (this.userRole === "student") {

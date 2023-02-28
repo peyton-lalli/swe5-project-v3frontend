@@ -4,6 +4,7 @@ import LoginPage from "../views/Login.vue";
 import { useLoginStore } from "../stores/LoginStore.js";
 
 const router = createRouter({
+  mode: "history",
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {

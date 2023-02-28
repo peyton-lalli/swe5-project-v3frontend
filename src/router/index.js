@@ -5,6 +5,7 @@ import { useLoginStore } from "../stores/LoginStore.js";
 
 const router = createRouter({
   mode: "history",
+  history: createWebHistory(import.meta.env.BASE_URL),
   baseurl: import.meta.env.BASE_URL,
   routes: [
     {

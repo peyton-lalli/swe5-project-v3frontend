@@ -31,9 +31,9 @@
         ></v-select>
       </v-card-text>
       <v-card-text v-if="userRole === 'faculty' || userRole === 'admin'">
-        <v-text-field>
-          <!-- sdvksndv,-->
-        </v-text-field>
+        <v-text-field
+          :placeholder="userTitleOrMajor"
+        ></v-text-field>
       </v-card-text>
       <v-card-text v-if="userRole === 'student'">
         <v-select

@@ -14,6 +14,12 @@
         eventsStore.getEventsPageStatus === false
       "
       class="dashboardSlot"></FacultyHomeDashboard>
+    <AdminHomeDashboard
+      v-if="
+        userDashboard === 'AdminDashboard' &&
+        eventsStore.getEventsPageStatus === false
+      "
+      class="dashboardSlot"></AdminHomeDashboard>
 
     <!-- Leaving commented out for now, until we figure out how to do it right. -->
     <!-- To view, just un comment it, and comment the StudentHomeDashboard out (also have a student role) -->
@@ -28,6 +34,7 @@
   import UserSidebar from "../components/UserSidebar.vue";
   import StudentHomeDashboard from "../components/StudentHomeDashboard.vue";
   import FacultyHomeDashboard from "../components/FacultyHomeDashboard.vue";
+  import AdminHomeDashboard from "../components/AdminHomeDashbaord.vue";
   import EventsDashboard from "../components/EventsDashboard.vue";
   import { useLoginStore } from "../stores/LoginStore.js";
   import { useEventsStore } from "../stores/EventsStore.js";
@@ -43,6 +50,7 @@
       UserSidebar,
       StudentHomeDashboard,
       FacultyHomeDashboard,
+      AdminHomeDashboard,
       EventsDashboard,
     },
     data() {
@@ -88,10 +96,9 @@
           this.userDashboard = "StudentDashboard";
         } else if (this.userRole === "faculty") {
           this.userDashboard = "FacultyDashboard";
+        } else if (this.userRole === "admin") {
+          this.userDashboard = "AdminDashboard";
         }
-        // else if(this.userRole === 'admin') {
-        //   this.userDashboard = 'AdminDashboard';
-        // }
       },
     },
   };

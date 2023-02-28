@@ -67,7 +67,7 @@
   import StudentComponent from "./StudentComponent.vue";
   import AttentionComponent from "./AttentionComponent.vue";
   export default {
-    name: "FacultyHomeDashboard",
+    name: "AdminHomeDashboard",
     components: {
       EventComponent,
       StudentComponent,

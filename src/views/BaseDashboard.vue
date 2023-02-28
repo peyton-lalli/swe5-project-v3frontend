@@ -34,6 +34,7 @@
   import { useStudentRepertoireStore } from "../stores/StudentRepertoireStore.js";
   import { useStudentInfoStore } from "../stores/StudentInfoStore.js";
   import { mapStores } from "pinia";
+  import EventDataService from "../services/event.js";
 
   export default {
     name: "BaseDashboard",
@@ -58,9 +59,10 @@
         useStudentInfoStore
       ),
     },
-    mounted() {
+    async mounted() {
       this.retrieveInfo();
       this.setUserDashboard();
+      await this.setEventsStore();
     },
     methods: {
       async retrieveInfo() {
@@ -71,6 +73,15 @@
         await this.studentRepertoireStore.setRepertoire(
           this.studentInfoStore.studentInfo.id
         );
+      },
+      async setEventsStore() {
+        await EventDataService.getAll()
+          .then(async (response) => {
+            await this.eventsStore.setEvents(response.data.Event);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
       },
       setUserDashboard() {
         if (this.userRole === "student") {

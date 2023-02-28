@@ -74,6 +74,8 @@
   import InstructorsDataService from "../services/instructors.js";
   import StudentInfoDataService from "../services/studentinfo.js";
   import UsersDataService from "../services/users.js";
+  //Remove later!
+  import { useStudentInfoStore } from "../stores/StudentInfoStore.js";
   import { useLoginStore } from "../stores/LoginStore.js";
   import { mapStores } from "pinia";
   export default {
@@ -100,7 +102,7 @@
       };
     },
     computed: {
-      ...mapStores(useLoginStore),
+      ...mapStores(useLoginStore, useStudentInfoStore),
     },
     mounted() {
       this.retrieveInfo();
@@ -151,6 +153,8 @@
               const user = response.data.Users[0];
               this.userInstructor.name = user.fName + " " + user.lName;
               this.userInstructor.picture = user.picture;
+              //Remove Later!!
+              this.studentInfoStore.setPic(user.picture);
               this.userInstructor.id = user.id;
             });
           })

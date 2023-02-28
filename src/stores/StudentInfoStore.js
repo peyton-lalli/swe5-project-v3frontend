@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import StudentInfoDataService from "../services/studentinfo.js";
 
 export const useStudentInfoStore = defineStore("studentInfo", {
-  state: () => ({ studentInfo: {} }),
+  state: () => ({ studentInfo: {}, pic: "" }),
   persist: true,
   getters: {},
   actions: {
@@ -14,6 +14,9 @@ export const useStudentInfoStore = defineStore("studentInfo", {
         .catch((e) => {
           console.log(e);
         });
+    },
+    setPic(pic) {
+      this.pic = pic;
     },
   },
 });

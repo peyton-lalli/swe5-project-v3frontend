@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import EventTimeDataService from "../services/eventtime.js";
 
 export const useEventsStore = defineStore("events", {
-  state: () => ({ eventsPageShown: false, events: [] }),
+  state: () => ({ eventsPageShown: false, events: [], currentSignups: [] }),
   persist: true,
   getters: {
     getEventsPageStatus(state) {
@@ -23,6 +23,7 @@ export const useEventsStore = defineStore("events", {
           date: new Date(eventsList[i].date),
           times: await this.createTimes(eventsList[i]),
         };
+        console.log("PARSED ID " + parsed.id);
         formattedEvents.push(parsed);
       }
       this.events = formattedEvents;
@@ -62,7 +63,13 @@ export const useEventsStore = defineStore("events", {
       this.eventsPageShown = false;
     },
     findEventForId(id) {
-      return this.events[id];
+      let event = this.events.find((ev) => ev.id === id);
+      if (!event) {
+        console.log("No Event Found");
+        return null;
+      } else {
+        return event;
+      }
     },
   },
 });

@@ -18,11 +18,8 @@
         </v-card-title>
         <v-card-text>
           <v-row>
-            <v-col cols="6">
-              <EventComponent />
-            </v-col>
-            <v-col cols="6">
-              <EventComponent />
+            <v-col cols="6" v-for="event in eventSignups">
+              <EventComponent :eventSignUpData="event" />
             </v-col>
           </v-row>
         </v-card-text>
@@ -85,6 +82,10 @@
   import RepertoireComponent from "../components/RepertoireComponent.vue";
   import CritiqueComponent from "../components/CritiqueComponent.vue";
   import RepertoireCreate from "../components/RepertoireCreate.vue";
+  import { useEventsStore } from "../stores/EventsStore.js";
+  import { useStudentInfoStore } from "../stores/StudentInfoStore.js";
+  import EventSignUpDataService from "../services/eventsignup.js";
+  import { mapStores } from "pinia";
   export default {
     name: "StudentHomeDashboard",
     components: {
@@ -96,11 +97,37 @@
     data() {
       return {
         createDialog: false,
+        eventSignups: [],
       };
+    },
+    computed: {
+      ...mapStores(useEventsStore, useStudentInfoStore),
+    },
+    async mounted() {
+      await this.generateEventSignupsForStudent();
     },
     methods: {
       closeCreateDialog(val) {
         this.createDialog = val;
+      },
+      async generateEventSignupsForStudent() {
+        let eventSignups = [];
+        let events = this.eventsStore.events;
+        for (let i = 0; i < events.length; i++) {
+          await EventSignUpDataService.getEventId(events[i].id)
+            .then((response) => {
+              let signUp = response.data.EventSignUp.find(
+                (es) =>
+                  es.studentinfoId === this.studentInfoStore.studentInfo.id
+              );
+              if (signUp) eventSignups.push(signUp);
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }
+        console.log("AHHHH" + eventSignups);
+        this.eventSignups = eventSignups;
       },
     },
   };

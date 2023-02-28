@@ -32,14 +32,12 @@
                 <v-row justify="center" class="pl-1 mt-0 mb-1">
                   <v-col cols="2" align-self="center">
                     <v-avatar class="bg-darkBlue">
-                      <font-awesome-icon
-                        icon="fa-solid fa-user"
-                        class="text-white" />
+                      <v-img :src="this.studentInfoStore.pic"></v-img>
                     </v-avatar>
                   </v-col>
                   <v-col cols="9">
                     <v-card-title class="text-darkBlue font-weight-bold pb-2">
-                      Jane Doe
+                      Nathan Lalli
                     </v-card-title>
                   </v-col>
                 </v-row>
@@ -65,7 +63,7 @@
                   </v-col>
                   <v-col cols="9">
                     <v-card-title class="text-darkBlue font-weight-bold pb-2">
-                      Jane Doe
+                      Peyton Lalli
                     </v-card-title>
                   </v-col>
                 </v-row>
@@ -184,7 +182,7 @@
             </v-card-text>
           </v-col>
           <v-col>
-            <v-row>
+            <!-- <v-row>
               <v-col>
                 <v-card-subtitle class="font-weight-bold text-darkGray pl-1">
                   Additional Musical Selection
@@ -199,7 +197,7 @@
                   Add to repertoire
                 </v-btn>
               </v-col>
-            </v-row>
+            </v-row> -->
             <v-row>
               <v-col>
                 <v-card
@@ -229,7 +227,6 @@
 </template>
 
 <script>
-  import EventItem from "./EventItem.vue";
   import { useEventsStore } from "../stores/EventsStore.js";
   import { useStudentInfoStore } from "../stores/StudentInfoStore.js";
   import { useStudentRepertoireStore } from "../stores/StudentRepertoireStore.js";

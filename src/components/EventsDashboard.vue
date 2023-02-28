@@ -38,10 +38,9 @@
           </v-col>
         </v-row>
       </v-card-title>
-      <v-card-text>
+      <v-card-text v-for="event in eventSignups">
         <v-row>
-          <EventComponent />
-          <EventComponent />
+          <EventComponent :eventSignUpData="event" />
         </v-row>
       </v-card-text>
     </v-card>
@@ -52,6 +51,8 @@
   import EventComponent from "./EventComponent.vue";
   import EventSignupItem from "./EventSignupItem.vue";
   import EventUpcomingItem from "./EventUpcomingItem.vue";
+  import EventSignUpDataService from "../services/eventsignup.js";
+  import { useStudentInfoStore } from "../stores/StudentInfoStore.js";
   import { useLoginStore } from "../stores/LoginStore.js";
   import { useEventsStore } from "../stores/EventsStore.js";
   import { mapStores } from "pinia";
@@ -69,14 +70,16 @@
         createDialog: false,
         openEventIds: [],
         upcomingEventIds: [],
+        eventSignups: [],
       };
     },
     computed: {
-      ...mapStores(useLoginStore, useEventsStore),
+      ...mapStores(useLoginStore, useEventsStore, useStudentInfoStore),
     },
-    mounted() {
-      this.setEventsStore();
+    async mounted() {
+      await this.setEventsStore();
       this.generateOpenEventIds();
+      await this.generateEventSignupsForStudent();
     },
     methods: {
       closeCreateDialog(val) {
@@ -84,8 +87,8 @@
       },
       async setEventsStore() {
         await EventDataService.getAll()
-          .then((response) => {
-            this.eventsStore.setEvents(response.data.Event);
+          .then(async (response) => {
+            await this.eventsStore.setEvents(response.data.Event);
           })
           .catch((e) => {
             console.log(e);
@@ -106,6 +109,25 @@
         }
         console.log(ids);
         this.upcomingEventIds = ids;
+      },
+      async generateEventSignupsForStudent() {
+        let eventSignups = [];
+        let events = this.eventsStore.events;
+        for (let i = 0; i < events.length; i++) {
+          await EventSignUpDataService.getEventId(events[i].id)
+            .then((response) => {
+              let signUp = response.data.EventSignUp.find(
+                (es) =>
+                  es.studentinfoId === this.studentInfoStore.studentInfo.id
+              );
+              if (signUp) eventSignups.push(signUp);
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }
+        console.log("AHHHH" + eventSignups);
+        this.eventSignups = eventSignups;
       },
     },
   };

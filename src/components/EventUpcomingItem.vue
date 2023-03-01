@@ -12,9 +12,6 @@
           <v-card-subtitle class="font-weight-semi-bold text-darkBlue pl-0">
             {{ timesInfoString }}
           </v-card-subtitle>
-          <v-card-subtitle class="font-weight-medium text-mediumBlue pl-0">
-            {{ eventData.location }}
-          </v-card-subtitle>
         </v-col>
         <v-spacer></v-spacer>
         <v-col justify="center" align="end" cols="auto">
@@ -66,7 +63,7 @@
           date: "",
           times: [],
           location: "Adams Recital Hall",
-          timeslots: { total: 25, filled: 14 },
+          timeslots: { total: 25, filled: 0 },
         },
         timesInfoString: "",
       };
@@ -112,6 +109,7 @@
         this.signUpDialog = val;
       },
       retrieveInfo() {
+        console.log("WTF");
         const event = this.eventsStore.getEventForId(this.eventId);
         this.eventData.id = event.id;
         this.eventData.type = event.type;

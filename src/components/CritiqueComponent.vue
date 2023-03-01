@@ -21,7 +21,7 @@
         <v-row justify="center" class="pl-5 mt-0">
           <v-col cols="1" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
+              <v-img :src="this.studentInfoStore.pic"></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="11">
@@ -33,7 +33,7 @@
         <v-row justify="center" class="pl-5 mt-0">
           <v-col cols="1" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
+              <v-img :src="this.studentInfoStore.pic2"></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="11">
@@ -45,7 +45,7 @@
         <v-row justify="center" class="pl-5 mt-0">
           <v-col cols="1" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
+              <v-img :src="this.studentInfoStore.pic3"></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="11">
@@ -73,20 +73,20 @@
           <v-row justify="center">
             <v-col align-self="center">
               <v-card-title class="pb-0 font-weight-bold">
-                {{ songs.at(0).name }}
+                {{ songs.at(1).name }}
               </v-card-title>
               <v-card-subtitle class="text-darkBlue font-weight-bold">
-                {{ songs.at(0).person }}
+                {{ songs.at(1).person }}
               </v-card-subtitle>
             </v-col>
           </v-row>
           <v-row justify="center">
             <v-col align-self="center">
               <v-card-title class="pb-0 font-weight-bold">
-                {{ songs.at(0).name }}
+                {{ songs.at(2).name }}
               </v-card-title>
               <v-card-subtitle class="text-darkBlue font-weight-bold">
-                {{ songs.at(0).person }}
+                {{ songs.at(2).person }}
               </v-card-subtitle>
             </v-col>
           </v-row>
@@ -97,6 +97,8 @@
 </template>
 
 <script>
+  import { useStudentInfoStore } from "../stores/StudentInfoStore.js";
+  import { mapStores } from "pinia";
   export default {
     name: "CritiqueComponent",
     components: {},
@@ -105,7 +107,7 @@
         title: "Jury Critique",
         type: "Soprano",
         date: "04/22/2023",
-        jurors: ["Jane Doe", "James Doe", "Jeff Doe"],
+        jurors: ["Nathan Lalli", "Peyton Powell", "Logan Demaray"],
         songs: [
           {
             name: "Bird Upon The Tree",
@@ -116,11 +118,14 @@
             person: "Schmidt, Harvey",
           },
           {
-            name: "Bird Upon The Tree",
+            name: "In My Life",
             person: "Schonberg, Claude-Michel",
           },
         ],
       };
+    },
+    computed: {
+      ...mapStores(useStudentInfoStore),
     },
   };
 </script>

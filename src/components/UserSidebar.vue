@@ -20,16 +20,12 @@
       <v-card-text v-if="userRole === 'student'">
         <v-row>
           <v-col cols="12">
+            <v-card-subtitle class="text-darkBlue pl-0">
+              Vocal Level 3
+            </v-card-subtitle>
             <v-progress-linear
               rounded
               v-model="userLevelPercent"
-              color="darkBlue"
-              height="10"></v-progress-linear>
-          </v-col>
-          <v-col cols="12">
-            <v-progress-linear
-              rounded
-              v-model="userSemestersPercent"
               color="darkBlue"
               height="10"></v-progress-linear>
           </v-col>
@@ -45,7 +41,8 @@
                   <v-card-title class="pb-0 font-weight-semi-bold text-h6">
                     {{ userInstructor.title }}
                   </v-card-title>
-                  <v-card-subtitle class="text-darkBlue font-weight-bold pb-2">
+                  <v-card-subtitle
+                    class="text-darkBlue font-weight-bold pb-2 font-weight-bold">
                     <!-- This will eventually be a store call passing the userInstuctor value -->
                     {{ userInstructor.name }}
                   </v-card-subtitle>

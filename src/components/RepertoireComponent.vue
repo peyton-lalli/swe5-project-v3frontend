@@ -5,7 +5,8 @@
         <v-row justify="center" class="pl-5 mt-0">
           <v-col cols="1" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
+              <v-img
+                src="https://www.mtishows.com/sites/default/files/profile/marcblitzstein.jpg?download=1"></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="9" class="pt-0 pb-0">
@@ -17,16 +18,16 @@
             </v-card-subtitle>
           </v-col>
           <v-col cols="1" align-self="center" class="pl-0">
-            <v-icon size="x-large">
+            <!-- <v-icon size="x-large">
               <font-awesome-icon icon="fa-solid fa-video" class="text-white" />
-            </v-icon>
+            </v-icon> -->
           </v-col>
           <v-col cols="1" align-self="center" class="pl-0">
-            <v-icon size="x-large">
+            <!-- <v-icon size="x-large">
               <font-awesome-icon
                 icon="fa-solid fa-calendar"
                 class="text-white" />
-            </v-icon>
+            </v-icon> -->
           </v-col>
         </v-row>
       </v-card-text>

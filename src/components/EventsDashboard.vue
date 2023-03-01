@@ -14,9 +14,9 @@
       <v-card-title class="font-weight-bold text-darkBlue text-h5">
         Upcoming Events
       </v-card-title>
-      <v-card-text v-for="event in this.eventsStore.events">
+      <v-card-text v-for="id in upcomingEventIds">
         <v-row>
-          <EventUpcomingItem :eventId="event.id" />
+          <EventUpcomingItem :eventId="id" />
         </v-row>
       </v-card-text>
     </v-card>
@@ -79,6 +79,7 @@
     async mounted() {
       await this.setEventsStore();
       this.generateOpenEventIds();
+      this.generateUpcomingEventIds();
       await this.generateEventSignupsForStudent();
     },
     methods: {
@@ -95,19 +96,19 @@
           });
       },
       generateOpenEventIds() {
-        let ids = [];
-        for (let event in this.eventsStore.events) {
-          ids.push(this.eventsStore.events[event].id);
-        }
-        console.log(ids);
+        let ids = [1, 2];
+        // for (let event in this.eventsStore.events) {
+        //   ids.push(this.eventsStore.events[event].id);
+        // }
+        // console.log(ids);
         this.openEventIds = ids;
       },
       generateUpcomingEventIds() {
-        let ids = [];
-        for (let event in this.eventsStore.events) {
-          ids.push(this.eventsStore.events[event].id);
-        }
-        console.log(ids);
+        let ids = [3, 4];
+        // for (let event in this.eventsStore.events) {
+        //   ids.push(this.eventsStore.events[event].id);
+        // }
+        // console.log(ids);
         this.upcomingEventIds = ids;
       },
       async generateEventSignupsForStudent() {

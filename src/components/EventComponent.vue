@@ -55,7 +55,7 @@
         <v-row justify="center" class="pl-5 mt-0 mb-1">
           <v-col cols="2" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
+              <v-img :src="this.studentInfoStore.pic2"></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="10" align-self="center">
@@ -75,7 +75,8 @@
         <v-row justify="center" class="pl-5 mt-0">
           <v-col cols="2" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
+              <v-img
+                src="https://www.mtishows.com/sites/default/files/profile/marcblitzstein.jpg?download=1"></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="10" align-self="center">

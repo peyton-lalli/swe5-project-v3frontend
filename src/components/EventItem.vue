@@ -56,9 +56,7 @@
                 <v-row justify="center" class="pl-1 mt-0 mb-1">
                   <v-col cols="2" align-self="center">
                     <v-avatar class="bg-darkBlue">
-                      <font-awesome-icon
-                        icon="fa-solid fa-user"
-                        class="text-white" />
+                      <v-img :src="this.studentInfoStore.pic2"></v-img>
                     </v-avatar>
                   </v-col>
                   <v-col cols="9">
@@ -148,9 +146,10 @@
                           <v-row justify="center" class="pl-1 mt-0">
                             <v-col cols="1" align-self="center">
                               <v-avatar class="bg-darkBlue">
-                                <font-awesome-icon
-                                  icon="fa-solid fa-user"
-                                  class="text-white" />
+                                <v-avatar class="bg-darkBlue">
+                                  <v-img
+                                    src="https://www.mtishows.com/sites/default/files/profile/marcblitzstein.jpg?download=1"></v-img>
+                                </v-avatar>
                               </v-avatar>
                             </v-col>
                             <v-col cols="11">

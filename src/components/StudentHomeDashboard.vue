@@ -147,15 +147,9 @@
 
   .eventsPane {
     grid-area: eventsPane;
-    overflow: hidden;
-    overflow-y: auto;
-    overflow-y: scroll;
   }
 
   .repertoirePane {
     grid-area: repertoirePane;
-    overflow: hidden;
-    overflow-y: auto;
-    overflow-y: scroll;
   }
 </style>

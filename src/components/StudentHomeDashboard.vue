@@ -16,17 +16,18 @@
             </v-col>
           </v-row>
         </v-card-title>
-        <v-card-text>
+        <v-card-text flex-grow="1" overflow="auto">
           <v-row>
-            <v-col cols="6">
+            <v-col cols="12" :sm="12" :md="12" :lg="12" :xl="6">
               <EventComponent />
             </v-col>
-            <v-col cols="6">
+            <v-col cols="12" :sm="12" :md="12" :lg="12" :xl="6">
               <EventComponent />
             </v-col>
           </v-row>
         </v-card-text>
       </v-card>
+
       <v-card class="repertoirePane mainBlur rounded-lg">
         <v-card-title class="font-weight-bold text-darkBlue">
           <v-row>
@@ -61,6 +62,9 @@
           </v-row>
         </v-card-title>
         <v-card-text>
+          <v-row>
+            <RepertoireComponent />
+          </v-row>
           <v-row>
             <RepertoireComponent />
           </v-row>

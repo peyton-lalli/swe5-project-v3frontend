@@ -54,7 +54,7 @@
     },
     data() {
       return {
-        critiqueDialog: true,
+        critiqueDialog: false,
         events: [
           {
             title: "Vocal Jury",

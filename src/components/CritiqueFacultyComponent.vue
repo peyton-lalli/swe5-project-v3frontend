@@ -260,11 +260,11 @@
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row v-if="isExpand">
+              <v-row v-if="isExpand" v-for="section in sections">
                 <v-col>
                   <v-card-title class="font-weight-bold text-darkGray pl-1">
                     <v-row>
-                      <v-col> Deployment </v-col>
+                      <v-col> {{ section.first }} </v-col>
                       <v-col class="text-right">
                         <v-select
                           label="Rating"
@@ -279,71 +279,7 @@
                 <v-col>
                   <v-card-title class="font-weight-bold text-darkGray pl-1">
                     <v-row>
-                      <v-col> Diction </v-col>
-                      <v-col class="text-right">
-                        <v-select
-                          label="Rating"
-                          :items="ratings"
-                          variant="solo"
-                          size="small" />
-                      </v-col>
-                    </v-row>
-                  </v-card-title>
-                  <v-textarea variant="solo" rows="2" />
-                </v-col>
-              </v-row>
-              <v-row v-if="isExpand">
-                <v-col>
-                  <v-card-title class="font-weight-bold text-darkGray pl-1">
-                    <v-row>
-                      <v-col> Tone </v-col>
-                      <v-col class="text-right">
-                        <v-select
-                          label="Rating"
-                          :items="ratings"
-                          variant="solo"
-                          size="small" />
-                      </v-col>
-                    </v-row>
-                  </v-card-title>
-                  <v-textarea variant="solo" rows="2" />
-                </v-col>
-                <v-col>
-                  <v-card-title class="font-weight-bold text-darkGray pl-1">
-                    <v-row>
-                      <v-col> Interpretation, Musicianship </v-col>
-                      <v-col class="text-right">
-                        <v-select
-                          label="Rating"
-                          :items="ratings"
-                          variant="solo"
-                          size="small" />
-                      </v-col>
-                    </v-row>
-                  </v-card-title>
-                  <v-textarea variant="solo" rows="2" />
-                </v-col>
-              </v-row>
-              <v-row v-if="isExpand">
-                <v-col>
-                  <v-card-title class="font-weight-bold text-darkGray pl-1">
-                    <v-row>
-                      <v-col> Accuracy/Intonation </v-col>
-                      <v-col class="text-right">
-                        <v-select
-                          label="Rating"
-                          :items="ratings"
-                          variant="solo"
-                          size="small" />
-                      </v-col>
-                    </v-row>
-                  </v-card-title>
-                  <v-textarea variant="solo" rows="2" />
-                </v-col>
-                <v-col>
-                  <v-card-title class="font-weight-bold text-darkGray pl-1">
-                    <v-row>
-                      <v-col> Balence Blend </v-col>
+                      <v-col> {{ section.second }} </v-col>
                       <v-col class="text-right">
                         <v-select
                           label="Rating"
@@ -409,6 +345,20 @@
           },
         ],
         ratings: ["Poor", "Fair", "Good", "Excellent"],
+        sections: [
+          {
+            first: "Deportment",
+            second: "Diction",
+          },
+          {
+            first: "Tone",
+            second: "Interpretation, Musicianship",
+          },
+          {
+            first: "Accuracy/Intonation",
+            second: "Balence Blend",
+          },
+        ],
       };
     },
     methods: {

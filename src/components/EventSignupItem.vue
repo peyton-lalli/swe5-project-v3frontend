@@ -30,31 +30,18 @@
           </v-row>
           <v-row align="center" justify="center">
             <v-col justify="center">
+              <v-btn
+                v-if="!hasPriorSignup"
+                elevation="0"
+                size="small"
+                rounded="pill"
+                class="buttonGradient text-white font-weight-bold text-capitalize"
+                @click="
+                  hasPriorSignup ? (editDialog = true) : (signUpDialog = true)
+                ">
+                {{ hasPriorSignup ? "Edit" : "Signup" }}
+              </v-btn>
               <v-dialog v-model="signUpDialog" persistent max-width="1000px">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    v-if="!hasPriorSignup"
-                    elevation="0"
-                    size="small"
-                    rounded="pill"
-                    class="buttonGradient text-white font-weight-bold text-capitalize"
-                    @click="signUpDialog = true"
-                    v-bind="attrs"
-                    v-on="on">
-                    Signup
-                  </v-btn>
-                  <v-btn
-                    v-if="hasPriorSignup"
-                    elevation="0"
-                    size="small"
-                    rounded="pill"
-                    class="buttonGradient text-white font-weight-bold text-capitalize"
-                    @click="editDialog = true"
-                    v-bind="attrs"
-                    v-on="on">
-                    Edit
-                  </v-btn>
-                </template>
                 <EventItem
                   @closeEventDialogEvent="closeEventDialog"
                   @regenerateSignups="regenerateSignups()"
@@ -142,13 +129,11 @@
         );
       },
       regenerateSignups() {
-        console.log("CAUGHT BY SUI");
         this.$emit("regenerateSignups");
         this.checkForPriorSignup();
       },
       async closeEventDialog(val) {
         this.signUpDialog = val;
-        console.log("CLOSED");
         await this.getPriorSignup();
       },
       retrieveInfo() {
@@ -170,8 +155,6 @@
           .catch((e) => {
             console.log(e);
           });
-
-        console.log(oldSignups);
 
         if (oldSignups.length >= 1) {
           this.hasPriorSignup = true;

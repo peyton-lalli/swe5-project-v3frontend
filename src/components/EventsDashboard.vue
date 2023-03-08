@@ -86,7 +86,6 @@
         this.createDialog = val;
       },
       generateOpenEventsList() {
-        console.log(this.eventsStore.events);
         let events = [this.eventsStore.events[0], this.eventsStore.events[1]];
         this.openEvents = events;
       },

@@ -24,7 +24,8 @@ export const useUserStore = defineStore("user", {
     },
     // Clear the login user info, logging them out
     clearLoginUser() {
-      this.loginUser = "";
+      this.userInfo = null;
+      this.userRoleInfo = null;
     },
     // Set the userRoleInfo based on the users role
     async setUserRoleInfo() {

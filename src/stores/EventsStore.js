@@ -29,7 +29,6 @@ export const useEventsStore = defineStore("events", {
         .then(async (response) => {
           let eventsResponse = response.data.Event;
           for (let event in eventsResponse) {
-            console.log(event);
             this.events.push({
               id: eventsResponse[event].id,
               type: eventsResponse[event].type,
@@ -42,14 +41,7 @@ export const useEventsStore = defineStore("events", {
         .catch((e) => {
           console.log(e);
         });
-
-      console.log("AFTER ORIGINAL EVENTS GET");
-      console.log(this.events);
-
       await this.generateSignUpsForAllEvents();
-
-      console.log("AFTER ORIGINAL EVENTS SIGNUPS GET");
-      console.log(this.events);
     },
     async generateSignUpsForAllEvents() {
       await EventSignUpDataService.getAll()

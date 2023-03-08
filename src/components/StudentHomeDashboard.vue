@@ -29,19 +29,15 @@
           <v-row>
             <v-col class="text-h5 font-weight-bold"> Repertoire </v-col>
             <v-col class="text-right">
+              <v-btn
+                @click="createDialog = true"
+                elevation="0"
+                size="small"
+                rounded="pill"
+                class="buttonGradient mr-3 text-white font-weight-bold">
+                Add New
+              </v-btn>
               <v-dialog v-model="createDialog" persistent max-width="600px">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="createDialog = true"
-                    elevation="0"
-                    size="small"
-                    rounded="pill"
-                    class="buttonGradient mr-3 text-white font-weight-bold">
-                    Add New
-                  </v-btn>
-                </template>
                 <RepertoireCreate
                   @closeCourseDialogEvent="
                     closeCreateDialog

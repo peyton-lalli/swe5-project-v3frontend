@@ -86,8 +86,6 @@
         await AuthServices.loginUser(token)
           .then(async (response) => {
             this.user = response.data;
-            console.log(this.user);
-            // this.loginStore.setLoginUser(this.user);
             await this.userStore.setUser(this.user);
             await this.eventsStore.setEvents();
 

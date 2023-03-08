@@ -1,6 +1,6 @@
 <template>
-  <v-container fluid class="eventComponent">
-    <v-card class="fullBorderCurve mainBlur">
+  <v-container fluid class="eventComponent"
+    ><v-card class="fullBorderCurve mainBlur" @click="createDialog = true">
       <v-card-title class="font-weight-bold text-black">
         <v-row>
           <v-col>{{ title }}</v-col>
@@ -21,7 +21,7 @@
         <v-row justify="center" class="pl-5 mt-0">
           <v-col cols="1" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <v-img></v-img>
+              <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
             </v-avatar>
           </v-col>
           <v-col cols="11">
@@ -33,7 +33,7 @@
         <v-row justify="center" class="pl-5 mt-0">
           <v-col cols="1" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <v-img></v-img>
+              <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
             </v-avatar>
           </v-col>
           <v-col cols="11">
@@ -45,7 +45,7 @@
         <v-row justify="center" class="pl-5 mt-0">
           <v-col cols="1" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <v-img></v-img>
+              <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
             </v-avatar>
           </v-col>
           <v-col cols="11">
@@ -73,36 +73,43 @@
           <v-row justify="center">
             <v-col align-self="center">
               <v-card-title class="pb-0 font-weight-bold">
-                {{ songs.at(1).name }}
+                {{ songs.at(0).name }}
               </v-card-title>
               <v-card-subtitle class="text-darkBlue font-weight-bold">
-                {{ songs.at(1).person }}
+                {{ songs.at(0).person }}
               </v-card-subtitle>
             </v-col>
           </v-row>
           <v-row justify="center">
             <v-col align-self="center">
               <v-card-title class="pb-0 font-weight-bold">
-                {{ songs.at(2).name }}
+                {{ songs.at(0).name }}
               </v-card-title>
               <v-card-subtitle class="text-darkBlue font-weight-bold">
-                {{ songs.at(2).person }}
+                {{ songs.at(0).person }}
               </v-card-subtitle>
             </v-col>
           </v-row>
         </v-card-text>
       </v-card>
     </v-card>
+    <v-dialog v-model="createDialog" persistent max-width="800px">
+      <StudentReviewComponent
+        @closeDialogEvent="closeCreateDialog"></StudentReviewComponent>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
-  import { mapStores } from "pinia";
+  import StudentReviewComponent from "../components/StudentReviewComponent.vue";
   export default {
     name: "CritiqueComponent",
-    components: {},
+    components: {
+      StudentReviewComponent,
+    },
     data() {
       return {
+        createDialog: false,
         title: "Jury Critique",
         type: "Soprano",
         date: "04/22/2023",
@@ -123,8 +130,10 @@
         ],
       };
     },
-    computed: {
-      ...mapStores(),
+    methods: {
+      closeCreateDialog(val) {
+        this.createDialog = val;
+      },
     },
   };
 </script>

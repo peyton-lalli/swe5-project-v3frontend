@@ -52,22 +52,16 @@
       </v-btn>
       <v-spacer></v-spacer>
       <!-- Settings -->
+      <v-btn
+        @click="createDialog = true"
+        elevation="0"
+        class="mt-16"
+        style="width: 90%; margin: auto">
+        <v-icon size="xx-large">
+          <font-awesome-icon icon="fa-solid fa-gear" class="text-darkBlue" />
+        </v-icon>
+      </v-btn>
       <v-dialog v-model="createDialog" persistent max-width="600px">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            v-bind="attrs"
-            v-on="on"
-            @click="createDialog = true"
-            elevation="0"
-            class="mt-16"
-            style="width: 90%; margin: auto">
-            <v-icon size="xx-large">
-              <font-awesome-icon
-                icon="fa-solid fa-gear"
-                class="text-darkBlue" />
-            </v-icon>
-          </v-btn>
-        </template>
         <ProfileSettings
           @closeCourseDialogEvent="closeCreateDialog"></ProfileSettings>
       </v-dialog>
@@ -122,7 +116,6 @@
         // this.loginStore.setLoginUser(null);
         this.userStore.clearLoginUser();
         location.reload();
-        // console.log(this.loginStore.loginUser);
       },
     },
   };

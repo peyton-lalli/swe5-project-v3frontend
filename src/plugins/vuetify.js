@@ -20,7 +20,6 @@ export default createVuetify({
           mediumBlue: "#3F86C5",
           lightBlue: "#B8D3EA",
           darkGray: "#343434",
-          gradientColor: "linear-gradient(#2E6799, #FFFFFF)",
         },
       },
     },

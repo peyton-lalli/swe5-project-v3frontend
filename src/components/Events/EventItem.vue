@@ -3,7 +3,9 @@
     <v-card class="rounded-lg mainblur">
       <v-card-title class="font-weight-bold text-darkBlue">
         <v-row>
-          <v-col class="text-h5 font-weight-bold"> {{ title }} Request</v-col>
+          <v-col class="text-h5 font-weight-bold">
+            {{ eventData.title }} Request</v-col
+          >
           <v-col class="text-right">
             <v-btn elevation="0" @click="closeDialog()">
               <v-icon>
@@ -30,14 +32,12 @@
                 <v-row justify="center" class="pl-1 mt-0 mb-1">
                   <v-col cols="2" align-self="center">
                     <v-avatar class="bg-darkBlue">
-                      <font-awesome-icon
-                        icon="fa-solid fa-user"
-                        class="text-white" />
+                      <v-img></v-img>
                     </v-avatar>
                   </v-col>
                   <v-col cols="9">
                     <v-card-title class="text-darkBlue font-weight-bold pb-2">
-                      Jane Doe
+                      Nathan Lalli
                     </v-card-title>
                   </v-col>
                 </v-row>
@@ -56,14 +56,12 @@
                 <v-row justify="center" class="pl-1 mt-0 mb-1">
                   <v-col cols="2" align-self="center">
                     <v-avatar class="bg-darkBlue">
-                      <font-awesome-icon
-                        icon="fa-solid fa-user"
-                        class="text-white" />
+                      <v-img></v-img>
                     </v-avatar>
                   </v-col>
                   <v-col cols="9">
                     <v-card-title class="text-darkBlue font-weight-bold pb-2">
-                      Jane Doe
+                      Peyton Lalli
                     </v-card-title>
                   </v-col>
                 </v-row>
@@ -74,12 +72,12 @@
             <v-card-subtitle class="font-weight-bold text-darkGray pl-1">
               Timeslot Selection
             </v-card-subtitle>
-            <v-row class="pt-3">
+            <v-row class="pt-3" v-for="time in eventData.times">
               <v-card-text
-                v-for="(time, index) in getTimeSlots(
-                  getDates(times[0].start_time),
-                  getDates(times[0].end_time),
-                  times[0].interval
+                v-for="time in getTimeSlots(
+                  time.startTime,
+                  time.endTime,
+                  time.interval
                 )"
                 :key="index">
                 <v-btn
@@ -91,7 +89,7 @@
                 >
               </v-card-text>
             </v-row>
-            <v-row>
+            <!-- <v-row>
               <v-card-text
                 v-for="(time, index) in getTimeSlots(
                   getDates(times[1].start_time),
@@ -107,7 +105,7 @@
                   >{{ time }}</v-btn
                 >
               </v-card-text>
-            </v-row>
+            </v-row> -->
           </v-col>
         </v-row>
         <v-row>
@@ -148,19 +146,29 @@
                           <v-row justify="center" class="pl-1 mt-0">
                             <v-col cols="1" align-self="center">
                               <v-avatar class="bg-darkBlue">
-                                <font-awesome-icon
-                                  icon="fa-solid fa-user"
-                                  class="text-white" />
+                                <v-avatar class="bg-darkBlue">
+                                  <v-img
+                                    src="https://www.mtishows.com/sites/default/files/profile/marcblitzstein.jpg?download=1"></v-img>
+                                </v-avatar>
                               </v-avatar>
                             </v-col>
                             <v-col cols="11">
                               <v-card-subtitle
                                 class="mt-2 ml-1 font-weight-bold">
-                                {{ songs.at(0).name }}
+                                {{
+                                  this.userStore.userRoleInfo.repertoire[0].name
+                                }}
                               </v-card-subtitle>
                               <v-card-subtitle
                                 class="text-darkBlue font-weight-bold pb-2 ml-1">
-                                {{ songs.at(0).person }}
+                                <!-- {{
+                                  // Not working yet, so hard coded
+                                  getComposerName(
+                                    this.userStore.userRoleInfo.repertoire[0]
+                                  )
+
+                                }} -->
+                                Marc Blitzstein
                               </v-card-subtitle>
                             </v-col>
                           </v-row>
@@ -173,7 +181,7 @@
             </v-card-text>
           </v-col>
           <v-col>
-            <v-row>
+            <!-- <v-row>
               <v-col>
                 <v-card-subtitle class="font-weight-bold text-darkGray pl-1">
                   Additional Musical Selection
@@ -188,7 +196,7 @@
                   Add to repertoire
                 </v-btn>
               </v-col>
-            </v-row>
+            </v-row> -->
             <v-row>
               <v-col>
                 <v-card
@@ -202,7 +210,7 @@
         <v-btn
           rounded="pill"
           class="buttonGradient text-white mr-3"
-          @click="closeDialog()">
+          @click="createSignup()">
           Signup
         </v-btn>
         <v-btn
@@ -218,56 +226,40 @@
 </template>
 
 <script>
+  import { useEventsStore } from "../../stores/EventsStore.js";
+  import { useUserStore } from "../../stores/UserStore.js";
+  import EventSignUpDataService from "../../services/eventsignup.js";
+  import EventSongsDataService from "../../services/eventsongs.js";
+  import { mapStores } from "pinia";
   export default {
     name: "EventItemEdit",
     data() {
       return {
-        title: "Recital Hearing",
-        date: "2/1/2023",
-        time: "3:30 PM",
-        place: "Adams Recital Hall",
-        instructors: [
-          {
-            type: "Private Instructor",
-            person: "Jane Doe",
-          },
-          {
-            type: "Accompanist",
-            person: "Jess Doe",
-          },
-        ],
-        songs: [
-          {
-            name: "Bird Upon The Tree",
-            person: "Blitzstein, Marc",
-          },
-        ],
-        times: [
-          {
-            start_time: "2023-02-01 09:00:00",
-            end_time: "2023-02-01 12:00:00",
-            interval: 10,
-          },
-          {
-            start_time: "2023-02-01 13:00:00",
-            end_time: "2023-02-01 15:00:00",
-            interval: 10,
-          },
-        ],
+        selectedTimeslot: new Date(this.eventData.date + "09:10:00"),
+        // Hard coded for now, needs work!
+        selectedPieceId: 1,
       };
     },
-    computed: {},
+    props: {
+      eventData: {},
+    },
+    computed: {
+      ...mapStores(useEventsStore, useUserStore),
+    },
+    mounted() {},
     methods: {
       /* This returns time slots in x intervals between two times */
-      getTimeSlots(startDate, endDate, interval) {
+      getTimeSlots(startTime, endTime, interval) {
+        startTime = new Date(startTime);
+        endTime = new Date(endTime);
         var slots = [];
 
         var intervalMillis = interval * 60 * 1000;
 
-        while (startDate < endDate) {
-          var mins = (startDate.getMinutes() + "0").slice(0, 2);
-          slots.push(startDate.getHours() + ":" + mins);
-          startDate.setTime(startDate.getTime() + intervalMillis);
+        while (startTime < endTime) {
+          var mins = (startTime.getMinutes() + "0").slice(0, 2);
+          slots.push(startTime.getHours() + ":" + mins);
+          startTime.setTime(startTime.getTime() + intervalMillis);
         }
         return slots;
       },
@@ -275,8 +267,69 @@
       getDates(dateTime) {
         return new Date(dateTime);
       },
+      //Not yet working
+      // async getComposerName(piece) {
+      //   await this.studentRepertoireStore.getComposerName(piece.composerId);
+      // },
       closeDialog() {
         this.$emit("closeEventDialogEvent", false);
+      },
+      async createSignup() {
+        let data = {
+          timeslot: this.selectedTimeslot,
+          eventId: this.eventData.id,
+          studentinfoId: this.userStore.userRoleInfo.id,
+        };
+
+        await this.eventsStore.createSignupForEvent(data);
+        // await this.createEventSong();
+        this.$emit("regenerateSignups");
+        this.closeDialog();
+      },
+      async findSingupId() {
+        let eventId = 0;
+        await EventSignUpDataService.getEventId(this.eventData.id)
+          .then((response) => {
+            eventId = response.data.EventSignUp.filter((es) => {
+              return es.studentinfoId === this.userStore.userRoleInfo.id;
+            });
+            eventId = eventId[0].id;
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+
+        return eventId;
+      },
+      async checkForPriorSignup() {
+        let oldSignups = 0;
+        await EventSignUpDataService.getEventId(this.eventData.id)
+          .then((response) => {
+            oldSignups = response.data.EventSignUp.filter((es) => {
+              return es.studentinfoId === this.userStore.userRoleInfo.id;
+            });
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+
+        console.log(oldSignups);
+
+        if (oldSignups.length >= 1) {
+          return true;
+        }
+
+        return false;
+      },
+      async createEventSong() {
+        let data = {
+          pieceId: this.selectedPieceId,
+          eventsignupId: await this.findSingupId(),
+        };
+
+        await EventSongsDataService.create(data).catch((e) => {
+          console.log(e);
+        });
       },
     },
   };

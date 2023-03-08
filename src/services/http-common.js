@@ -1,7 +1,7 @@
 import axios from "axios";
 import AuthServices from "./authServices.js";
 import Router from "../router";
-import { useLoginStore } from "../stores/LoginStore.js";
+import { useUserStore } from "../stores/UserStore.js";
 
 var baseurl = "";
 if (import.meta.env.DEV) {
@@ -20,9 +20,8 @@ const apiClient = axios.create({
     crossDomain: true,
   },
   transformRequest: (data, headers) => {
-    const loginStore = useLoginStore();
-    ``;
-    let user = loginStore.loginUser;
+    const userStore = useUserStore();
+    let user = userStore.userInfo;
     if (user != null) {
       let token = user.token;
       let authHeader = "";
@@ -32,18 +31,17 @@ const apiClient = axios.create({
     return JSON.stringify(data);
   },
   transformResponse: function (data) {
-    const loginStore = useLoginStore();
+    const userStore = useUserStore();
     data = JSON.parse(data);
     if (data.message !== undefined && data.message.includes("Unauthorized")) {
-      AuthServices.logoutUser(loginStore.loginUser)
+      AuthServices.logoutUser(userStore.userInfo)
         .then((response) => {
           console.log(response);
-          this.loginStore.clearLoginUser();
+          this.userStore.clearLoginUser();
           Router.push({ name: "loginPage" });
         })
         .catch((error) => {
           console.log("error", error);
-          //this is where we are getting the unexpected token error
         });
     }
     return data;

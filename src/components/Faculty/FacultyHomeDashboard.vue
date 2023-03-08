@@ -63,7 +63,7 @@
 </template>
 
 <script>
-  import EventComponent from "./EventComponent.vue";
+  import EventComponent from "../Events/EventComponent.vue";
   import StudentComponent from "./StudentComponent.vue";
   import AttentionComponent from "./AttentionComponent.vue";
   export default {

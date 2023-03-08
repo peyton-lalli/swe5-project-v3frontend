@@ -31,7 +31,6 @@
           <v-row align="center" justify="center">
             <v-col justify="center">
               <v-btn
-                v-if="!hasPriorSignup"
                 elevation="0"
                 size="small"
                 rounded="pill"
@@ -71,14 +70,6 @@
       return {
         signUpDialog: false,
         hasPriorSignup: false,
-        // eventData: {
-        //   id: 1,
-        //   type: "",
-        //   date: "",
-        //   times: [],
-        //   location: "Adams Recital Hall",
-        //   timeslots: { total: 25, filled: 0 },
-        // },
         timesInfoString: "",
       };
     },

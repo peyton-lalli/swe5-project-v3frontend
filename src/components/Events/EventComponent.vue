@@ -8,19 +8,15 @@
               {{ eventData.type }}
             </v-col>
             <v-col class="text-right">
+              <v-btn
+                elevation="0"
+                rounded="pill"
+                size="small"
+                class="buttonGradient text-white font-weight-bold"
+                @click="editDialog = true">
+                Edit
+              </v-btn>
               <v-dialog v-model="editDialog" persistent max-width="1000px">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    elevation="0"
-                    rounded="pill"
-                    size="small"
-                    class="buttonGradient text-white font-weight-bold"
-                    @click="editDialog = true"
-                    v-bind="attrs"
-                    v-on="on">
-                    Edit
-                  </v-btn>
-                </template>
                 <EventItem @closeEventDialogEvent="closeEventDialog">
                 </EventItem>
               </v-dialog>

@@ -101,7 +101,7 @@
 </template>
 
 <script>
-  import StudentReviewComponent from "../components/StudentReviewComponent.vue";
+  import StudentReviewComponent from "./StudentReviewComponent.vue";
   export default {
     name: "CritiqueComponent",
     components: {

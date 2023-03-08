@@ -32,10 +32,10 @@
 <script>
   import MenuSidebar from "../components/MenuSidebar.vue";
   import UserSidebar from "../components/UserSidebar.vue";
-  import StudentHomeDashboard from "../components/StudentHomeDashboard.vue";
-  import FacultyHomeDashboard from "../components/FacultyHomeDashboard.vue";
-  import AdminHomeDashboard from "../components/AdminHomeDashbaord.vue";
-  import EventsDashboard from "../components/EventsDashboard.vue";
+  import StudentHomeDashboard from "../components/Student/StudentHomeDashboard.vue";
+  import FacultyHomeDashboard from "../components/Faculty/FacultyHomeDashboard.vue";
+  import AdminHomeDashboard from "../components/Admin/AdminHomeDashbaord.vue";
+  import EventsDashboard from "../components/Events/EventsDashboard.vue";
   import { useEventsStore } from "../stores/EventsStore.js";
   import { useUserStore } from "../stores/UserStore.js";
   import { mapStores } from "pinia";

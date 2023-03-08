@@ -53,8 +53,8 @@
   import EventComponent from "./EventComponent.vue";
   import EventSignupItem from "./EventSignupItem.vue";
   import EventUpcomingItem from "./EventUpcomingItem.vue";
-  import { useUserStore } from "../stores/UserStore.js";
-  import { useEventsStore } from "../stores/EventsStore.js";
+  import { useUserStore } from "../../stores/UserStore.js";
+  import { useEventsStore } from "../../stores/EventsStore.js";
   import { mapStores } from "pinia";
 
   export default {

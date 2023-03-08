@@ -47,7 +47,7 @@
 
 <script>
   import EventItem from "./EventItem.vue";
-  import { useEventsStore } from "../stores/EventsStore.js";
+  import { useEventsStore } from "../../stores/EventsStore.js";
   import { mapStores } from "pinia";
   export default {
     name: "EventUpcomingItem",

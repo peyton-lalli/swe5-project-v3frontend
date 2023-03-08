@@ -74,11 +74,11 @@
 </template>
 
 <script>
-  import EventComponent from "../components/EventComponent.vue";
-  import RepertoireComponent from "../components/RepertoireComponent.vue";
-  import CritiqueComponent from "../components/CritiqueComponent.vue";
-  import RepertoireCreate from "../components/RepertoireCreate.vue";
-  import { useEventsStore } from "../stores/EventsStore.js";
+  import EventComponent from "../Events/EventComponent.vue";
+  import RepertoireComponent from "./RepertoireComponent.vue";
+  import CritiqueComponent from "./CritiqueComponent.vue";
+  import RepertoireCreate from "./RepertoireCreate.vue";
+  import { useEventsStore } from "../../stores/EventsStore.js";
   import { mapStores } from "pinia";
   export default {
     name: "StudentHomeDashboard",

@@ -226,10 +226,10 @@
 </template>
 
 <script>
-  import { useEventsStore } from "../stores/EventsStore.js";
-  import { useUserStore } from "../stores/UserStore.js";
-  import EventSignUpDataService from "../services/eventsignup.js";
-  import EventSongsDataService from "../services/eventsongs.js";
+  import { useEventsStore } from "../../stores/EventsStore.js";
+  import { useUserStore } from "../../stores/UserStore.js";
+  import EventSignUpDataService from "../../services/eventsignup.js";
+  import EventSongsDataService from "../../services/eventsongs.js";
   import { mapStores } from "pinia";
   export default {
     name: "EventItemEdit",

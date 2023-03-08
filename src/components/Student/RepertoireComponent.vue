@@ -37,7 +37,7 @@
 
 <script>
   export default {
-    name: "EventComponent",
+    name: "Repertoire Component",
     components: {},
     data() {
       return {

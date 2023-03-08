@@ -80,7 +80,7 @@
 </template>
 
 <script>
-  import MissingInformation from "./MissingInformation.vue";
+  import MissingInformation from "../MissingInformation.vue";
   export default {
     name: "RepertoireCreate",
     components: {

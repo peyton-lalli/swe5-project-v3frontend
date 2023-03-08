@@ -4,7 +4,7 @@
       <v-img
         alt="OC Logo"
         class="shrink mx-3 mt-4 mb-15"
-        style = "width: 70%; margin: auto;"
+        style="width: 70%; margin: auto"
         contain
         :src="logoUrl"
         transition="scale-transition"
@@ -13,7 +13,7 @@
       <v-btn
         elevation="0"
         class="mt-16 mb-3"
-        style = "width: 90%; margin: auto;"
+        style="width: 90%; margin: auto"
         @click="eventsStore.hideEventsPage">
         <v-icon size="xx-large">
           <font-awesome-icon
@@ -23,10 +23,10 @@
       </v-btn>
       <v-spacer></v-spacer>
       <!-- Events -->
-      <v-btn 
-        elevation="0" 
-        class="mt-5" 
-        style = "width: 90%; margin: auto;"
+      <v-btn
+        elevation="0"
+        class="mt-5"
+        style="width: 90%; margin: auto"
         @click="eventsStore.showEventsPage">
         <v-icon size="xx-large">
           <font-awesome-icon
@@ -36,20 +36,14 @@
       </v-btn>
       <v-spacer></v-spacer>
       <!-- Repertoire -->
-      <v-btn 
-        elevation="0" 
-        class="mt-5"
-        style = "width: 90%; margin: auto;">
+      <v-btn elevation="0" class="mt-5" style="width: 90%; margin: auto">
         <v-icon size="xx-large">
           <font-awesome-icon icon="fa-solid fa-music" class="text-darkBlue" />
         </v-icon>
       </v-btn>
       <v-spacer></v-spacer>
       <!-- Comments -->
-      <v-btn 
-        elevation="0" 
-        class="mt-5 mb-16"
-        style = "width: 90%; margin: auto;">
+      <v-btn elevation="0" class="mt-5 mb-16" style="width: 90%; margin: auto">
         <v-icon size="xx-large">
           <font-awesome-icon
             icon="fa-solid fa-comments"
@@ -66,7 +60,7 @@
             @click="createDialog = true"
             elevation="0"
             class="mt-16"
-            style = "width: 90%; margin: auto;">
+            style="width: 90%; margin: auto">
             <v-icon size="xx-large">
               <font-awesome-icon
                 icon="fa-solid fa-gear"
@@ -79,12 +73,10 @@
       </v-dialog>
       <v-spacer></v-spacer>
       <!-- Logout -->
-      <v-btn 
-        elevation="0" 
+      <v-btn
+        elevation="0"
         class="mt-5"
-        style = "
-          width: 90%; 
-          margin: auto;"
+        style="width: 90%; margin: auto"
         @click="logout()">
         <v-icon size="xx-large">
           <font-awesome-icon
@@ -102,6 +94,7 @@
   import { useEventsStore } from "../stores/EventsStore.js";
   import { mapStores } from "pinia";
   import { useLoginStore } from "../stores/LoginStore.js";
+  import { useUserStore } from "../stores/UserStore.js";
   export default {
     name: "MenuSidebar",
     components: {
@@ -116,8 +109,7 @@
       };
     },
     computed: {
-      ...mapStores(useEventsStore),
-      ...mapStores(useLoginStore),
+      ...mapStores(useEventsStore, useLoginStore, useUserStore),
     },
     async created() {
       this.logoUrl = ocLogo;
@@ -127,11 +119,12 @@
         this.createDialog = val;
       },
       logout() {
-        this.loginStore.setLoginUser(null);
+        // this.loginStore.setLoginUser(null);
+        this.userStore.clearLoginUser();
         location.reload();
-        console.log(this.loginStore.loginUser);
+        // console.log(this.loginStore.loginUser);
       },
-    }
+    },
   };
 </script>
 

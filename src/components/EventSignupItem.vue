@@ -7,7 +7,7 @@
             {{ eventData.type }}
           </v-card-title>
           <v-card-subtitle class="font-weight-semi-bold text-darkBlue pl-0">
-            {{ eventData.date }}
+            {{ formatDate(eventData.date) }}
           </v-card-subtitle>
           <v-card-subtitle class="font-weight-semi-bold text-darkBlue pl-0">
             {{ timesInfoString }}
@@ -23,8 +23,8 @@
                 size="small"
                 rounded="pill"
                 class="bg-white text-darkBlue font-weight-bold">
-                {{ eventData.timeslots.filled }} /
-                {{ eventData.timeslots.total }} Timeslots Filled
+                <!-- {{ eventData.timeslots.filled }} /
+                {{ eventData.timeslots.total }} Timeslots Filled -->
               </v-btn>
             </v-col>
           </v-row>
@@ -57,6 +57,7 @@
                 </template>
                 <EventItem
                   @closeEventDialogEvent="closeEventDialog"
+                  @regenerateSignups="regenerateSignups()"
                   :eventData="eventData">
                 </EventItem>
               </v-dialog>
@@ -71,7 +72,7 @@
 <script>
   import EventItem from "./EventItem.vue";
   import { useEventsStore } from "../stores/EventsStore.js";
-  import { useStudentInfoStore } from "../stores/StudentInfoStore.js";
+  import { useUserStore } from "../stores/UserStore.js";
   import { mapStores } from "pinia";
   import EventSignUpDataService from "../services/eventsignup.js";
   export default {
@@ -83,26 +84,29 @@
       return {
         signUpDialog: false,
         hasPriorSignup: false,
-        eventData: {
-          id: 1,
-          type: "",
-          date: "",
-          times: [],
-          location: "Adams Recital Hall",
-          timeslots: { total: 25, filled: 0 },
-        },
+        // eventData: {
+        //   id: 1,
+        //   type: "",
+        //   date: "",
+        //   times: [],
+        //   location: "Adams Recital Hall",
+        //   timeslots: { total: 25, filled: 0 },
+        // },
         timesInfoString: "",
       };
     },
     computed: {
-      ...mapStores(useEventsStore, useStudentInfoStore),
+      ...mapStores(useEventsStore, useUserStore),
     },
     async mounted() {
-      this.retrieveInfo();
-      await this.getPriorSignup();
+      // this.retrieveInfo();
+      this.timesInfoString = this.createTimesInfoString();
+
+      console.log(this.eventData);
+      this.checkForPriorSignup();
     },
     props: {
-      eventId: 1,
+      eventData: {},
     },
     methods: {
       createTimesInfoString() {
@@ -132,6 +136,16 @@
         const options = { year: "numeric", month: "numeric", day: "numeric" };
         return new Date(date).toLocaleDateString("us-EN", options);
       },
+      checkForPriorSignup() {
+        this.hasPriorSignup = this.eventsStore.hasUserSignedUpForEvent(
+          this.eventData.id
+        );
+      },
+      regenerateSignups() {
+        console.log("CAUGHT BY SUI");
+        this.$emit("regenerateSignups");
+        this.checkForPriorSignup();
+      },
       async closeEventDialog(val) {
         this.signUpDialog = val;
         console.log("CLOSED");
@@ -150,7 +164,7 @@
         await EventSignUpDataService.getEventId(this.eventData.id)
           .then((response) => {
             oldSignups = response.data.EventSignUp.filter((es) => {
-              return es.studentinfoId === this.studentInfoStore.studentInfo.id;
+              return es.studentinfoId === this.userStore.userRoleInfo.id;
             });
           })
           .catch((e) => {

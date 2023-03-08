@@ -83,8 +83,6 @@
   import CritiqueComponent from "../components/CritiqueComponent.vue";
   import RepertoireCreate from "../components/RepertoireCreate.vue";
   import { useEventsStore } from "../stores/EventsStore.js";
-  import { useStudentInfoStore } from "../stores/StudentInfoStore.js";
-  import EventSignUpDataService from "../services/eventsignup.js";
   import { mapStores } from "pinia";
   export default {
     name: "StudentHomeDashboard",
@@ -101,33 +99,14 @@
       };
     },
     computed: {
-      ...mapStores(useEventsStore, useStudentInfoStore),
+      ...mapStores(useEventsStore),
     },
-    async mounted() {
-      await this.generateEventSignupsForStudent();
+    mounted() {
+      this.eventSignups = this.eventsStore.generateEventSignupsForUser();
     },
     methods: {
       closeCreateDialog(val) {
         this.createDialog = val;
-      },
-      async generateEventSignupsForStudent() {
-        let eventSignups = [];
-        let events = this.eventsStore.events;
-        for (let i = 0; i < events.length; i++) {
-          await EventSignUpDataService.getEventId(events[i].id)
-            .then((response) => {
-              let signUp = response.data.EventSignUp.find(
-                (es) =>
-                  es.studentinfoId === this.studentInfoStore.studentInfo.id
-              );
-              if (signUp) eventSignups.push(signUp);
-            })
-            .catch((e) => {
-              console.log(e);
-            });
-        }
-        console.log("AHHHH" + eventSignups);
-        this.eventSignups = eventSignups;
       },
     },
   };

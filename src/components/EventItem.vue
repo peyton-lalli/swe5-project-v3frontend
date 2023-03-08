@@ -32,7 +32,7 @@
                 <v-row justify="center" class="pl-1 mt-0 mb-1">
                   <v-col cols="2" align-self="center">
                     <v-avatar class="bg-darkBlue">
-                      <v-img :src="this.studentInfoStore.pic"></v-img>
+                      <v-img></v-img>
                     </v-avatar>
                   </v-col>
                   <v-col cols="9">
@@ -56,7 +56,7 @@
                 <v-row justify="center" class="pl-1 mt-0 mb-1">
                   <v-col cols="2" align-self="center">
                     <v-avatar class="bg-darkBlue">
-                      <v-img :src="this.studentInfoStore.pic2"></v-img>
+                      <v-img></v-img>
                     </v-avatar>
                   </v-col>
                   <v-col cols="9">
@@ -156,7 +156,7 @@
                               <v-card-subtitle
                                 class="mt-2 ml-1 font-weight-bold">
                                 {{
-                                  this.studentRepertoireStore.repertoire[0].name
+                                  this.userStore.userRoleInfo.repertoire[0].name
                                 }}
                               </v-card-subtitle>
                               <v-card-subtitle
@@ -164,7 +164,7 @@
                                 <!-- {{
                                   // Not working yet, so hard coded
                                   getComposerName(
-                                    this.studentRepertoireStore.repertoire[0]
+                                    this.userStore.userRoleInfo.repertoire[0]
                                   )
 
                                 }} -->
@@ -227,8 +227,7 @@
 
 <script>
   import { useEventsStore } from "../stores/EventsStore.js";
-  import { useStudentInfoStore } from "../stores/StudentInfoStore.js";
-  import { useStudentRepertoireStore } from "../stores/StudentRepertoireStore.js";
+  import { useUserStore } from "../stores/UserStore.js";
   import EventSignUpDataService from "../services/eventsignup.js";
   import EventSongsDataService from "../services/eventsongs.js";
   import { mapStores } from "pinia";
@@ -245,11 +244,7 @@
       eventData: {},
     },
     computed: {
-      ...mapStores(
-        useEventsStore,
-        useStudentRepertoireStore,
-        useStudentInfoStore
-      ),
+      ...mapStores(useEventsStore, useUserStore),
     },
     mounted() {},
     methods: {
@@ -273,9 +268,9 @@
         return new Date(dateTime);
       },
       //Not yet working
-      async getComposerName(piece) {
-        await this.studentRepertoireStore.getComposerName(piece.composerId);
-      },
+      // async getComposerName(piece) {
+      //   await this.studentRepertoireStore.getComposerName(piece.composerId);
+      // },
       closeDialog() {
         this.$emit("closeEventDialogEvent", false);
       },
@@ -283,13 +278,12 @@
         let data = {
           timeslot: this.selectedTimeslot,
           eventId: this.eventData.id,
-          studentinfoId: this.studentInfoStore.studentInfo.id,
+          studentinfoId: this.userStore.userRoleInfo.id,
         };
 
-        await EventSignUpDataService.create(data).catch((e) => {
-          console.log(e);
-        });
-        await this.createEventSong();
+        await this.eventsStore.createSignupForEvent(data);
+        // await this.createEventSong();
+        this.$emit("regenerateSignups");
         this.closeDialog();
       },
       async findSingupId() {
@@ -297,7 +291,7 @@
         await EventSignUpDataService.getEventId(this.eventData.id)
           .then((response) => {
             eventId = response.data.EventSignUp.filter((es) => {
-              return es.studentinfoId === this.studentInfoStore.studentInfo.id;
+              return es.studentinfoId === this.userStore.userRoleInfo.id;
             });
             eventId = eventId[0].id;
           })
@@ -312,7 +306,7 @@
         await EventSignUpDataService.getEventId(this.eventData.id)
           .then((response) => {
             oldSignups = response.data.EventSignUp.filter((es) => {
-              return es.studentinfoId === this.studentInfoStore.studentInfo.id;
+              return es.studentinfoId === this.userStore.userRoleInfo.id;
             });
           })
           .catch((e) => {

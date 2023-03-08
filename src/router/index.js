@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import BaseDashboard from "../views/BaseDashboard.vue";
 import LoginPage from "../views/Login.vue";
-import { useLoginStore } from "../stores/LoginStore.js";
+import { useUserStore } from "../stores/UserStore.js";
 
 const router = createRouter({
   mode: "history",
@@ -20,9 +20,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
   const publicPages = ["/"];
-  const loginStore = useLoginStore();
+  const userStore = useUserStore();
   const authRequired = !publicPages.includes(to.path);
-  const loggedIn = loginStore.loginUser;
+  const loggedIn = userStore.userInfo;
   if (authRequired && !loggedIn) {
     return next("/");
   }

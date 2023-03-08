@@ -68,12 +68,7 @@
 
 <script>
   import NotificationItem from "./NotificationItem.vue";
-  import InstructorsDataService from "../services/instructors.js";
-  import StudentInfoDataService from "../services/studentinfo.js";
-  import UsersDataService from "../services/users.js";
-  //Remove later!
-  import { useStudentInfoStore } from "../stores/StudentInfoStore.js";
-  import { useLoginStore } from "../stores/LoginStore.js";
+  import { useUserStore } from "../stores/UserStore.js";
   import { mapStores } from "pinia";
   export default {
     name: "UserSidebar",
@@ -90,49 +85,31 @@
         userLevelPercent: 0,
         userSemestersPercent: 0,
         userSemesters: 8,
-        userInstructor: {
-          id: 0,
-          picture: "",
-          name: "",
-          title: "",
-        },
+        userInstructor: {},
       };
     },
     computed: {
-      ...mapStores(useLoginStore, useStudentInfoStore),
+      ...mapStores(useUserStore),
     },
     mounted() {
       this.retrieveInfo();
     },
     methods: {
       retrieveInfo() {
-        this.userRole = this.loginStore.loginUser.role;
-        this.userName = this.loginStore.getFullName;
-        this.userPicture = this.loginStore.getPicture;
+        this.userRole = this.userStore.userInfo.role;
+        this.userName = this.userStore.getFullName;
+        this.userPicture = this.userStore.userInfo.picture;
+
         if (this.userRole === "student") {
-          StudentInfoDataService.getUserId(this.loginStore.loginUser.userId)
-            .then((response) => {
-              const student = response.data.StudentInfo[0];
-              console.log(student);
-              this.userTitleOrMajor = student.major + " Major";
-              this.userClassification = student.classification;
-              this.userSemesters = student.semesters;
-              this.userLevel = student.level;
-              this.setUserLevelPercent(this.userLevel);
-              this.setSemestersPercent(this.userSemesters);
-              this.getInstructorData(student.instructorId);
-            })
-            .catch((e) => {
-              console.log(e);
-            });
+          this.userTitleOrMajor = this.userStore.userRoleInfo.major;
+          this.useClassification = this.userStore.userRoleInfo.classification;
+          this.userSemesters = this.userStore.userRoleInfo.semesters;
+          this.userLevel = this.userStore.userRoleInfo.level;
+          this.userInstructor = this.userStore.userRoleInfo.instructor;
+          this.setUserLevelPercent(this.userLevel);
+          this.setSemestersPercent(this.userSemesters);
         } else if (this.userRole === "faculty") {
-          InstructorsDataService.getSingle(this.loginStore.loginUser.userId)
-            .then((response) => {
-              this.userTitleOrMajor = response.data.Instructors[0].title;
-            })
-            .catch((e) => {
-              console.log(e);
-            });
+          this.userTitleOrMajor = this.userStore.userRoleInfo.title;
         }
       },
       setUserLevelPercent(level) {
@@ -140,24 +117,6 @@
       },
       setSemestersPercent(semesters) {
         this.userSemestersPercent = semesters * 10;
-      },
-      getInstructorData(instructorId) {
-        InstructorsDataService.getInstructorByInstructorId(instructorId)
-          .then((response) => {
-            const instructor = response.data.Instructors[0];
-            this.userInstructor.title = instructor.title;
-            UsersDataService.getSingle(instructor.userId).then((response) => {
-              const user = response.data.Users[0];
-              this.userInstructor.name = user.fName + " " + user.lName;
-              this.userInstructor.picture = user.picture;
-              //Remove Later!!
-              this.studentInfoStore.setPic(user.picture);
-              this.userInstructor.id = user.id;
-            });
-          })
-          .catch((e) => {
-            console.log(e);
-          });
       },
     },
   };

@@ -36,12 +36,9 @@
   import FacultyHomeDashboard from "../components/FacultyHomeDashboard.vue";
   import AdminHomeDashboard from "../components/AdminHomeDashbaord.vue";
   import EventsDashboard from "../components/EventsDashboard.vue";
-  import { useLoginStore } from "../stores/LoginStore.js";
   import { useEventsStore } from "../stores/EventsStore.js";
-  import { useStudentRepertoireStore } from "../stores/StudentRepertoireStore.js";
-  import { useStudentInfoStore } from "../stores/StudentInfoStore.js";
+  import { useUserStore } from "../stores/UserStore.js";
   import { mapStores } from "pinia";
-  import EventDataService from "../services/event.js";
 
   export default {
     name: "BaseDashboard",
@@ -60,36 +57,16 @@
       };
     },
     computed: {
-      ...mapStores(
-        useLoginStore,
-        useEventsStore,
-        useStudentRepertoireStore,
-        useStudentInfoStore
-      ),
+      ...mapStores(useEventsStore, useUserStore),
     },
     async mounted() {
       this.retrieveInfo();
+      // await this.eventsStore.setEvents();
       this.setUserDashboard();
-      await this.setEventsStore();
     },
     methods: {
       async retrieveInfo() {
-        this.userRole = this.loginStore.loginUser.role;
-        await this.studentInfoStore.setStudentInfo(
-          this.loginStore.loginUser.userId
-        );
-        await this.studentRepertoireStore.setRepertoire(
-          this.studentInfoStore.studentInfo.id
-        );
-      },
-      async setEventsStore() {
-        await EventDataService.getAll()
-          .then(async (response) => {
-            await this.eventsStore.setEvents(response.data.Event);
-          })
-          .catch((e) => {
-            console.log(e);
-          });
+        this.userRole = this.userStore.userInfo.role;
       },
       setUserDashboard() {
         if (this.userRole === "student") {

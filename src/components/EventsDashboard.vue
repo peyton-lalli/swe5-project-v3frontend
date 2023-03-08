@@ -4,9 +4,11 @@
       <v-card-title class="font-weight-bold text-h5 text-darkBlue">
         Open Event Signups
       </v-card-title>
-      <v-card-text v-for="id in openEventIds">
+      <v-card-text v-for="event in openEvents">
         <v-row>
-          <EventSignupItem :eventId="id" />
+          <EventSignupItem
+            :eventData="event"
+            @regenerateSignups="regenerateSignups()" />
         </v-row>
       </v-card-text>
     </v-card>
@@ -16,7 +18,7 @@
       </v-card-title>
       <v-card-text v-for="id in upcomingEventIds">
         <v-row>
-          <EventUpcomingItem :eventId="id" />
+          <!-- <EventUpcomingItem :eventId="id" /> -->
         </v-row>
       </v-card-text>
     </v-card>
@@ -51,12 +53,9 @@
   import EventComponent from "./EventComponent.vue";
   import EventSignupItem from "./EventSignupItem.vue";
   import EventUpcomingItem from "./EventUpcomingItem.vue";
-  import EventSignUpDataService from "../services/eventsignup.js";
-  import { useStudentInfoStore } from "../stores/StudentInfoStore.js";
-  import { useLoginStore } from "../stores/LoginStore.js";
+  import { useUserStore } from "../stores/UserStore.js";
   import { useEventsStore } from "../stores/EventsStore.js";
   import { mapStores } from "pinia";
-  import EventDataService from "../services/event.js";
 
   export default {
     name: "EventsDashboard",
@@ -68,67 +67,38 @@
     data() {
       return {
         createDialog: false,
-        openEventIds: [],
+        openEvents: [],
         upcomingEventIds: [],
         eventSignups: [],
       };
     },
     computed: {
-      ...mapStores(useLoginStore, useEventsStore, useStudentInfoStore),
+      ...mapStores(useEventsStore, useUserStore),
     },
-    async mounted() {
-      await this.setEventsStore();
-      this.generateOpenEventIds();
+    mounted() {
+      this.eventSignups = this.eventsStore.generateEventSignupsForUser();
+
+      this.generateOpenEventsList();
       this.generateUpcomingEventIds();
-      await this.generateEventSignupsForStudent();
     },
     methods: {
       closeCreateDialog(val) {
         this.createDialog = val;
       },
-      async setEventsStore() {
-        await EventDataService.getAll()
-          .then(async (response) => {
-            await this.eventsStore.setEvents(response.data.Event);
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      },
-      generateOpenEventIds() {
-        let ids = [1, 2];
-        // for (let event in this.eventsStore.events) {
-        //   ids.push(this.eventsStore.events[event].id);
-        // }
-        // console.log(ids);
-        this.openEventIds = ids;
+      generateOpenEventsList() {
+        console.log(this.eventsStore.events);
+        let events = [this.eventsStore.events[0], this.eventsStore.events[1]];
+        this.openEvents = events;
       },
       generateUpcomingEventIds() {
         let ids = [3, 4];
-        // for (let event in this.eventsStore.events) {
-        //   ids.push(this.eventsStore.events[event].id);
-        // }
-        // console.log(ids);
         this.upcomingEventIds = ids;
       },
-      async generateEventSignupsForStudent() {
-        let eventSignups = [];
-        let events = this.eventsStore.events;
-        for (let i = 0; i < events.length; i++) {
-          await EventSignUpDataService.getEventId(events[i].id)
-            .then((response) => {
-              let signUp = response.data.EventSignUp.find(
-                (es) =>
-                  es.studentinfoId === this.studentInfoStore.studentInfo.id
-              );
-              if (signUp) eventSignups.push(signUp);
-            })
-            .catch((e) => {
-              console.log(e);
-            });
-        }
-        console.log("AHHHH" + eventSignups);
-        this.eventSignups = eventSignups;
+      regenerateSignups() {
+        console.log("CAUGHT BY ED");
+        console.log(this.eventsStore.events);
+        this.eventSignups = this.eventsStore.generateEventSignupsForUser();
+        console.log(this.eventSignups);
       },
     },
   };

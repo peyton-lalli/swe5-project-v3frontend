@@ -40,30 +40,30 @@
         <v-row justify="center" class="pl-5">
           <v-col cols="2" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <v-img :src="this.studentInfoStore.pic"></v-img>
+              <v-img></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="10" align-self="center">
             <v-card-title class="pb-0 font-weight-bold">
-              {{ instructors.at(0).type }}
+              Private Instructor
             </v-card-title>
             <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-              {{ instructors.at(0).person }}
+              {{ this.userStore.userRoleInfo.instructor.name }}
             </v-card-subtitle>
           </v-col>
         </v-row>
         <v-row justify="center" class="pl-5 mt-0 mb-1">
           <v-col cols="2" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <v-img :src="this.studentInfoStore.pic2"></v-img>
+              <v-img></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="10" align-self="center">
             <v-card-title class="pb-0 font-weight-bold">
-              {{ instructors.at(1).type }}
+              Accompanist
             </v-card-title>
             <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-              {{ instructors.at(1).person }}
+              {{ this.userStore.userRoleInfo.instructor.name }}
             </v-card-subtitle>
           </v-col>
         </v-row>
@@ -96,10 +96,7 @@
 <script>
   import EventItem from "./EventItem.vue";
   import { useEventsStore } from "../stores/EventsStore.js";
-  import { useStudentInfoStore } from "../stores/StudentInfoStore.js";
-  import { useStudentRepertoireStore } from "../stores/StudentRepertoireStore.js";
-  import EventSignUpDataService from "../services/eventsignup.js";
-  import EventSongsDataService from "../services/eventsongs.js";
+  import { useUserStore } from "../stores/UserStore.js";
   import { mapStores } from "pinia";
   export default {
     name: "EventComponent",
@@ -110,64 +107,35 @@
       return {
         editDialog: false,
         eventData: [],
-        eventType: "Recital Hearing",
-        eventDate: "02/01/2023",
-        timeslot: "3:30 PM",
-        instructors: [
-          {
-            type: "Private Instructor",
-            person: "Nathan Lalli",
-          },
-          {
-            type: "Accompanist",
-            person: "Peyton Lalli",
-          },
-        ],
-        songs: [
-          {
-            name: "Bird Upon The Tree",
-            person: "Blitzstein, Marc",
-          },
-        ],
       };
     },
     props: {
       eventSignUpData: {},
     },
     computed: {
-      ...mapStores(
-        useEventsStore,
-        useStudentRepertoireStore,
-        useStudentInfoStore
-      ),
+      ...mapStores(useEventsStore, useUserStore),
     },
     mounted() {
-      // this.retrieveInfo();
       this.setEventData();
+      console.log(this.eventData);
     },
     methods: {
       closeEventDialog(val) {
         this.editDialog = val;
       },
       setEventData() {
-        console.log("ID " + this.eventSignUpData.eventId);
         this.eventData = this.eventsStore.findEventForId(
           this.eventSignUpData.eventId
         );
-        console.log("DATA " + this.eventData);
-      },
-      retrieveInfo() {
-        this.eventType = this.eventData.type;
-        this.eventDate = this.formatDate(new Date(this.eventData.date));
       },
       formatDate(date) {
         const options = { year: "numeric", month: "numeric", day: "numeric" };
         return new Date(date).toLocaleDateString("us-EN", options);
       },
       getSongForSignup() {
-        let repertoire = this.studentRepertoireStore.repertoire;
+        let repertoire = this.userStore.userRoleInfo.repertoire;
 
-        return this.studentRepertoireStore.repertoire[0].name;
+        return repertoire[0].name;
       },
     },
   };

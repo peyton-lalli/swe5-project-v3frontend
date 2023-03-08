@@ -21,7 +21,7 @@
         <v-row justify="center" class="pl-5 mt-0">
           <v-col cols="1" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <v-img :src="this.studentInfoStore.pic"></v-img>
+              <v-img></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="11">
@@ -33,7 +33,7 @@
         <v-row justify="center" class="pl-5 mt-0">
           <v-col cols="1" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <v-img :src="this.studentInfoStore.pic2"></v-img>
+              <v-img></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="11">
@@ -45,7 +45,7 @@
         <v-row justify="center" class="pl-5 mt-0">
           <v-col cols="1" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <v-img :src="this.studentInfoStore.pic3"></v-img>
+              <v-img></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="11">
@@ -97,7 +97,6 @@
 </template>
 
 <script>
-  import { useStudentInfoStore } from "../stores/StudentInfoStore.js";
   import { mapStores } from "pinia";
   export default {
     name: "CritiqueComponent",
@@ -125,7 +124,7 @@
       };
     },
     computed: {
-      ...mapStores(useStudentInfoStore),
+      ...mapStores(),
     },
   };
 </script>

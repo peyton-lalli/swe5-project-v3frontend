@@ -40,7 +40,7 @@
   import StudentInfoDataService from "../../services/studentinfo.js";
   import UserDataService from "../../services/users.js";
   import InstructorsDataService from "../../services/instructors.js";
-  import { useLoginStore } from "../../stores/LoginStore.js";
+  import { useUserStore } from "../../stores/UserStore.js";
   import { useStudentStore } from "../../stores/StudentStore.js";
   import { mapStores } from "pinia";
 
@@ -54,8 +54,7 @@
       };
     },
     computed: {
-      ...mapStores(useStudentStore),
-      ...mapStores(useLoginStore),
+      ...mapStores(useStudentStore, useUserStore),
     },
     mounted() {
       this.retrieveInfo();
@@ -63,7 +62,7 @@
     methods: {
       async retrieveInfo() {
         await InstructorsDataService.getSingle(
-          this.loginStore.loginUser.userId
+          this.userStore.userInfo.userId
         ).then((response) => {
           this.instructorId = JSON.stringify(response.data.Instructors[0].id);
         });

@@ -85,9 +85,8 @@
 <script>
   import ocLogo from "/OC_LOGO_BLUE.svg";
   import ProfileSettings from "./ProfileSettings.vue";
-  import { useEventsStore } from "../stores/EventsStore.js";
   import { mapStores } from "pinia";
-  import { useLoginStore } from "../stores/LoginStore.js";
+  import { useEventsStore } from "../stores/EventsStore.js";
   import { useUserStore } from "../stores/UserStore.js";
   export default {
     name: "MenuSidebar",
@@ -103,7 +102,7 @@
       };
     },
     computed: {
-      ...mapStores(useEventsStore, useLoginStore, useUserStore),
+      ...mapStores(useEventsStore, useUserStore),
     },
     async created() {
       this.logoUrl = ocLogo;
@@ -113,7 +112,6 @@
         this.createDialog = val;
       },
       logout() {
-        // this.loginStore.setLoginUser(null);
         this.userStore.clearLoginUser();
         location.reload();
       },

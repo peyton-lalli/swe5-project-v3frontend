@@ -22,9 +22,11 @@ export const useEventsStore = defineStore("events", {
     hideEventsPage() {
       this.eventsPageShown = false;
     },
+    // Load all events and relevant data in from database
     async setEvents() {
       this.events = [];
 
+      // Load all the events in, creating a custom object array with the needed data.
       await EventDataService.getAll()
         .then(async (response) => {
           let eventsResponse = response.data.Event;
@@ -43,6 +45,8 @@ export const useEventsStore = defineStore("events", {
         });
       await this.generateSignUpsForAllEvents();
     },
+    // Load all of the signups for a specific event, appending the event's data
+    // Probably needs to be changed to just be called inside the constructor for the event on line 34 - similar to how createTimes() works.
     async generateSignUpsForAllEvents() {
       await EventSignUpDataService.getAll()
         .then((response) => {
@@ -65,6 +69,7 @@ export const useEventsStore = defineStore("events", {
           console.log(e);
         });
     },
+    // Load all of the times for a specific event, appending the event's data
     async createTimes(event) {
       let timesFinal = [];
       await EventTimeDataService.getEventId(event.id)
@@ -93,9 +98,11 @@ export const useEventsStore = defineStore("events", {
 
       return timesFinal;
     },
+    // Clear all events
     clearEvents() {
       this.events = new Array();
     },
+    // Return a list of all of the signups of events for the current user in the UserStore
     generateEventSignupsForUser() {
       let userStore = useUserStore();
 
@@ -110,6 +117,7 @@ export const useEventsStore = defineStore("events", {
       }
       return eventSignups;
     },
+    // Return true if the user is signed up for the event coorespinding to the eventId passed in
     hasUserSignedUpForEvent(eventId) {
       let userStore = useUserStore();
       let pastSignups = this.events
@@ -122,6 +130,7 @@ export const useEventsStore = defineStore("events", {
         return false;
       }
     },
+    // Return and event object from this.events for the passed in id
     findEventForId(id) {
       let event = this.events.find((ev) => ev.id === id);
       if (!event) {
@@ -131,6 +140,9 @@ export const useEventsStore = defineStore("events", {
         return event;
       }
     },
+    // Generate a signup for an event based on the passed in signup
+    // Needs some more work, we should be able to avoid calling setEvents() again here.
+    // The commented out part inside here is where the issue was.
     async createSignupForEvent(data) {
       // this.events[
       //   this.events.findIndex((e) => (e.id = data.eventId))

@@ -73,6 +73,7 @@ export const useUserStore = defineStore("user", {
           console.log(e);
         });
 
+      // Load Student instructor's userInfo into the store, appending userRoleInfo.instructor
       await UsersDataService.getSingle(this.userRoleInfo.instructor.userId)
         .then((response) => {
           const user = response.data.Users[0];

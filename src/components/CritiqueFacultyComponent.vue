@@ -4,7 +4,7 @@
       <v-row>
         <v-col class="text-h5 font-weight-bold"> {{ title }} Critique</v-col>
         <v-col class="text-right">
-          <v-btn elevation="0" @click="closeCritiqueDialog()">
+          <v-btn elevation="0" @click="closeCritiqueEditDialog()">
             <v-icon>
               <font-awesome-icon
                 icon="a-solid fa-circle-xmark"
@@ -301,14 +301,14 @@
       <v-btn
         rounded="pill"
         class="buttonGradient text-white mr-3"
-        @click="closeCritiqueDialog()">
+        @click="closeCritiqueEditDialog()">
         Save
       </v-btn>
       <v-btn
         rounded="pill"
         color="#DA9B9B"
         class="text-white mr-3"
-        @click="closeCritiqueDialog()">
+        @click="closeCritiqueEditDialog()">
         Cancel
       </v-btn>
     </v-card-text>
@@ -362,8 +362,8 @@
       };
     },
     methods: {
-      closeCritiqueDialog() {
-        this.$emit("closeCritiqueDialogEvent", false);
+      closeCritiqueEditDialog() {
+        this.$emit("closeCritiqueEditDialogEvent", false);
       },
       changeButton() {
         if (isExpand) {

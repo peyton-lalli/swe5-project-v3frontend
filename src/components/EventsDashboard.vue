@@ -32,8 +32,19 @@
               elevation="0"
               size="small"
               rounded="pill"
-              class="buttonGradient text-white font-weight-bold">
-              Upcoming
+              class="buttonGradient text-white font-weight-bold"
+              @click="changeText()">
+              {{ toggleText }}
+              <v-icon size="small" v-if="toggleText == 'Upcoming'">
+                <font-awesome-icon
+                  icon="fa-solid fa-caret-up"
+                  class="text-white" />
+              </v-icon>
+              <v-icon size="small" v-else>
+                <font-awesome-icon
+                  icon="fa-solid fa-caret-down"
+                  class="text-white" />
+              </v-icon>
             </v-btn>
           </v-col>
         </v-row>
@@ -66,6 +77,7 @@
     },
     data() {
       return {
+        toggleText: "Upcoming",
         createDialog: false,
         openEventIds: [],
         upcomingEventIds: [],
@@ -81,6 +93,13 @@
     methods: {
       closeCreateDialog(val) {
         this.createDialog = val;
+      },
+      changeText() {
+        if (this.toggleText == "Upcoming") {
+          this.toggleText = "Past";
+        } else {
+          this.toggleText = "Upcoming";
+        }
       },
       setEventsStore() {
         EventDataService.getAll()

@@ -11,10 +11,10 @@
           </v-col>
           <v-col cols="9" class="pt-0 pb-0">
             <v-card-title class="pb-0 font-weight-bold text-h9">
-              {{ songs.at(0).name }}
+              {{ sentPiece.name }}
             </v-card-title>
             <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-              {{ songs.at(0).person }}
+              {{ sentPiece.composer.name }}
             </v-card-subtitle>
           </v-col>
           <v-col cols="1" align-self="center" class="pl-0">
@@ -39,15 +39,11 @@
   export default {
     name: "Repertoire Component",
     components: {},
+    props: {
+      sentPiece: {},
+    },
     data() {
-      return {
-        songs: [
-          {
-            name: "Bird Upon The Tree",
-            person: "Blitzstein, Marc",
-          },
-        ],
-      };
+      return {};
     },
   };
 </script>

@@ -4,7 +4,7 @@
       <v-card-title class="font-weight-bold text-darkBlue">
         <v-row>
           <v-col class="text-h5 font-weight-bold">
-            {{ eventData.title }} Request</v-col
+            {{ eventData.title }} Signup</v-col
           >
           <v-col class="text-right">
             <v-btn elevation="0" @click="closeDialog()">
@@ -19,7 +19,7 @@
         </v-row>
       </v-card-title>
       <v-card-subtitle class="font-weight-bold text-darkBlue">
-        {{ date }}
+        {{ formatDate(eventData.date) }}
       </v-card-subtitle>
       <v-card-text>
         <v-row>
@@ -32,22 +32,18 @@
                 <v-row justify="center" class="pl-1 mt-0 mb-1">
                   <v-col cols="2" align-self="center">
                     <v-avatar class="bg-darkBlue">
-                      <v-img></v-img>
+                      <v-img
+                        :src="
+                          this.userStore.userRoleInfo.instructor.picture
+                        "></v-img>
                     </v-avatar>
                   </v-col>
                   <v-col cols="9">
                     <v-card-title class="text-darkBlue font-weight-bold pb-2">
-                      Nathan Lalli
+                      {{ this.userStore.userRoleInfo.instructor.name }}
                     </v-card-title>
                   </v-col>
                 </v-row>
-                <v-card-subtitle class="font-weight-bold text-darkGray">
-                  Voice Part
-                </v-card-subtitle>
-                <v-card-subtitle
-                  class="font-weight-bold text-darkBlue mt-5 mb-1">
-                  Soprano
-                </v-card-subtitle>
               </v-col>
               <v-col>
                 <v-card-subtitle class="font-weight-bold text-darkGray">
@@ -67,45 +63,38 @@
                 </v-row>
               </v-col>
             </v-row>
+            <v-row>
+              <v-col>
+                <v-card-subtitle class="font-weight-bold text-darkGray">
+                  Voice Part
+                </v-card-subtitle>
+                <v-card-subtitle
+                  class="font-weight-bold text-darkBlue mt-5 mb-1">
+                  Soprano
+                </v-card-subtitle>
+              </v-col>
+            </v-row>
           </v-col>
           <v-col>
             <v-card-subtitle class="font-weight-bold text-darkGray pl-1">
               Timeslot Selection
             </v-card-subtitle>
-            <v-row class="pt-3" v-for="time in eventData.times">
-              <v-card-text
-                v-for="time in getTimeSlots(
-                  time.startTime,
-                  time.endTime,
-                  time.interval
-                )"
-                :key="index">
+            <v-row class="pt-3" v-for="eventTime in eventData.times">
+              <v-card-text>
                 <v-btn
+                  v-for="timeSlot in getTimeSlots(
+                    eventTime.startTime,
+                    eventTime.endTime,
+                    eventTime.interval
+                  )"
                   elevation="0"
                   rounded="lg"
                   size="x-small"
-                  class="buttonGradient text-white font-weight-bold"
-                  >{{ time }}</v-btn
+                  class="buttonGradient text-white font-weight-bold mr-2"
+                  >{{ timeSlot }}</v-btn
                 >
               </v-card-text>
             </v-row>
-            <!-- <v-row>
-              <v-card-text
-                v-for="(time, index) in getTimeSlots(
-                  getDates(times[1].start_time),
-                  getDates(times[1].end_time),
-                  times[1].interval
-                )"
-                :key="index">
-                <v-btn
-                  elevation="0"
-                  rounded="lg"
-                  size="x-small"
-                  class="buttonGradient text-white font-weight-bold"
-                  >{{ time }}</v-btn
-                >
-              </v-card-text>
-            </v-row> -->
           </v-col>
         </v-row>
         <v-row>
@@ -120,7 +109,9 @@
                     bg-color="lightBlue"
                     class="text-blue"
                     placeholder="Search"
-                    :items="['Bird Upon a Tree', 'Souvenir', 'Cherry Valley']"
+                    :items="musicalSelection"
+                    item-title="name"
+                    item-value="id"
                     variant="solo"
                     text="darkBlue"></v-select>
                 </v-col>
@@ -238,6 +229,7 @@
         selectedTimeslot: new Date(this.eventData.date + "09:10:00"),
         // Hard coded for now, needs work!
         selectedPieceId: 1,
+        musicalSelection: [],
       };
     },
     props: {
@@ -246,7 +238,9 @@
     computed: {
       ...mapStores(useEventsStore, useUserStore),
     },
-    mounted() {},
+    mounted() {
+      this.musicalSelection = this.userStore.userRoleInfo.repertoire;
+    },
     methods: {
       /* This returns time slots in x intervals between two times */
       getTimeSlots(startTime, endTime, interval) {
@@ -262,6 +256,10 @@
           startTime.setTime(startTime.getTime() + intervalMillis);
         }
         return slots;
+      },
+      formatDate(date) {
+        const options = { year: "numeric", month: "numeric", day: "numeric" };
+        return new Date(date).toLocaleDateString("us-EN", options);
       },
       /* This takes a date and time string and changes to a Date */
       getDates(dateTime) {

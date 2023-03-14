@@ -77,10 +77,7 @@
       ...mapStores(useEventsStore, useUserStore),
     },
     async mounted() {
-      // this.retrieveInfo();
       this.timesInfoString = this.createTimesInfoString();
-
-      console.log(this.eventData);
       this.checkForPriorSignup();
     },
     props: {
@@ -126,14 +123,6 @@
       async closeEventDialog(val) {
         this.signUpDialog = val;
         await this.getPriorSignup();
-      },
-      retrieveInfo() {
-        const event = this.eventsStore.getEventForId(this.eventId);
-        this.eventData.id = event.id;
-        this.eventData.type = event.type;
-        this.eventData.date = this.formatDate(event.date);
-        this.eventData.times = event.times;
-        this.timesInfoString = this.createTimesInfoString();
       },
       async getPriorSignup() {
         let oldSignups = 0;

@@ -61,11 +61,8 @@
           </v-row>
         </v-card-title>
         <v-card-text>
-          <v-row>
-            <RepertoireComponent />
-          </v-row>
-          <v-row>
-            <RepertoireComponent />
+          <v-row v-for="piece in this.userStore.userRoleInfo.repertoire">
+            <RepertoireComponent :sentPiece="piece" />
           </v-row>
         </v-card-text>
       </v-card>
@@ -89,6 +86,7 @@
   import CritiqueComponent from "./CritiqueComponent.vue";
   import RepertoireCreate from "./RepertoireCreate.vue";
   import { useEventsStore } from "../../stores/EventsStore.js";
+  import { useUserStore } from "../../stores/UserStore.js";
   import { mapStores } from "pinia";
   export default {
     name: "StudentHomeDashboard",
@@ -105,7 +103,7 @@
       };
     },
     computed: {
-      ...mapStores(useEventsStore),
+      ...mapStores(useEventsStore, useUserStore),
     },
     mounted() {
       this.eventSignups = this.eventsStore.generateEventSignupsForUser();

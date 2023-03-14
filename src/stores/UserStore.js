@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import StudentInfoDataService from "../services/studentinfo.js";
 import PiecesDataService from "../services/pieces.js";
+import ComposersDataService from "../services/composers.js";
 import InstructorDataService from "../services/instructors.js";
 import UsersDataService from "../services/users.js";
 
@@ -59,6 +60,25 @@ export const useUserStore = defineStore("user", {
         .catch((e) => {
           console.log(e);
         });
+
+      // Load composer data in for each piece in the student's repertoire
+      await ComposersDataService.getAll()
+        .then((response) => {
+          for (let piece in this.userRoleInfo.repertoire) {
+            this.userRoleInfo.repertoire[piece] = {
+              ...this.userRoleInfo.repertoire[piece],
+              ...{
+                composer: response.data.Composers.filter(
+                  (c) => c.id === this.userRoleInfo.repertoire[piece].composerId
+                )[0],
+              },
+            };
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
       // Load Student instructor into the store, appending the userRoleInfo
       await InstructorDataService.getInstructorByInstructorId(
         this.userRoleInfo.instructorId

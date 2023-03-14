@@ -27,10 +27,7 @@
           {{ formatDate(new Date(eventData.date)) }}
         </v-card-subtitle>
         <v-card-subtitle class="font-weight-semi-bold text-darkBlue pt-0">
-          {{ time }}
-        </v-card-subtitle>
-        <v-card-subtitle class="font-weight-medium text-mediumBlue pt-0">
-          {{ place }}
+          {{ eventSignUpData.timeslot }}
         </v-card-subtitle>
 
         <v-row justify="center" class="pl-5">
@@ -113,7 +110,6 @@
     },
     mounted() {
       this.setEventData();
-      console.log(this.eventData);
     },
     methods: {
       closeEventDialog(val) {

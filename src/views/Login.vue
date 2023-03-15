@@ -54,6 +54,7 @@
       ...mapStores(useUserStore, useEventsStore),
     },
     async mounted() {
+      this.userStore.clearLoginUser();
       await this.loginWithGoogle();
     },
     methods: {

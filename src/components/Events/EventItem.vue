@@ -228,7 +228,15 @@
       return {
         selectedTimeslot: new Date(this.eventData.date + "09:10:00"),
         // Hard coded for now, needs work!
-        selectedPieceId: 1,
+        selectedPiece: {
+          name: "Bird Upon a Tree",
+          lyrics: "song",
+          translation: "sing song",
+          language: "English",
+          id: 1,
+          composerId: 1,
+          repertoireId: 1,
+        },
         musicalSelection: [],
       };
     },
@@ -279,7 +287,7 @@
           studentinfoId: this.userStore.userRoleInfo.id,
         };
 
-        await this.eventsStore.createSignupForEvent(data);
+        await this.eventsStore.createSignupForEvent(data, this.selectedPiece);
         // await this.createEventSong();
         this.$emit("regenerateSignups");
         this.closeDialog();
@@ -318,16 +326,6 @@
         }
 
         return false;
-      },
-      async createEventSong() {
-        let data = {
-          pieceId: this.selectedPieceId,
-          eventsignupId: await this.findSingupId(),
-        };
-
-        await EventSongsDataService.create(data).catch((e) => {
-          console.log(e);
-        });
       },
     },
   };

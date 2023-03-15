@@ -79,6 +79,7 @@
     async mounted() {
       this.timesInfoString = this.createTimesInfoString();
       this.checkForPriorSignup();
+      console.log(this.eventData);
     },
     props: {
       eventData: {},

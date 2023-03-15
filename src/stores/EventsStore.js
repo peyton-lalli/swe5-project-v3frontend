@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import EventTimeDataService from "../services/eventtime.js";
 import EventDataService from "../services/event.js";
 import EventSignUpDataService from "../services/eventsignup.js";
+import EventSongsDataService from "../services/eventsongs.js";
 import { useUserStore } from "../stores/UserStore.js";
 
 export const useEventsStore = defineStore("events", {
@@ -68,6 +69,25 @@ export const useEventsStore = defineStore("events", {
         .catch((e) => {
           console.log(e);
         });
+
+      for (let event in this.events) {
+        for (let signup in this.events[event].signups) {
+          await EventSongsDataService.getEventSignupId(
+            this.events[event].signups[signup].id
+          )
+            .then((response) => {
+              this.events[event].signups[signup] = {
+                ...this.events[event].signups[signup],
+                ...{ songs: response.data.EventSongs },
+              };
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }
+      }
+
+      console.log(this.events);
     },
     // Load all of the times for a specific event, appending the event's data
     async createTimes(event) {
@@ -143,12 +163,28 @@ export const useEventsStore = defineStore("events", {
     // Generate a signup for an event based on the passed in signup
     // Needs some more work, we should be able to avoid calling setEvents() again here.
     // The commented out part inside here is where the issue was.
-    async createSignupForEvent(data) {
+    async createSignupForEvent(data, piece) {
       // this.events[
       //   this.events.findIndex((e) => (e.id = data.eventId))
       // ].signups.push(data);
 
-      await EventSignUpDataService.create(data).catch((e) => {
+      let signupId = 0;
+
+      await EventSignUpDataService.create(data)
+        .then((response) => {
+          console.log(response);
+          signupId = response.data.id;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      let songData = {
+        pieceId: piece.id,
+        eventsignupId: signupId,
+      };
+
+      await EventSongsDataService.create(songData).catch((e) => {
         console.log(e);
       });
 

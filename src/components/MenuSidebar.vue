@@ -113,7 +113,9 @@
       },
       logout() {
         this.userStore.clearLoginUser();
-        location.reload();
+        this.$router.push({
+          name: "loginPage",
+        });
       },
     },
   };

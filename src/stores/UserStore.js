@@ -6,7 +6,7 @@ import InstructorDataService from "../services/instructors.js";
 import UsersDataService from "../services/users.js";
 
 export const useUserStore = defineStore("user", {
-  state: () => ({ userInfo: {}, userRoleInfo: {} }),
+  state: () => ({ userInfo: "", userRoleInfo: "" }),
   persist: true,
   getters: {
     getFullName(state) {
@@ -25,8 +25,8 @@ export const useUserStore = defineStore("user", {
     },
     // Clear the login user info, logging them out
     clearLoginUser() {
-      this.userInfo = null;
-      this.userRoleInfo = null;
+      this.userInfo = "";
+      this.userRoleInfo = "";
     },
     // Set the userRoleInfo based on the users role
     async setUserRoleInfo() {

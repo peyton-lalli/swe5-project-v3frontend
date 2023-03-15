@@ -9,6 +9,9 @@ class EventSongsDataService {
   getAll() {
     return http.get("/performance-t3/eventsongs");
   }
+  getEventSignupId(id) {
+    return http.get(`/performance-t3/eventsongs/eventsignupId/${id}`);
+  }
   delete(id) {
     return http.delete(`/performance-t3/eventsongs/${id}`);
   }

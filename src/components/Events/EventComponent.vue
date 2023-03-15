@@ -33,7 +33,8 @@
         <v-row justify="center" class="pl-5">
           <v-col cols="2" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <v-img></v-img>
+              <v-img
+                :src="this.userStore.userRoleInfo.instructor.picture"></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="10" align-self="center">
@@ -68,17 +69,21 @@
         <v-row justify="center" class="pl-5 mt-0">
           <v-col cols="2" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <v-img
-                src="https://www.mtishows.com/sites/default/files/profile/marcblitzstein.jpg?download=1"></v-img>
+              <!-- Need to get composer API working to get image -->
+              <v-img></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="10" align-self="center">
-            <v-card-title class="pb-0 font-weight-bold">
-              {{ getSongForSignup() }}
-            </v-card-title>
-            <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-              Marc Blitzstein
-            </v-card-subtitle>
+            <v-row v-for="song in eventSignUpData.songs">
+              <v-col>
+                <v-card-title class="pb-0 font-weight-bold">
+                  {{ song.name }}
+                </v-card-title>
+                <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
+                  {{ song.composer.name }}
+                </v-card-subtitle>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </v-card-text>

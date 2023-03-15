@@ -3,6 +3,8 @@ import EventTimeDataService from "../services/eventtime.js";
 import EventDataService from "../services/event.js";
 import EventSignUpDataService from "../services/eventsignup.js";
 import EventSongsDataService from "../services/eventsongs.js";
+import PiecesDataService from "../services/pieces.js";
+import ComposersDataService from "../services/composers.js";
 import { useUserStore } from "../stores/UserStore.js";
 
 export const useEventsStore = defineStore("events", {
@@ -69,10 +71,19 @@ export const useEventsStore = defineStore("events", {
       for (let [i, event] of this.events.entries()) {
         for (let [j, signup] of event.signups.entries()) {
           await EventSongsDataService.getEventSignupId(signup.id)
-            .then((response) => {
+            .then(async (response) => {
+              let songs = response.data.EventSongs;
+
+              for (let [k, song] of songs.entries()) {
+                songs[k] = {
+                  ...songs[k],
+                  ...(await this.generateSongDataForEventSong(song.pieceId)),
+                };
+              }
+
               this.events[i].signups[j] = {
                 ...this.events[i].signups[j],
-                ...{ songs: response.data.EventSongs },
+                ...{ songs: songs },
               };
             })
             .catch((e) => {
@@ -80,8 +91,39 @@ export const useEventsStore = defineStore("events", {
             });
         }
       }
+    },
 
-      console.log(this.events);
+    // Given an EventSong's pieceId, gets the Piece and Composer data for it
+    async generateSongDataForEventSong(id) {
+      let data = {};
+      await PiecesDataService.getId(id)
+        .then((response) => {
+          data = {
+            ...this.data,
+            ...response.data.Pieces[0],
+          };
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      // Load composer data in for each piece in the student's repertoire
+      await ComposersDataService.getAll()
+        .then((response) => {
+          data = {
+            ...data,
+            ...{
+              composer: response.data.Composers.filter(
+                (c) => c.id === data.composerId
+              )[0],
+            },
+          };
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      return data;
     },
     // Load all of the times for a specific event, appending the event's data
     async createTimes(event) {
@@ -147,10 +189,7 @@ export const useEventsStore = defineStore("events", {
     },
     // Generate a signup for an event based on the passed in signup
     async createSignupForEvent(data, piece) {
-      // Update the EventsStore with the change
-      this.events[
-        this.events.findIndex((e) => e.id === data.eventId)
-      ].signups.push({ ...data, ...{ songs: new Array(piece) } });
+      let songData = {};
 
       // Post the change to the database
       await EventSignUpDataService.create(data)
@@ -158,13 +197,26 @@ export const useEventsStore = defineStore("events", {
           await EventSongsDataService.create({
             pieceId: piece.id,
             eventsignupId: response.data.id,
-          }).catch((e) => {
-            console.log(e);
-          });
+          })
+            .then(async (sResponse) => {
+              // Build the song data to be loaded in the local copy
+              songData = {
+                ...sResponse.data,
+                ...piece,
+              };
+            })
+            .catch((e) => {
+              console.log(e);
+            });
         })
         .catch((e) => {
           console.log(e);
         });
+
+      // Update the local copy with the new data
+      this.events[
+        this.events.findIndex((e) => e.id === data.eventId)
+      ].signups.push({ ...data, ...{ songs: new Array(songData) } });
     },
   },
 });

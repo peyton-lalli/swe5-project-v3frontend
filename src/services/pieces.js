@@ -9,6 +9,9 @@ class PiecesDataService {
   getAll() {
     return http.get("/performance-t3/pieces");
   }
+  getId(id) {
+    return http.get(`/performance-t3/pieces/id/${id}`);
+  }
   getName(id) {
     return http.get(`/performance-t3/pieces/name/${id}`);
   }

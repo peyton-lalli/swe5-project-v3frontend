@@ -79,19 +79,21 @@
             <v-card-subtitle class="font-weight-bold text-darkGray pl-1">
               Timeslot Selection
             </v-card-subtitle>
-            <v-row class="pt-3" v-for="eventTime in eventData.times">
-              <v-card-text>
+            <v-row class="pt-3">
+              <v-card-text v-for="slotsList in getTimeSlots(eventData.times)">
                 <v-btn
-                  v-for="timeSlot in getTimeSlots(
-                    eventTime.startTime,
-                    eventTime.endTime,
-                    eventTime.interval
-                  )"
+                  v-for="timeSlot in slotsList"
+                  @click="setSelectedTimeslot(timeSlot)"
+                  :class="
+                    selectedTimeslot.id === timeSlot.id
+                      ? 'bg-darkGray'
+                      : 'buttonGradient'
+                  "
                   elevation="0"
                   rounded="lg"
                   size="x-small"
-                  class="buttonGradient text-white font-weight-bold mr-2"
-                  >{{ timeSlot }}</v-btn
+                  class="text-white font-weight-bold mr-2"
+                  >{{ timeSlot.time }}</v-btn
                 >
               </v-card-text>
             </v-row>
@@ -109,7 +111,6 @@
                     bg-color="lightBlue"
                     class="text-blue"
                     placeholder="Search"
-                    :items="musicalSelection"
                     item-title="name"
                     item-value="id"
                     variant="solo"
@@ -127,40 +128,41 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <v-card class="eventsGradient rounded-lg mainblur">
-                    <v-card-title class="font-weight-bold text-white pl-5">
+                  <v-card class="eventsGradient rounded-lg mainBlur">
+                    <v-card-title class="font-weight-bold text-white pl-5 pb-0">
                       Selected
                     </v-card-title>
                     <v-card-text>
-                      <v-card class="rounded-lg">
+                      <v-card
+                        class="rounded-lg mt-4 lighterBlur"
+                        v-for="piece in this.userStore.userRoleInfo.repertoire"
+                        @click="setSelectedPiece(piece)"
+                        :class="
+                          this.selectedPiece.id === piece.id
+                            ? 'bg-lightBlue'
+                            : 'bg-white'
+                        ">
                         <v-card-text class="pt-0">
                           <v-row justify="center" class="pl-1 mt-0">
                             <v-col cols="1" align-self="center">
                               <v-avatar class="bg-darkBlue">
-                                <v-avatar class="bg-darkBlue">
-                                  <v-img
-                                    src="https://www.mtishows.com/sites/default/files/profile/marcblitzstein.jpg?download=1"></v-img>
-                                </v-avatar>
+                                <!-- Need to get composer API working to get image -->
+                                <v-img></v-img>
                               </v-avatar>
                             </v-col>
                             <v-col cols="11">
-                              <v-card-subtitle
-                                class="mt-2 ml-1 font-weight-bold">
-                                {{
-                                  this.userStore.userRoleInfo.repertoire[0].name
-                                }}
-                              </v-card-subtitle>
-                              <v-card-subtitle
-                                class="text-darkBlue font-weight-bold pb-2 ml-1">
-                                <!-- {{
-                                  // Not working yet, so hard coded
-                                  getComposerName(
-                                    this.userStore.userRoleInfo.repertoire[0]
-                                  )
-
-                                }} -->
-                                Marc Blitzstein
-                              </v-card-subtitle>
+                              <v-row>
+                                <v-col>
+                                  <v-card-subtitle
+                                    class="mt-2 ml-1 font-weight-bold">
+                                    {{ piece.name }}
+                                  </v-card-subtitle>
+                                  <v-card-subtitle
+                                    class="text-darkBlue font-weight-bold pb-2 ml-1">
+                                    {{ piece.composer.name }}
+                                  </v-card-subtitle>
+                                </v-col>
+                              </v-row>
                             </v-col>
                           </v-row>
                         </v-card-text>
@@ -172,22 +174,6 @@
             </v-card-text>
           </v-col>
           <v-col>
-            <!-- <v-row>
-              <v-col>
-                <v-card-subtitle class="font-weight-bold text-darkGray pl-1">
-                  Additional Musical Selection
-                </v-card-subtitle>
-              </v-col>
-              <v-col class="text-right">
-                <v-btn
-                  elevation="0"
-                  rounded="pill"
-                  size="x-small"
-                  class="buttonGradient text-white font-weight-bold">
-                  Add to repertoire
-                </v-btn>
-              </v-col>
-            </v-row> -->
             <v-row>
               <v-col>
                 <v-card
@@ -226,18 +212,9 @@
     name: "EventItemEdit",
     data() {
       return {
-        selectedTimeslot: new Date(this.eventData.date + "09:10:00"),
+        selectedTimeslot: {},
         // Hard coded for now, needs work!
-        selectedPiece: {
-          name: "Bird Upon a Tree",
-          lyrics: "song",
-          translation: "sing song",
-          language: "English",
-          id: 1,
-          composerId: 1,
-          repertoireId: 1,
-        },
-        musicalSelection: [],
+        selectedPiece: {},
       };
     },
     props: {
@@ -247,23 +224,36 @@
       ...mapStores(useEventsStore, useUserStore),
     },
     mounted() {
-      this.musicalSelection = this.userStore.userRoleInfo.repertoire;
+      // Set default selected piece
+      this.selectedPiece = this.userStore.userRoleInfo.repertoire[0];
     },
     methods: {
-      /* This returns time slots in x intervals between two times */
-      getTimeSlots(startTime, endTime, interval) {
-        startTime = new Date(startTime);
-        endTime = new Date(endTime);
-        var slots = [];
+      // Given all of the time sections for an event, return a 2d array of timeslots
+      getTimeSlots(times) {
+        let counter = 1;
+        let totalSlots = [];
 
-        var intervalMillis = interval * 60 * 1000;
+        for (let time of times) {
+          let slots = [];
+          let intervalMillis = time.interval * 60 * 1000;
 
-        while (startTime < endTime) {
-          var mins = (startTime.getMinutes() + "0").slice(0, 2);
-          slots.push(startTime.getHours() + ":" + mins);
-          startTime.setTime(startTime.getTime() + intervalMillis);
+          let startTime = new Date(time.startTime);
+          let endTime = new Date(time.endTime);
+
+          while (startTime < endTime) {
+            let mins = (startTime.getMinutes() + "0").slice(0, 2);
+            slots.push({
+              id: counter,
+              time: startTime.getHours() + ":" + mins,
+            });
+            startTime.setTime(startTime.getTime() + intervalMillis);
+            counter++;
+          }
+
+          totalSlots.push(slots);
         }
-        return slots;
+
+        return totalSlots;
       },
       formatDate(date) {
         const options = { year: "numeric", month: "numeric", day: "numeric" };
@@ -273,16 +263,18 @@
       getDates(dateTime) {
         return new Date(dateTime);
       },
-      //Not yet working
-      // async getComposerName(piece) {
-      //   await this.studentRepertoireStore.getComposerName(piece.composerId);
-      // },
+      setSelectedPiece(piece) {
+        this.selectedPiece = piece;
+      },
+      setSelectedTimeslot(timeslot) {
+        this.selectedTimeslot = timeslot;
+      },
       closeDialog() {
         this.$emit("closeEventDialogEvent", false);
       },
       async createSignup() {
         let data = {
-          timeslot: this.selectedTimeslot,
+          timeslot: this.selectedTimeslot.time,
           eventId: this.eventData.id,
           studentinfoId: this.userStore.userRoleInfo.id,
         };

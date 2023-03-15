@@ -125,6 +125,8 @@ export const useUserStore = defineStore("user", {
         .then((response) => {
           this.userRoleInfo = {
             ...this.userRoleInfo,
+            // Needs to be updated to get all the student info like a student user would have
+            //@ethanimooney: add this
             ...{ students: response.data.StudentInfo },
           };
         })

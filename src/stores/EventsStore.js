@@ -146,12 +146,10 @@ export const useEventsStore = defineStore("events", {
       }
     },
     // Generate a signup for an event based on the passed in signup
-    // Needs some more work, we should be able to avoid calling setEvents() again here.
-    // The commented out part inside here is where the issue was.
     async createSignupForEvent(data, piece) {
-      // this.events[
-      //   this.events.findIndex((e) => (e.id = data.eventId))
-      // ].signups.push(data);
+      this.events[
+        this.events.findIndex((e) => e.id === data.eventId)
+      ].signups.push(data);
 
       let signupId = 0;
 
@@ -172,8 +170,6 @@ export const useEventsStore = defineStore("events", {
       await EventSongsDataService.create(songData).catch((e) => {
         console.log(e);
       });
-
-      await this.setEvents();
     },
   },
 });

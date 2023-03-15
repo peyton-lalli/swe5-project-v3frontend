@@ -100,6 +100,8 @@ export const useEventsStore = defineStore("events", {
         .then((response) => {
           data = {
             ...this.data,
+            // This might be an issue, as it would have two 'id' fields - may need to change to mimmick composer below
+            // @ethanimooney: fix?
             ...response.data.Pieces[0],
           };
         })

@@ -44,7 +44,8 @@
                 <EventItem
                   @closeEventDialogEvent="closeEventDialog"
                   @regenerateSignups="regenerateSignups()"
-                  :eventData="eventData">
+                  :eventData="eventData"
+                  :timesInfoString="timesInfoString">
                 </EventItem>
               </v-dialog>
             </v-col>

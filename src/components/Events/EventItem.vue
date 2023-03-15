@@ -3,7 +3,7 @@
     <v-card class="rounded-lg mainblur">
       <v-card-title class="font-weight-bold text-darkBlue">
         <v-row>
-          <v-col class="text-h5 font-weight-bold">
+          <v-col class="text-h5 font-weight-bold pb-0 mb-0">
             {{ eventData.title }} Signup</v-col
           >
           <v-col class="text-right">
@@ -18,8 +18,11 @@
           </v-col>
         </v-row>
       </v-card-title>
-      <v-card-subtitle class="font-weight-bold text-darkBlue">
+      <v-card-subtitle class="font-weight-bold text-darkBlue pt-0">
         {{ formatDate(eventData.date) }}
+      </v-card-subtitle>
+      <v-card-subtitle class="font-weight-bold text-darkBlue">
+        {{ timesInfoString }}
       </v-card-subtitle>
       <v-card-text>
         <v-row>
@@ -46,6 +49,7 @@
                 </v-row>
               </v-col>
               <v-col>
+                <!-- Database doesn't support this yet, so hard coded for now, doesn't effect anything -->
                 <v-card-subtitle class="font-weight-bold text-darkGray">
                   Accompanist
                 </v-card-subtitle>
@@ -65,6 +69,7 @@
             </v-row>
             <v-row>
               <v-col>
+                <!-- Not supported in database yet, so hardcoded for now, but doesn't effect anything -->
                 <v-card-subtitle class="font-weight-bold text-darkGray">
                   Voice Part
                 </v-card-subtitle>
@@ -219,9 +224,15 @@
     },
     props: {
       eventData: {},
+      timesInfoString: "",
     },
     computed: {
       ...mapStores(useEventsStore, useUserStore),
+    },
+    watch: {
+      timesInfoString(str) {
+        this.timesInfoString = str;
+      },
     },
     mounted() {
       // Set default selected piece

@@ -30,14 +30,13 @@ export const useEventsStore = defineStore("events", {
       // Load all the events in, creating a custom object array with the needed data.
       await EventDataService.getAll()
         .then(async (response) => {
-          let eventsResponse = response.data.Event;
-          for (let event in eventsResponse) {
+          for (let event of response.data.Event) {
             this.events.push({
-              id: eventsResponse[event].id,
-              type: eventsResponse[event].type,
-              title: eventsResponse[event].title,
-              date: new Date(eventsResponse[event].date),
-              times: await this.createTimes(eventsResponse[event]),
+              id: event.id,
+              type: event.type,
+              title: event.title,
+              date: new Date(event.date),
+              times: await this.createTimes(event),
             });
           }
         })
@@ -51,16 +50,12 @@ export const useEventsStore = defineStore("events", {
     async generateSignUpsForAllEvents() {
       await EventSignUpDataService.getAll()
         .then((response) => {
-          for (let event in this.events) {
-            let updateEventId = this.events.findIndex(
-              (e) => e.id === this.events[event].id
-            );
-
-            this.events[updateEventId] = {
-              ...this.events[updateEventId],
+          for (let [i, event] of this.events.entries()) {
+            this.events[i] = {
+              ...this.events[i],
               ...{
                 signups: response.data.EventSignUp.filter(
-                  (signUp) => signUp.eventId === this.events[event].id
+                  (signUp) => signUp.eventId === event.id
                 ),
               },
             };
@@ -70,14 +65,13 @@ export const useEventsStore = defineStore("events", {
           console.log(e);
         });
 
-      for (let event in this.events) {
-        for (let signup in this.events[event].signups) {
-          await EventSongsDataService.getEventSignupId(
-            this.events[event].signups[signup].id
-          )
+      // Loads the songs for each signup of each event
+      for (let [i, event] of this.events.entries()) {
+        for (let [j, signup] of event.signups.entries()) {
+          await EventSongsDataService.getEventSignupId(signup.id)
             .then((response) => {
-              this.events[event].signups[signup] = {
-                ...this.events[event].signups[signup],
+              this.events[i].signups[j] = {
+                ...this.events[i].signups[j],
                 ...{ songs: response.data.EventSongs },
               };
             })
@@ -94,20 +88,14 @@ export const useEventsStore = defineStore("events", {
       let timesFinal = [];
       await EventTimeDataService.getEventId(event.id)
         .then((response) => {
-          let timesResponse = response.data.EventTime;
-
-          for (let i = 0; i < timesResponse.length; i++) {
+          for (let time of response.data.EventTime) {
             let timesSingle = {};
 
-            timesSingle.startTime = new Date(
-              event.date + " " + timesResponse[i].starttime
-            );
+            timesSingle.startTime = new Date(event.date + " " + time.starttime);
 
-            timesSingle.endTime = new Date(
-              event.date + " " + timesResponse[i].endtime
-            );
+            timesSingle.endTime = new Date(event.date + " " + time.endtime);
 
-            timesSingle.interval = timesResponse[i].interval;
+            timesSingle.interval = time.interval;
 
             timesFinal.push(timesSingle);
           }
@@ -128,13 +116,14 @@ export const useEventsStore = defineStore("events", {
 
       let eventSignups = new Array();
 
-      for (let event in this.events) {
+      for (let event of this.events) {
         eventSignups = eventSignups.concat(
-          this.events[event].signups.filter(
+          event.signups.filter(
             (s) => s.studentinfoId === userStore.userRoleInfo.id
           )
         );
       }
+
       return eventSignups;
     },
     // Return true if the user is signed up for the event coorespinding to the eventId passed in

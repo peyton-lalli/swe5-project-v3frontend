@@ -135,6 +135,8 @@ export const useUserStore = defineStore("user", {
         });
     },
     // Post update to the DB, then update store
+    // This needs to be used carefully, it's not really safe to use yet
+    // @ethanimooney: Fix?
     async updateUserInfo(data, role) {
       if (role === "student") {
         await this.updateStudentInfo(data);

@@ -22,7 +22,7 @@
           class="buttonWhite text-mediumBlue font-weight-bold">
           View Signups
         </v-btn>
-        <v-dialog v-model="critiqueDialog" persistent max-width="1000px">
+        <v-dialog v-model="critiqueDialog" max-width="1000px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               v-bind="attrs"
@@ -35,10 +35,10 @@
               Critiques
             </v-btn>
           </template>
-          <CritiqueFacultyComponent
+          <CritiqueListComponent
             @closeCritiqueDialogEvent="
               closeCritiqueDialog
-            "></CritiqueFacultyComponent>
+            "></CritiqueListComponent>
         </v-dialog>
       </v-card-actions>
     </v-card>
@@ -46,11 +46,11 @@
 </template>
 
 <script>
-  import CritiqueFacultyComponent from "./CritiqueFacultyComponent.vue";
+  import CritiqueListComponent from "./CritiqueListComponent.vue";
   export default {
     name: "AttentionComponent",
     components: {
-      CritiqueFacultyComponent,
+      CritiqueListComponent,
     },
     data() {
       return {

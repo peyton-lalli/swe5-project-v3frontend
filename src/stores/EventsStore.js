@@ -147,29 +147,24 @@ export const useEventsStore = defineStore("events", {
     },
     // Generate a signup for an event based on the passed in signup
     async createSignupForEvent(data, piece) {
+      // Update the EventsStore with the change
       this.events[
         this.events.findIndex((e) => e.id === data.eventId)
-      ].signups.push(data);
+      ].signups.push({ ...data, ...{ songs: new Array(piece) } });
 
-      let signupId = 0;
-
+      // Post the change to the database
       await EventSignUpDataService.create(data)
-        .then((response) => {
-          console.log(response);
-          signupId = response.data.id;
+        .then(async (response) => {
+          await EventSongsDataService.create({
+            pieceId: piece.id,
+            eventsignupId: response.data.id,
+          }).catch((e) => {
+            console.log(e);
+          });
         })
         .catch((e) => {
           console.log(e);
         });
-
-      let songData = {
-        pieceId: piece.id,
-        eventsignupId: signupId,
-      };
-
-      await EventSongsDataService.create(songData).catch((e) => {
-        console.log(e);
-      });
     },
   },
 });

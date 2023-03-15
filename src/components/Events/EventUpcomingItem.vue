@@ -109,7 +109,6 @@
         this.signUpDialog = val;
       },
       retrieveInfo() {
-        console.log("WTF");
         const event = this.eventsStore.getEventForId(this.eventId);
         this.eventData.id = event.id;
         this.eventData.type = event.type;

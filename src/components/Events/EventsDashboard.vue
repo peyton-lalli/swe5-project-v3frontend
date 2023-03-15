@@ -32,12 +32,25 @@
           </v-col>
           <v-spacer></v-spacer>
           <v-col cols="auto">
+            <!-- Toggle does not work yet, similar issue to on EventsDashboard with upcoming and current -->
+            <!-- @ethanimooney: Resolve -->
             <v-btn
               elevation="0"
               size="small"
               rounded="pill"
-              class="buttonGradient text-white font-weight-bold">
-              Upcoming
+              class="buttonGradient text-white font-weight-bold"
+              @click="changeText()">
+              {{ toggleText }}
+              <v-icon size="small" v-if="toggleText == 'Upcoming'">
+                <font-awesome-icon
+                  icon="fa-solid fa-caret-up"
+                  class="text-white" />
+              </v-icon>
+              <v-icon size="small" v-else>
+                <font-awesome-icon
+                  icon="fa-solid fa-caret-down"
+                  class="text-white" />
+              </v-icon>
             </v-btn>
           </v-col>
         </v-row>
@@ -69,6 +82,8 @@
     data() {
       return {
         openEvents: [],
+        toggleText: "Upcoming",
+        createDialog: false,
         upcomingEventIds: [],
         eventSignups: [],
       };
@@ -86,6 +101,16 @@
       generateOpenEventsList() {
         let events = [this.eventsStore.events[0], this.eventsStore.events[1]];
         this.openEvents = events;
+      },
+      closeCreateDialog(val) {
+        this.createDialog = val;
+      },
+      changeText() {
+        if (this.toggleText == "Upcoming") {
+          this.toggleText = "Past";
+        } else {
+          this.toggleText = "Upcoming";
+        }
       },
       generateUpcomingEventIds() {
         let ids = [3, 4];

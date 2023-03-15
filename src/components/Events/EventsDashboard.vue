@@ -16,6 +16,8 @@
       <v-card-title class="font-weight-bold text-darkBlue text-h5">
         Upcoming Events
       </v-card-title>
+      <!-- Not yet working with new stores -->
+      <!-- @ethanimooney: Get this working -->
       <v-card-text v-for="id in upcomingEventIds">
         <v-row>
           <!-- <EventUpcomingItem :eventId="id" /> -->
@@ -66,7 +68,6 @@
     },
     data() {
       return {
-        createDialog: false,
         openEvents: [],
         upcomingEventIds: [],
         eventSignups: [],
@@ -82,9 +83,6 @@
       this.generateUpcomingEventIds();
     },
     methods: {
-      closeCreateDialog(val) {
-        this.createDialog = val;
-      },
       generateOpenEventsList() {
         let events = [this.eventsStore.events[0], this.eventsStore.events[1]];
         this.openEvents = events;
@@ -94,10 +92,7 @@
         this.upcomingEventIds = ids;
       },
       regenerateSignups() {
-        console.log("CAUGHT BY ED");
-        console.log(this.eventsStore.events);
         this.eventSignups = this.eventsStore.generateEventSignupsForUser();
-        console.log(this.eventSignups);
       },
     },
   };

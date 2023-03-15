@@ -53,11 +53,12 @@
             </v-avatar>
           </v-col>
           <v-col cols="10" align-self="center">
+            <!-- Not yet supported in database so hardcoded for now, doesn't effect anything -->
             <v-card-title class="pb-0 font-weight-bold">
               Accompanist
             </v-card-title>
             <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-              {{ this.userStore.userRoleInfo.instructor.name }}
+              Peyton Lalli
             </v-card-subtitle>
           </v-col>
         </v-row>
@@ -128,11 +129,6 @@
       formatDate(date) {
         const options = { year: "numeric", month: "numeric", day: "numeric" };
         return new Date(date).toLocaleDateString("us-EN", options);
-      },
-      getSongForSignup() {
-        let repertoire = this.userStore.userRoleInfo.repertoire;
-
-        return repertoire[0].name;
       },
     },
   };

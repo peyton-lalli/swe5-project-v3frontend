@@ -23,6 +23,8 @@
                 size="small"
                 rounded="pill"
                 class="bg-white text-darkBlue font-weight-bold">
+                <!-- Still need to get this working, will need to generate timeslots in the EventStore -->
+                <!-- @ethanimooney: Do this -->
                 <!-- {{ eventData.timeslots.filled }} /
                 {{ eventData.timeslots.total }} Timeslots Filled -->
               </v-btn>
@@ -80,7 +82,6 @@
     async mounted() {
       this.timesInfoString = this.createTimesInfoString();
       this.checkForPriorSignup();
-      console.log(this.eventData);
     },
     props: {
       eventData: {},

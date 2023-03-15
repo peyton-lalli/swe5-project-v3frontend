@@ -213,7 +213,7 @@ export const useEventsStore = defineStore("events", {
           console.log(e);
         });
 
-      // Update the local copy with the new data
+      // Update the EventsStore.events with the new data
       this.events[
         this.events.findIndex((e) => e.id === data.eventId)
       ].signups.push({ ...data, ...{ songs: new Array(songData) } });

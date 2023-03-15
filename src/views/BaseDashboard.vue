@@ -21,8 +21,6 @@
       "
       class="dashboardSlot"></AdminHomeDashboard>
 
-    <!-- Leaving commented out for now, until we figure out how to do it right. -->
-    <!-- To view, just un comment it, and comment the StudentHomeDashboard out (also have a student role) -->
     <EventsDashboard
       v-if="eventsStore.getEventsPageStatus"
       class="dashboardSlot"></EventsDashboard>
@@ -61,7 +59,6 @@
     },
     async mounted() {
       this.retrieveInfo();
-      // await this.eventsStore.setEvents();
       this.setUserDashboard();
     },
     methods: {

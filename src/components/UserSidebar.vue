@@ -21,7 +21,7 @@
         <v-row>
           <v-col cols="12">
             <v-card-subtitle class="text-darkBlue pl-0">
-              Vocal Level 3
+              {{ "Vocal Level " + userLevel }}
             </v-card-subtitle>
             <v-progress-linear
               rounded
@@ -43,7 +43,6 @@
                   </v-card-title>
                   <v-card-subtitle
                     class="text-darkBlue font-weight-bold pb-2 font-weight-bold">
-                    <!-- This will eventually be a store call passing the userInstuctor value -->
                     {{ userInstructor.name }}
                   </v-card-subtitle>
                 </v-col>

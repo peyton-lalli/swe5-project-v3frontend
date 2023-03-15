@@ -81,6 +81,8 @@
             </v-row>
           </v-col>
           <v-col>
+            <!-- ***It's currently possible to signup without selecting a timeslot -->
+            <!-- @ethanimooney: Add error checking and handling -->
             <v-card-subtitle class="font-weight-bold text-darkGray pl-1">
               Timeslot Selection
             </v-card-subtitle>
@@ -211,7 +213,6 @@
   import { useEventsStore } from "../../stores/EventsStore.js";
   import { useUserStore } from "../../stores/UserStore.js";
   import EventSignUpDataService from "../../services/eventsignup.js";
-  import EventSongsDataService from "../../services/eventsongs.js";
   import { mapStores } from "pinia";
   export default {
     name: "EventItemEdit",
@@ -239,6 +240,15 @@
       this.selectedPiece = this.userStore.userRoleInfo.repertoire[0];
     },
     methods: {
+      setSelectedPiece(piece) {
+        this.selectedPiece = piece;
+      },
+      setSelectedTimeslot(timeslot) {
+        this.selectedTimeslot = timeslot;
+      },
+      closeDialog() {
+        this.$emit("closeEventDialogEvent", false);
+      },
       // Given all of the time sections for an event, return a 2d array of timeslots
       getTimeSlots(times) {
         let counter = 1;
@@ -270,19 +280,6 @@
         const options = { year: "numeric", month: "numeric", day: "numeric" };
         return new Date(date).toLocaleDateString("us-EN", options);
       },
-      /* This takes a date and time string and changes to a Date */
-      getDates(dateTime) {
-        return new Date(dateTime);
-      },
-      setSelectedPiece(piece) {
-        this.selectedPiece = piece;
-      },
-      setSelectedTimeslot(timeslot) {
-        this.selectedTimeslot = timeslot;
-      },
-      closeDialog() {
-        this.$emit("closeEventDialogEvent", false);
-      },
       async createSignup() {
         let data = {
           timeslot: this.selectedTimeslot.time,
@@ -291,44 +288,8 @@
         };
 
         await this.eventsStore.createSignupForEvent(data, this.selectedPiece);
-        // await this.createEventSong();
         this.$emit("regenerateSignups");
         this.closeDialog();
-      },
-      async findSingupId() {
-        let eventId = 0;
-        await EventSignUpDataService.getEventId(this.eventData.id)
-          .then((response) => {
-            eventId = response.data.EventSignUp.filter((es) => {
-              return es.studentinfoId === this.userStore.userRoleInfo.id;
-            });
-            eventId = eventId[0].id;
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-
-        return eventId;
-      },
-      async checkForPriorSignup() {
-        let oldSignups = 0;
-        await EventSignUpDataService.getEventId(this.eventData.id)
-          .then((response) => {
-            oldSignups = response.data.EventSignUp.filter((es) => {
-              return es.studentinfoId === this.userStore.userRoleInfo.id;
-            });
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-
-        console.log(oldSignups);
-
-        if (oldSignups.length >= 1) {
-          return true;
-        }
-
-        return false;
       },
     },
   };

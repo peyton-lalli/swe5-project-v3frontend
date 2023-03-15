@@ -89,15 +89,11 @@ export const useEventsStore = defineStore("events", {
       await EventTimeDataService.getEventId(event.id)
         .then((response) => {
           for (let time of response.data.EventTime) {
-            let timesSingle = {};
-
-            timesSingle.startTime = new Date(event.date + " " + time.starttime);
-
-            timesSingle.endTime = new Date(event.date + " " + time.endtime);
-
-            timesSingle.interval = time.interval;
-
-            timesFinal.push(timesSingle);
+            timesFinal.push({
+              startTime: new Date(event.date + " " + time.starttime),
+              endTime: new Date(event.date + " " + time.endtime),
+              interval: time.interval,
+            });
           }
         })
         .catch((e) => {

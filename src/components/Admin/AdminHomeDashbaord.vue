@@ -106,9 +106,9 @@
 </template>
 
 <script>
-  import EventComponent from "./EventComponent.vue";
-  import StudentComponent from "./StudentComponent.vue";
-  import AttentionComponent from "./AttentionComponent.vue";
+  import EventComponent from "../Events/EventComponent.vue";
+  import StudentComponent from "../Faculty/StudentComponent.vue";
+  import AttentionComponent from "../Faculty/AttentionComponent.vue";
   export default {
     name: "AdminHomeDashboard",
     components: {

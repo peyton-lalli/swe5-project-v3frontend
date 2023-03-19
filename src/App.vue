@@ -7,14 +7,11 @@
 </template>
 
 <script>
-  import { useLoginStore } from "./stores/LoginStore.js";
   export default {
     name: "App",
     components: {},
     data() {
-      return {
-        loginStore: useLoginStore(),
-      };
+      return {};
     },
   };
 </script>

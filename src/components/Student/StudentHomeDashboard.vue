@@ -29,11 +29,14 @@
         </v-card-title>
         <v-card-text flex-grow="1" overflow="auto">
           <v-row>
-            <v-col cols="12" :sm="12" :md="12" :lg="12" :xl="6">
-              <EventComponent />
-            </v-col>
-            <v-col cols="12" :sm="12" :md="12" :lg="12" :xl="6">
-              <EventComponent />
+            <v-col
+              cols="6"
+              :sm="12"
+              :md="12"
+              :lg="12"
+              :xl="6"
+              v-for="event in eventSignups">
+              <EventComponent :eventSignUpData="event" />
             </v-col>
           </v-row>
         </v-card-text>
@@ -44,19 +47,15 @@
           <v-row>
             <v-col class="text-h5 font-weight-bold"> Repertoire </v-col>
             <v-col class="text-right">
+              <v-btn
+                @click="createDialog = true"
+                elevation="0"
+                size="small"
+                rounded="pill"
+                class="buttonGradient mr-3 text-white font-weight-bold">
+                Add New
+              </v-btn>
               <v-dialog v-model="createDialog" persistent max-width="600px">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="createDialog = true"
-                    elevation="0"
-                    size="small"
-                    rounded="pill"
-                    class="buttonGradient mr-3 text-white font-weight-bold">
-                    Add New
-                  </v-btn>
-                </template>
                 <RepertoireCreate
                   @closeCourseDialogEvent="
                     closeCreateDialog
@@ -73,11 +72,8 @@
           </v-row>
         </v-card-title>
         <v-card-text>
-          <v-row>
-            <RepertoireComponent />
-          </v-row>
-          <v-row>
-            <RepertoireComponent />
+          <v-row v-for="piece in this.userStore.userRoleInfo.repertoire">
+            <RepertoireComponent :sentPiece="piece" />
           </v-row>
         </v-card-text>
       </v-card>
@@ -96,10 +92,13 @@
 </template>
 
 <script>
-  import EventComponent from "../components/EventComponent.vue";
-  import RepertoireComponent from "../components/RepertoireComponent.vue";
-  import CritiqueComponent from "../components/CritiqueComponent.vue";
-  import RepertoireCreate from "../components/RepertoireCreate.vue";
+  import EventComponent from "../Events/EventComponent.vue";
+  import RepertoireComponent from "./RepertoireComponent.vue";
+  import CritiqueComponent from "./CritiqueComponent.vue";
+  import RepertoireCreate from "./RepertoireCreate.vue";
+  import { useEventsStore } from "../../stores/EventsStore.js";
+  import { useUserStore } from "../../stores/UserStore.js";
+  import { mapStores } from "pinia";
   export default {
     name: "StudentHomeDashboard",
     components: {
@@ -112,7 +111,14 @@
       return {
         toggleText: "Upcoming",
         createDialog: false,
+        eventSignups: [],
       };
+    },
+    computed: {
+      ...mapStores(useEventsStore, useUserStore),
+    },
+    mounted() {
+      this.eventSignups = this.eventsStore.generateEventSignupsForUser();
     },
     methods: {
       closeCreateDialog(val) {

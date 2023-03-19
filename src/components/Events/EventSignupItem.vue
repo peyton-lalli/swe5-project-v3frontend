@@ -7,13 +7,10 @@
             {{ eventData.type }}
           </v-card-title>
           <v-card-subtitle class="font-weight-semi-bold text-darkBlue pl-0">
-            {{ eventData.date }}
+            {{ formatDate(eventData.date) }}
           </v-card-subtitle>
           <v-card-subtitle class="font-weight-semi-bold text-darkBlue pl-0">
             {{ timesInfoString }}
-          </v-card-subtitle>
-          <v-card-subtitle class="font-weight-medium text-mediumBlue pl-0">
-            {{ eventData.location }}
           </v-card-subtitle>
         </v-col>
         <v-spacer></v-spacer>
@@ -26,27 +23,31 @@
                 size="small"
                 rounded="pill"
                 class="bg-white text-darkBlue font-weight-bold">
-                {{ eventData.timeslots.filled }} /
-                {{ eventData.timeslots.total }} Timeslots Filled
+                <!-- Still need to get this working, will need to generate timeslots in the EventStore -->
+                <!-- @ethanimooney: Do this -->
+                <!-- {{ eventData.timeslots.filled }} /
+                {{ eventData.timeslots.total }} Timeslots Filled -->
               </v-btn>
             </v-col>
           </v-row>
           <v-row align="center" justify="center">
             <v-col justify="center">
+              <v-btn
+                elevation="0"
+                size="small"
+                rounded="pill"
+                class="buttonGradient text-white font-weight-bold text-capitalize"
+                @click="
+                  hasPriorSignup ? (editDialog = true) : (signUpDialog = true)
+                ">
+                {{ hasPriorSignup ? "Edit" : "Signup" }}
+              </v-btn>
               <v-dialog v-model="signUpDialog" persistent max-width="1000px">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    elevation="0"
-                    size="small"
-                    rounded="pill"
-                    class="buttonGradient text-white font-weight-bold text-capitalize"
-                    @click="signUpDialog = true"
-                    v-bind="attrs"
-                    v-on="on">
-                    Signup
-                  </v-btn>
-                </template>
-                <EventItem @closeEventDialogEvent="closeEventDialog">
+                <EventItem
+                  @closeEventDialogEvent="closeEventDialog"
+                  @regenerateSignups="regenerateSignups()"
+                  :eventData="eventData"
+                  :timesInfoString="timesInfoString">
                 </EventItem>
               </v-dialog>
             </v-col>
@@ -59,8 +60,10 @@
 
 <script>
   import EventItem from "./EventItem.vue";
-  import { useEventsStore } from "../stores/EventsStore.js";
+  import { useEventsStore } from "../../stores/EventsStore.js";
+  import { useUserStore } from "../../stores/UserStore.js";
   import { mapStores } from "pinia";
+  import EventSignUpDataService from "../../services/eventsignup.js";
   export default {
     name: "EventSignupItem",
     components: {
@@ -69,24 +72,19 @@
     data() {
       return {
         signUpDialog: false,
-        eventData: {
-          type: "",
-          date: "",
-          times: [],
-          location: "Adams Recital Hall",
-          timeslots: { total: 25, filled: 14 },
-        },
+        hasPriorSignup: false,
         timesInfoString: "",
       };
     },
     computed: {
-      ...mapStores(useEventsStore),
+      ...mapStores(useEventsStore, useUserStore),
     },
-    mounted() {
-      this.retrieveInfo();
+    async mounted() {
+      this.timesInfoString = this.createTimesInfoString();
+      this.checkForPriorSignup();
     },
     props: {
-      eventId: 1,
+      eventData: {},
     },
     methods: {
       createTimesInfoString() {
@@ -116,15 +114,36 @@
         const options = { year: "numeric", month: "numeric", day: "numeric" };
         return new Date(date).toLocaleDateString("us-EN", options);
       },
-      closeEventDialog(val) {
-        this.signUpDialog = val;
+      checkForPriorSignup() {
+        this.hasPriorSignup = this.eventsStore.hasUserSignedUpForEvent(
+          this.eventData.id
+        );
       },
-      retrieveInfo() {
-        const event = this.eventsStore.getEventForId(this.eventId);
-        this.eventData.type = event.type;
-        this.eventData.date = this.formatDate(event.date);
-        this.eventData.times = event.times;
-        this.timesInfoString = this.createTimesInfoString();
+      regenerateSignups() {
+        this.$emit("regenerateSignups");
+        this.checkForPriorSignup();
+      },
+      async closeEventDialog(val) {
+        this.signUpDialog = val;
+        await this.getPriorSignup();
+      },
+      async getPriorSignup() {
+        let oldSignups = 0;
+        await EventSignUpDataService.getEventId(this.eventData.id)
+          .then((response) => {
+            oldSignups = response.data.EventSignUp.filter((es) => {
+              return es.studentinfoId === this.userStore.userRoleInfo.id;
+            });
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+
+        if (oldSignups.length >= 1) {
+          this.hasPriorSignup = true;
+        } else {
+          this.hasPriorSignup = false;
+        }
       },
     },
   };

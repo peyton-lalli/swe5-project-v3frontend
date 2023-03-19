@@ -21,8 +21,6 @@
       "
       class="dashboardSlot"></AdminHomeDashboard>
 
-    <!-- Leaving commented out for now, until we figure out how to do it right. -->
-    <!-- To view, just un comment it, and comment the StudentHomeDashboard out (also have a student role) -->
     <EventsDashboard
       v-if="eventsStore.getEventsPageStatus"
       class="dashboardSlot"></EventsDashboard>
@@ -32,12 +30,12 @@
 <script>
   import MenuSidebar from "../components/MenuSidebar.vue";
   import UserSidebar from "../components/UserSidebar.vue";
-  import StudentHomeDashboard from "../components/StudentHomeDashboard.vue";
-  import FacultyHomeDashboard from "../components/FacultyHomeDashboard.vue";
-  import AdminHomeDashboard from "../components/AdminHomeDashbaord.vue";
-  import EventsDashboard from "../components/EventsDashboard.vue";
-  import { useLoginStore } from "../stores/LoginStore.js";
+  import StudentHomeDashboard from "../components/Student/StudentHomeDashboard.vue";
+  import FacultyHomeDashboard from "../components/Faculty/FacultyHomeDashboard.vue";
+  import AdminHomeDashboard from "../components/Admin/AdminHomeDashbaord.vue";
+  import EventsDashboard from "../components/Events/EventsDashboard.vue";
   import { useEventsStore } from "../stores/EventsStore.js";
+  import { useUserStore } from "../stores/UserStore.js";
   import { mapStores } from "pinia";
 
   export default {
@@ -57,16 +55,15 @@
       };
     },
     computed: {
-      ...mapStores(useLoginStore, useEventsStore),
+      ...mapStores(useEventsStore, useUserStore),
     },
-    mounted() {
+    async mounted() {
       this.retrieveInfo();
       this.setUserDashboard();
     },
     methods: {
-      retrieveInfo() {
-        this.userRole = this.loginStore.loginUser.role;
-        console.log(this.userRole);
+      async retrieveInfo() {
+        this.userRole = this.userStore.userInfo.role;
       },
       setUserDashboard() {
         if (this.userRole === "student") {

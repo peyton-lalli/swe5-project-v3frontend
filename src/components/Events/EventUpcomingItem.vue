@@ -12,9 +12,6 @@
           <v-card-subtitle class="font-weight-semi-bold text-darkBlue pl-0">
             {{ timesInfoString }}
           </v-card-subtitle>
-          <v-card-subtitle class="font-weight-medium text-mediumBlue pl-0">
-            {{ eventData.location }}
-          </v-card-subtitle>
         </v-col>
         <v-spacer></v-spacer>
         <v-col justify="center" align="end" cols="auto">
@@ -50,7 +47,7 @@
 
 <script>
   import EventItem from "./EventItem.vue";
-  import { useEventsStore } from "../stores/EventsStore.js";
+  import { useEventsStore } from "../../stores/EventsStore.js";
   import { mapStores } from "pinia";
   export default {
     name: "EventUpcomingItem",
@@ -61,11 +58,12 @@
       return {
         signUpDialog: false,
         eventData: {
+          id: 1,
           type: "",
           date: "",
           times: [],
           location: "Adams Recital Hall",
-          timeslots: { total: 25, filled: 14 },
+          timeslots: { total: 25, filled: 0 },
         },
         timesInfoString: "",
       };
@@ -112,6 +110,7 @@
       },
       retrieveInfo() {
         const event = this.eventsStore.getEventForId(this.eventId);
+        this.eventData.id = event.id;
         this.eventData.type = event.type;
         this.eventData.date = this.formatDate(event.date);
         this.eventData.times = event.times;

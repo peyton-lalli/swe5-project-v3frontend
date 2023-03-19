@@ -4,9 +4,11 @@
       <v-card-title class="font-weight-bold text-h5 text-darkBlue">
         Open Event Signups
       </v-card-title>
-      <v-card-text v-for="id in openEventIds">
+      <v-card-text v-for="event in openEvents">
         <v-row>
-          <EventSignupItem :eventId="id" />
+          <EventSignupItem
+            :eventData="event"
+            @regenerateSignups="regenerateSignups()" />
         </v-row>
       </v-card-text>
     </v-card>
@@ -14,9 +16,11 @@
       <v-card-title class="font-weight-bold text-darkBlue text-h5">
         Upcoming Events
       </v-card-title>
-      <v-card-text v-for="event in this.eventsStore.events">
+      <!-- Not yet working with new stores -->
+      <!-- @ethanimooney: Get this working -->
+      <v-card-text v-for="id in upcomingEventIds">
         <v-row>
-          <EventUpcomingItem :eventId="event.id" />
+          <!-- <EventUpcomingItem :eventId="id" /> -->
         </v-row>
       </v-card-text>
     </v-card>
@@ -28,6 +32,8 @@
           </v-col>
           <v-spacer></v-spacer>
           <v-col cols="auto">
+            <!-- Toggle does not work yet, similar issue to on EventsDashboard with upcoming and current -->
+            <!-- @ethanimooney: Resolve -->
             <v-btn
               elevation="0"
               size="small"
@@ -49,10 +55,9 @@
           </v-col>
         </v-row>
       </v-card-title>
-      <v-card-text>
+      <v-card-text v-for="event in eventSignups">
         <v-row>
-          <EventComponent />
-          <EventComponent />
+          <EventComponent :eventSignUpData="event" />
         </v-row>
       </v-card-text>
     </v-card>
@@ -63,10 +68,9 @@
   import EventComponent from "./EventComponent.vue";
   import EventSignupItem from "./EventSignupItem.vue";
   import EventUpcomingItem from "./EventUpcomingItem.vue";
-  import { useLoginStore } from "../stores/LoginStore.js";
-  import { useEventsStore } from "../stores/EventsStore.js";
+  import { useUserStore } from "../../stores/UserStore.js";
+  import { useEventsStore } from "../../stores/EventsStore.js";
   import { mapStores } from "pinia";
-  import EventDataService from "../services/event.js";
 
   export default {
     name: "EventsDashboard",
@@ -77,20 +81,27 @@
     },
     data() {
       return {
+        openEvents: [],
         toggleText: "Upcoming",
         createDialog: false,
-        openEventIds: [],
         upcomingEventIds: [],
+        eventSignups: [],
       };
     },
     computed: {
-      ...mapStores(useLoginStore, useEventsStore),
+      ...mapStores(useEventsStore, useUserStore),
     },
     mounted() {
-      this.setEventsStore();
-      this.generateOpenEventIds();
+      this.eventSignups = this.eventsStore.generateEventSignupsForUser();
+
+      this.generateOpenEventsList();
+      this.generateUpcomingEventIds();
     },
     methods: {
+      generateOpenEventsList() {
+        let events = [this.eventsStore.events[0], this.eventsStore.events[1]];
+        this.openEvents = events;
+      },
       closeCreateDialog(val) {
         this.createDialog = val;
       },
@@ -101,30 +112,12 @@
           this.toggleText = "Upcoming";
         }
       },
-      setEventsStore() {
-        EventDataService.getAll()
-          .then((response) => {
-            this.eventsStore.setEvents(response.data.Event);
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      },
-      generateOpenEventIds() {
-        let ids = [];
-        for (let event in this.eventsStore.events) {
-          ids.push(this.eventsStore.events[event].id);
-        }
-        console.log(ids);
-        this.openEventIds = ids;
-      },
       generateUpcomingEventIds() {
-        let ids = [];
-        for (let event in this.eventsStore.events) {
-          ids.push(this.eventsStore.events[event].id);
-        }
-        console.log(ids);
+        let ids = [3, 4];
         this.upcomingEventIds = ids;
+      },
+      regenerateSignups() {
+        this.eventSignups = this.eventsStore.generateEventSignupsForUser();
       },
     },
   };

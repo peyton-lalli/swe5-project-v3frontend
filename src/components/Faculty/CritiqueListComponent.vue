@@ -142,7 +142,7 @@
 </template>
 
 <script>
-  import CritiqueFacultyComponent from "../components/CritiqueFacultyComponent.vue";
+  import CritiqueFacultyComponent from "./CritiqueFacultyComponent.vue";
   export default {
     name: "CritiqueListComponent",
     components: {

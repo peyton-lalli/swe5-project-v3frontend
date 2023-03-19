@@ -2,25 +2,21 @@
   <v-container fluid class="eventComponent">
     <v-card elevation="0" class="eventsGradient mainblur rounded-lg">
       <v-card elevation="0" class="ma-3 rounded-lg lighterBlur">
-        <v-card-title class="font-weight-bold text-h5 text-darkGray pb-0">
+        <v-card-title class="font-weight-bold text-h6 text-darkGray pb-0">
           <v-row>
             <v-col>
-              {{ title }}
+              {{ eventData.type }}
             </v-col>
             <v-col class="text-right">
+              <v-btn
+                elevation="0"
+                rounded="pill"
+                size="small"
+                class="buttonGradient text-white font-weight-bold"
+                @click="editDialog = true">
+                Edit
+              </v-btn>
               <v-dialog v-model="editDialog" persistent max-width="1000px">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    elevation="0"
-                    rounded="pill"
-                    size="small"
-                    class="buttonGradient text-white font-weight-bold"
-                    @click="editDialog = true"
-                    v-bind="attrs"
-                    v-on="on">
-                    Edit
-                  </v-btn>
-                </template>
                 <EventItem @closeEventDialogEvent="closeEventDialog">
                 </EventItem>
               </v-dialog>
@@ -28,42 +24,41 @@
           </v-row>
         </v-card-title>
         <v-card-subtitle class="font-weight-semi-bold text-darkBlue pt-0">
-          {{ date }}
+          {{ formatDate(new Date(eventData.date)) }}
         </v-card-subtitle>
         <v-card-subtitle class="font-weight-semi-bold text-darkBlue pt-0">
-          {{ time }}
-        </v-card-subtitle>
-        <v-card-subtitle class="font-weight-medium text-mediumBlue pt-0">
-          {{ place }}
+          {{ eventSignUpData.timeslot }}
         </v-card-subtitle>
 
         <v-row justify="center" class="pl-5">
           <v-col cols="2" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
+              <v-img
+                :src="this.userStore.userRoleInfo.instructor.picture"></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="10" align-self="center">
             <v-card-title class="pb-0 font-weight-bold">
-              {{ instructors.at(0).type }}
+              Private Instructor
             </v-card-title>
             <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-              {{ instructors.at(0).person }}
+              {{ this.userStore.userRoleInfo.instructor.name }}
             </v-card-subtitle>
           </v-col>
         </v-row>
         <v-row justify="center" class="pl-5 mt-0 mb-1">
           <v-col cols="2" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
+              <v-img></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="10" align-self="center">
+            <!-- Not yet supported in database so hardcoded for now, doesn't effect anything -->
             <v-card-title class="pb-0 font-weight-bold">
-              {{ instructors.at(1).type }}
+              Accompanist
             </v-card-title>
             <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-              {{ instructors.at(1).person }}
+              Peyton Lalli
             </v-card-subtitle>
           </v-col>
         </v-row>
@@ -75,16 +70,21 @@
         <v-row justify="center" class="pl-5 mt-0">
           <v-col cols="2" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
+              <!-- Need to get composer API working to get image -->
+              <v-img></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="10" align-self="center">
-            <v-card-title class="pb-0 font-weight-bold">
-              {{ songs.at(0).name }}
-            </v-card-title>
-            <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-              {{ songs.at(0).person }}
-            </v-card-subtitle>
+            <v-row v-for="song in eventSignUpData.songs">
+              <v-col>
+                <v-card-title class="pb-0 font-weight-bold">
+                  {{ song.name }}
+                </v-card-title>
+                <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
+                  {{ song.composer.name }}
+                </v-card-subtitle>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </v-card-text>
@@ -94,6 +94,9 @@
 
 <script>
   import EventItem from "./EventItem.vue";
+  import { useEventsStore } from "../../stores/EventsStore.js";
+  import { useUserStore } from "../../stores/UserStore.js";
+  import { mapStores } from "pinia";
   export default {
     name: "EventComponent",
     components: {
@@ -102,31 +105,30 @@
     data() {
       return {
         editDialog: false,
-        title: "Recital Hearing",
-        date: "02/01/2023",
-        time: "3:30 PM",
-        place: "Adams Recital Hall",
-        instructors: [
-          {
-            type: "Private Instructor",
-            person: "Jane Doe",
-          },
-          {
-            type: "Accompanist",
-            person: "Jess Doe",
-          },
-        ],
-        songs: [
-          {
-            name: "Bird Upon The Tree",
-            person: "Blitzstein, Marc",
-          },
-        ],
+        eventData: [],
       };
+    },
+    props: {
+      eventSignUpData: {},
+    },
+    computed: {
+      ...mapStores(useEventsStore, useUserStore),
+    },
+    mounted() {
+      this.setEventData();
     },
     methods: {
       closeEventDialog(val) {
         this.editDialog = val;
+      },
+      setEventData() {
+        this.eventData = this.eventsStore.findEventForId(
+          this.eventSignUpData.eventId
+        );
+      },
+      formatDate(date) {
+        const options = { year: "numeric", month: "numeric", day: "numeric" };
+        return new Date(date).toLocaleDateString("us-EN", options);
       },
     },
   };

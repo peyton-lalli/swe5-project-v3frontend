@@ -46,7 +46,7 @@
 </template>
 
 <script>
-  import CritiqueListComponent from "../components/CritiqueListComponent.vue";
+  import CritiqueListComponent from "./CritiqueListComponent.vue";
   export default {
     name: "AttentionComponent",
     components: {

@@ -5,29 +5,19 @@
         <v-row justify="center" class="pl-5 mt-0">
           <v-col cols="1" align-self="center">
             <v-avatar class="bg-darkBlue">
-              <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
+              <!-- Need to get composer API working to get this image -->
+              <v-img></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="9" class="pt-0 pb-0">
             <v-card-title class="pb-0 font-weight-bold text-h9">
-              {{ songs.at(0).name }}
+              {{ sentPiece.name }}
             </v-card-title>
             <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-              {{ songs.at(0).person }}
+              {{ sentPiece.composer.name }}
             </v-card-subtitle>
           </v-col>
-          <v-col cols="1" align-self="center" class="pl-0">
-            <v-icon size="x-large">
-              <font-awesome-icon icon="fa-solid fa-video" class="text-white" />
-            </v-icon>
-          </v-col>
-          <v-col cols="1" align-self="center" class="pl-0">
-            <v-icon size="x-large">
-              <font-awesome-icon
-                icon="fa-solid fa-calendar"
-                class="text-white" />
-            </v-icon>
-          </v-col>
+          <v-spacer></v-spacer>
         </v-row>
       </v-card-text>
     </v-card>
@@ -36,17 +26,13 @@
 
 <script>
   export default {
-    name: "EventComponent",
+    name: "Repertoire Component",
     components: {},
+    props: {
+      sentPiece: {},
+    },
     data() {
-      return {
-        songs: [
-          {
-            name: "Bird Upon The Tree",
-            person: "Blitzstein, Marc",
-          },
-        ],
-      };
+      return {};
     },
   };
 </script>

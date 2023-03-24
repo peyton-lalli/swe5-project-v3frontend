@@ -4,7 +4,7 @@
       <v-card-title class="font-weight-bold text-h5 text-darkBlue">
         Open Event Signups
       </v-card-title>
-      <v-card-text v-for="event in openEvents">
+      <v-card-text v-for="event in this.eventsStore.events">
         <v-row>
           <EventSignupItem
             :eventData="event"

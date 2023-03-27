@@ -10,74 +10,114 @@
         transition="scale-transition"
         width="40" />
       <!-- Home Page -->
-      <v-btn
-        elevation="0"
-        class="mt-16 mb-3"
-        style="width: 90%; margin: auto"
-        @click="eventsStore.hideEventsPage">
-        <v-icon size="xx-large">
-          <font-awesome-icon
-            icon="fa-solid fa-house-chimney"
-            class="text-darkBlue" />
-        </v-icon>
-      </v-btn>
+      <v-tooltip text="Home Dashboard">
+        <template v-slot:activator="{ props }">
+          <v-btn
+            elevation="0"
+            class="mt-16 mb-3"
+            style="width: 90%; margin: auto"
+            @click="eventsStore.hideEventsPage"
+            v-bind="props">
+            <v-icon size="xx-large">
+              <font-awesome-icon
+                icon="fa-solid fa-house-chimney"
+                class="text-darkBlue" />
+            </v-icon>
+          </v-btn>
+        </template>
+      </v-tooltip>
       <v-spacer></v-spacer>
       <!-- Events -->
-      <v-btn
-        elevation="0"
-        class="mt-5"
-        style="width: 90%; margin: auto"
-        @click="eventsStore.showEventsPage">
-        <v-icon size="xx-large">
-          <font-awesome-icon
-            icon="fa-solid fa-calendar"
-            class="text-darkBlue" />
-        </v-icon>
-      </v-btn>
+      <v-tooltip text="Events">
+        <template v-slot:activator="{ props }">
+          <v-btn
+            elevation="0"
+            class="mt-5"
+            style="width: 90%; margin: auto"
+            @click="eventsStore.showEventsPage"
+            v-bind="props">
+            <v-icon size="xx-large">
+              <font-awesome-icon
+                icon="fa-solid fa-calendar"
+                class="text-darkBlue" />
+            </v-icon>
+          </v-btn>
+        </template>
+      </v-tooltip>
       <v-spacer></v-spacer>
       <!-- Repertoire -->
-      <v-btn elevation="0" class="mt-5" style="width: 90%; margin: auto">
-        <v-icon size="xx-large">
-          <font-awesome-icon icon="fa-solid fa-music" class="text-darkBlue" />
-        </v-icon>
-      </v-btn>
+      <v-tooltip text="Repertoire">
+        <template v-slot:activator="{ props }">
+          <v-btn
+            elevation="0"
+            class="mt-5"
+            style="width: 90%; margin: auto"
+            v-bind="props">
+            <v-icon size="xx-large">
+              <font-awesome-icon
+                icon="fa-solid fa-music"
+                class="text-darkBlue" />
+            </v-icon>
+          </v-btn>
+        </template>
+      </v-tooltip>
       <v-spacer></v-spacer>
       <!-- Comments -->
-      <v-btn elevation="0" class="mt-5 mb-16" style="width: 90%; margin: auto">
-        <v-icon size="xx-large">
-          <font-awesome-icon
-            icon="fa-solid fa-comments"
-            class="text-darkBlue" />
-        </v-icon>
-      </v-btn>
+      <v-tooltip text="Comments">
+        <template v-slot:activator="{ props }">
+          <v-btn
+            elevation="0"
+            class="mt-5 mb-16"
+            style="width: 90%; margin: auto"
+            v-bind="props">
+            <v-icon size="xx-large">
+              <font-awesome-icon
+                icon="fa-solid fa-comments"
+                class="text-darkBlue" />
+            </v-icon>
+          </v-btn>
+        </template>
+      </v-tooltip>
       <v-spacer></v-spacer>
       <!-- Settings -->
-      <v-btn
-        @click="createDialog = true"
-        elevation="0"
-        class="mt-16"
-        style="width: 90%; margin: auto">
-        <v-icon size="xx-large">
-          <font-awesome-icon icon="fa-solid fa-gear" class="text-darkBlue" />
-        </v-icon>
-      </v-btn>
+      <v-tooltip text="Settings">
+        <template v-slot:activator="{ props }">
+          <v-btn
+            @click="createDialog = true"
+            elevation="0"
+            class="mt-16"
+            style="width: 90%; margin: auto"
+            v-bind="props">
+            <v-icon size="xx-large">
+              <font-awesome-icon
+                icon="fa-solid fa-gear"
+                class="text-darkBlue" />
+            </v-icon>
+          </v-btn>
+        </template>
+      </v-tooltip>
       <v-dialog v-model="createDialog" persistent max-width="600px">
         <ProfileSettings
           @closeCourseDialogEvent="closeCreateDialog"></ProfileSettings>
       </v-dialog>
       <v-spacer></v-spacer>
       <!-- Logout -->
-      <v-btn
-        elevation="0"
-        class="mt-5"
-        style="width: 90%; margin: auto"
-        @click="logout()">
-        <v-icon size="xx-large">
-          <font-awesome-icon
-            icon="fa-solid fa-right-from-bracket"
-            class="text-darkBlue fa-flip-horizontal" />
-        </v-icon>
-      </v-btn>
+      <v-tooltip text="Logout">
+        <template v-slot:activator="{ props }">
+          <v-btn
+            elevation="0"
+            class="mt-5"
+            style="width: 90%; margin: auto"
+            @click="logout()"
+            v-bind="props">
+            <v-icon size="xx-large">
+              <font-awesome-icon
+                icon="fa-solid fa-right-from-bracket"
+                class="text-darkBlue fa-flip-horizontal" />
+            </v-icon>
+          </v-btn>
+        </template>
+      </v-tooltip>
     </v-card>
   </v-container>
 </template>

@@ -37,113 +37,79 @@
       </v-card-title>
       <v-card-text>
         <!-- These buttons will be constant -->
+        <v-btn
+          @click="createEventDialog = true"
+          class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
+          block>
+          Create Events
+        </v-btn>
         <v-dialog v-model="createEventDialog" max-width="600px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              @click="createEventDialog = true"
-              class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
-              block>
-              Create Events
-            </v-btn>
-          </template>
           <AdminCreateEvent
             @closeCreateEventDialogEvent="
               closeCreateEventDialog
             "></AdminCreateEvent>
         </v-dialog>
-
+        <v-btn
+          @click="editAdminDialog = true"
+          class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
+          block>
+          Edit Administrators
+        </v-btn>
         <v-dialog v-model="editAdminDialog" max-width="600px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              @click="editAdminDialog = true"
-              class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
-              block>
-              Edit Administrators
-            </v-btn>
-          </template>
           <EditAdmins
             @closeEditAdminDialogEvent="closeEditAdminDialog"></EditAdmins>
         </v-dialog>
-
+        <v-btn
+          @click="editFacultyDialog = true"
+          class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
+          block>
+          Edit Faculty/Accompanists
+        </v-btn>
         <v-dialog v-model="editFacultyDialog" max-width="600px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              @click="editFacultyDialog = true"
-              class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
-              block>
-              Edit Faculty/Accompanists
-            </v-btn>
-          </template>
           <EditFaculty
             @closeEditFacultyDialogEvent="closeEditFacultyDialog"></EditFaculty>
         </v-dialog>
-
+        <v-btn
+          @click="editStudentsDialog = true"
+          class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
+          block>
+          Edit Students
+        </v-btn>
         <v-dialog v-model="editStudentsDialog" max-width="600px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              @click="editStudentsDialog = true"
-              class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
-              block>
-              Edit Students
-            </v-btn>
-          </template>
           <EditStudents
             @closeEditStudentsDialogEvent="
               closeEditStudentsDialog
             "></EditStudents>
         </v-dialog>
-
+        <v-btn
+          @click="editInstDialog = true"
+          class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
+          block>
+          Edit Instruments/Vocals
+        </v-btn>
         <v-dialog v-model="editInstDialog" max-width="600px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              @click="editInstDialog = true"
-              class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
-              block>
-              Edit Instruments/Vocals
-            </v-btn>
-          </template>
           <EditInstruments
             @closeEditInstDialogEvent="closeEditInstDialog"></EditInstruments>
         </v-dialog>
-
+        <v-btn
+          @click="editComposersDialog = true"
+          class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
+          block>
+          Edit Composers
+        </v-btn>
         <v-dialog v-model="editComposersDialog" max-width="600px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              @click="editComposersDialog = true"
-              class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
-              block>
-              Edit Composers
-            </v-btn>
-          </template>
           <EditComposers
             @closeEditComposersDialogEvent="
               closeEditComposersDialog
             "></EditComposers>
         </v-dialog>
-
+        <v-btn
+          @click="sendEmailDialog = true"
+          class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
+          block>
+          Send Email
+        </v-btn>
         <v-dialog v-model="sendEmailDialog" max-width="600px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              @click="sendEmailDialog = true"
-              class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
-              block>
-              Send Email
-            </v-btn>
-          </template>
           <SendEmail
             @closeSendEmailDialogEvent="closeSendEmailDialog"></SendEmail>
         </v-dialog>

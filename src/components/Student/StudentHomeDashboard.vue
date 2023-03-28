@@ -72,7 +72,7 @@
               <v-dialog v-model="viewAllRepDialog" persistent max-width="600px">
                 <StudentRepertoireViewAll
                   @closeRepViewAllEvent="
-                    closeRepViewAllEvent
+                    this.viewAllRepDialog = false
                   "></StudentRepertoireViewAll>
               </v-dialog>
             </v-col>
@@ -133,9 +133,6 @@
     methods: {
       closeCreateDialog(val) {
         this.createDialog = val;
-      },
-      closeRepViewAllEvent(val) {
-        this.viewAllRepDialog = val;
       },
       changeText() {
         if (this.toggleText == "Upcoming") {

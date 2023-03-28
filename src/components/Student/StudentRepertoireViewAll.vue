@@ -27,7 +27,6 @@
 
 <script>
   import RepertoireComponent from "./RepertoireComponent.vue";
-  import { useEventsStore } from "../../stores/EventsStore.js";
   import { useUserStore } from "../../stores/UserStore.js";
   import { mapStores } from "pinia";
   export default {
@@ -39,11 +38,11 @@
       return {};
     },
     computed: {
-      ...mapStores(useEventsStore, useUserStore),
+      ...mapStores(useUserStore),
     },
     methods: {
       closeViewAllDialog() {
-        this.$emit("closeRepViewAllEvent", false);
+        this.$emit("closeRepViewAllEvent");
       },
     },
   };

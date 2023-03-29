@@ -14,7 +14,7 @@
       <v-card-subtitle class="font-weight-bold text-mediumBlue ml-4">
         {{ timesInfoString }}
       </v-card-subtitle>
-      <v-card-text>
+      <v-card-text class="pb-0">
         <v-row>
           <v-col>
             <v-row>
@@ -85,27 +85,40 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col>
+          <v-col class="pb-0">
             <v-card-subtitle class="font-weight-bold text-darkGray">
               Musical Selection
             </v-card-subtitle>
-            <v-card-text>
+            <v-card-text class="pb-0">
               <v-row>
-                <v-col cols="6">
-                  <v-btn @click="eventRepertoireSelection = true"></v-btn>
+                <v-col cols="auto">
+                  <v-btn
+                    elevation="0"
+                    rounded="lg"
+                    class="text-none searchGradient text-white font-weight-bold"
+                    @click="eventRepertoireSelection = true">
+                    Search your repertoire
+                    <template v-slot:append>
+                      <v-icon size="sm" class="font-weight-semi-bold pl-4 pr-4"
+                        ><font-awesome-icon
+                          icon="fa-solid fa-magnifying-glass"
+                          class="text-darkBlue"
+                      /></v-icon>
+                    </template>
+                  </v-btn>
                 </v-col>
-                <v-spacer></v-spacer>
+                <!-- <v-spacer></v-spacer> -->
                 <v-col cols="4">
                   <v-btn
                     elevation="0"
                     rounded="lg"
-                    class="buttonGradient text-white font-weight-bold">
-                    Add New
+                    class="text-none buttonGradient text-white font-weight-bold">
+                    Add new
                   </v-btn>
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col class="pb-0">
                   <v-card class="eventsGradient rounded-lg mainBlur">
                     <v-card-title class="font-weight-bold text-white pl-5 pb-0">
                       Selected
@@ -153,7 +166,7 @@
           </v-col>
           <v-col>
             <v-row>
-              <v-col>
+              <v-col class="pb-0">
                 <v-card
                   class="eventsGradient fullBorderCurve mainblur"></v-card>
               </v-col>
@@ -161,18 +174,18 @@
           </v-col>
         </v-row>
       </v-card-text>
-      <v-card-actions class="mr-2 mb-2">
+      <v-card-actions class="mr-2 mb-2 pt-0">
         <v-btn
           rounded="lg"
           elevation="0"
-          class="buttonCancel ml-auto mr-3 text-white font-weight-semi-bold"
+          class="text-none buttonCancel ml-auto mr-3 text-white font-weight-bold"
           @click="closeDialog()">
           Cancel
         </v-btn>
         <v-btn
           rounded="lg"
           elevation="0"
-          class="buttonGradient text-white font-weight-semi-bold"
+          class="text-none buttonGradient text-white font-weight-bold"
           @click="createSignup()">
           Signup
         </v-btn>

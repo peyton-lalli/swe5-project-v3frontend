@@ -38,9 +38,19 @@
                 rounded="pill"
                 class="buttonGradient text-white font-weight-bold text-capitalize"
                 @click="
-                  hasPriorSignup ? (editDialog = true) : (signUpDialog = true)
+                  this.userStore.userInfo.role === 'student'
+                    ? hasPriorSignup
+                      ? (editDialog = true)
+                      : (signUpDialog = true)
+                    : (availabilityDialog = true)
                 ">
-                {{ hasPriorSignup ? "Edit" : "Signup" }}
+                {{
+                  this.userStore.userInfo.role === "student"
+                    ? hasPriorSignup
+                      ? "Edit"
+                      : "Signup"
+                    : "Add Availability"
+                }}
               </v-btn>
               <v-dialog v-model="signUpDialog" persistent max-width="1000px">
                 <EventItem
@@ -73,6 +83,8 @@
       return {
         signUpDialog: false,
         hasPriorSignup: false,
+        // Needs to be implemented
+        availabilityDialog: false,
         timesInfoString: "",
       };
     },

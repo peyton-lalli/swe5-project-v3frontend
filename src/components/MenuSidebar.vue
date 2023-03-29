@@ -32,13 +32,13 @@
         <template v-slot:activator="{ props }">
           <v-btn
             elevation="0"
-            class="mt-16 mb-3"
+            class="mt-5"
             style="width: 90%; margin: auto"
-            @click="routePage('dashboard')"
+            @click="routePage('events')"
             v-bind="props">
             <v-icon size="xx-large">
               <font-awesome-icon
-                icon="fa-solid fa-house-chimney"
+                icon="fa-solid fa-calendar"
                 class="text-darkBlue" />
             </v-icon>
           </v-btn>

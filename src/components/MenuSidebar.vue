@@ -16,7 +16,7 @@
             elevation="0"
             class="mt-16 mb-3"
             style="width: 90%; margin: auto"
-            @click="eventsStore.hideEventsPage"
+            @click="routePage('dashboard')"
             v-bind="props">
             <v-icon size="xx-large">
               <font-awesome-icon
@@ -32,13 +32,13 @@
         <template v-slot:activator="{ props }">
           <v-btn
             elevation="0"
-            class="mt-5"
+            class="mt-16 mb-3"
             style="width: 90%; margin: auto"
-            @click="eventsStore.showEventsPage"
+            @click="routePage('dashboard')"
             v-bind="props">
             <v-icon size="xx-large">
               <font-awesome-icon
-                icon="fa-solid fa-calendar"
+                icon="fa-solid fa-house-chimney"
                 class="text-darkBlue" />
             </v-icon>
           </v-btn>
@@ -156,6 +156,9 @@
         this.$router.push({
           name: "loginPage",
         });
+      },
+      routePage(page) {
+        this.$router.push({ path: page });
       },
     },
   };

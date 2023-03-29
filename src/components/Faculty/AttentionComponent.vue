@@ -22,19 +22,15 @@
           class="buttonWhite text-mediumBlue font-weight-bold">
           View Signups
         </v-btn>
+        <v-btn
+          @click="critiqueDialog = true"
+          elevation="0"
+          size="small"
+          rounded="pill"
+          class="buttonWhite text-mediumBlue font-weight-bold">
+          Critiques
+        </v-btn>
         <v-dialog v-model="critiqueDialog" max-width="1000px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              @click="critiqueDialog = true"
-              elevation="0"
-              size="small"
-              rounded="pill"
-              class="buttonWhite text-mediumBlue font-weight-bold">
-              Critiques
-            </v-btn>
-          </template>
           <CritiqueListComponent
             @closeCritiqueDialogEvent="
               closeCritiqueDialog

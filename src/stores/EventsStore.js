@@ -215,5 +215,29 @@ export const useEventsStore = defineStore("events", {
         this.events.findIndex((e) => e.id === data.eventId)
       ].signups.push({ ...data, ...{ songs: new Array(songData) } });
     },
+
+    async createNewEvent(eventData, timeData) {
+      // Post the change to the database
+      let finalTimeData = [];
+      await EventDataService.create(eventData)
+        .then(async (response) => {
+          for (let time of timeData) {
+            time.eventId = response.data.id;
+            await EventTimeDataService.create(time)
+              .then(async (response) => {
+                finalTimeData.push(response.data);
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      // Update the EventsStore.events with the new data
+      this.events.push({ ...eventData, ...{ times: finalTimeData } });
+    },
   },
 });

@@ -68,7 +68,7 @@
     },
     methods: {
       closeSendEmailDialog() {
-        this.$emit("closeSendEmailDialogEvent", false);
+        this.$emit("closeSendEmailDialogEvent");
       },
     },
   };

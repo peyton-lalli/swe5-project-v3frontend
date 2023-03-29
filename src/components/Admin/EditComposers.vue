@@ -64,7 +64,7 @@
     },
     methods: {
       closeEditComposersDialog() {
-        this.$emit("closeEditComposersDialogEvent", false);
+        this.$emit("closeEditComposersDialogEvent");
       },
     },
   };

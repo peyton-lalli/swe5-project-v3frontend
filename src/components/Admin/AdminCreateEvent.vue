@@ -15,185 +15,47 @@
         </v-col>
       </v-row>
     </v-card-title>
-    <v-card-text>
-      <v-select
-        :items="['Vocal Jury', 'Instrument Jury', 'Recital Hearing']"
-        variant="solo"
-        color="white"
-        label="Event Type"></v-select>
-      <v-flex>
-        <v-dialog
-          ref="dialog"
-          v-model="dateModal"
-          :return-value.sync="date"
-          persistent
-          lazy
-          full-width
-          width="290px">
-          <template v-slot:activator="{ on }">
-            <v-text-field
-              v-model="date"
-              readonly
-              v-on="on"
-              label="Date"></v-text-field>
-          </template>
-          <v-date-picker v-model="date" scrollable>
-            <v-spacer></v-spacer>
-            <v-btn flat color="primary" @click="dateModal = false"
-              >Cancel</v-btn
-            >
-            <v-btn flat color="primary" @click="$refs.dialog.save(date)"
-              >OK</v-btn
-            >
-          </v-date-picker>
-        </v-dialog>
-      </v-flex>
+    <v-card-text class="text-center">
+      <v-text-field label="Event Name" v-model="this.eventName"></v-text-field>
+      <v-text-field label="Date" type="date" v-model="this.date"></v-text-field>
       <v-row>
         <v-col>
-          <v-flex xs11 sm5>
-            <v-dialog
-              ref="dialog"
-              v-model="timeModal"
-              :return-value.sync="time"
-              persistent
-              lazy
-              full-width
-              width="290px">
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="time"
-                  readonly
-                  v-on="on"
-                  label="Start Time"></v-text-field>
-              </template>
-              <v-time-picker v-if="timeModal" v-model="time" full-width>
-                <v-spacer></v-spacer>
-                <v-btn flat color="primary" @click="timeModal = false"
-                  >Cancel</v-btn
-                >
-                <v-btn flat color="primary" @click="$refs.dialog.save(time)"
-                  >OK</v-btn
-                >
-              </v-time-picker>
-            </v-dialog>
-          </v-flex>
+          <v-text-field
+            label="Start Time"
+            type="time"
+            v-model="this.baseTimeStart"></v-text-field>
         </v-col>
         <v-col>
-          <v-flex xs11 sm5>
-            <v-dialog
-              ref="dialog"
-              v-model="timeModalEnd"
-              :return-value.sync="timeEnd"
-              persistent
-              lazy
-              full-width
-              width="290px">
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="timeEnd"
-                  readonly
-                  v-on="on"
-                  label="End Time"></v-text-field>
-              </template>
-              <v-time-picker v-if="timeModalEnd" v-model="timeEnd" full-width>
-                <v-spacer></v-spacer>
-                <v-btn flat color="primary" @click="timeModalEnd = false"
-                  >Cancel</v-btn
-                >
-                <v-btn flat color="primary" @click="$refs.dialog.save(timeEnd)"
-                  >OK</v-btn
-                >
-              </v-time-picker>
-            </v-dialog>
-          </v-flex>
+          <v-text-field
+            label="End Time"
+            type="time"
+            v-model="this.baseTimeEnd"></v-text-field>
         </v-col>
       </v-row>
 
-      <v-text-field label="Interval"></v-text-field>
-
-      <v-checkbox
-        v-model="this.break"
-        label="Break Period"
-        color="#2E6799"></v-checkbox>
-
-      <v-row v-if="this.break">
+      <v-row v-for="timeSlot in this.timeSlots">
         <v-col>
-          <v-flex xs11 sm5>
-            <v-dialog
-              ref="dialog"
-              v-model="timeModalBreak"
-              :return-value.sync="timeBreak"
-              persistent
-              lazy
-              full-width
-              width="290px">
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="timeBreak"
-                  readonly
-                  v-on="on"
-                  label="Break Start Time"></v-text-field>
-              </template>
-              <v-time-picker
-                v-if="timeModalBreak"
-                v-model="timeBreak"
-                full-width>
-                <v-spacer></v-spacer>
-                <v-btn flat color="primary" @click="timeModalBreak = false"
-                  >Cancel</v-btn
-                >
-                <v-btn
-                  flat
-                  color="primary"
-                  @click="$refs.dialog.save(timeBreak)"
-                  >OK</v-btn
-                >
-              </v-time-picker>
-            </v-dialog>
-          </v-flex>
+          <v-text-field
+            label="Start Time"
+            type="time"
+            v-model="timeSlot.timeStart"></v-text-field>
         </v-col>
         <v-col>
-          <v-flex>
-            <v-dialog
-              ref="dialog"
-              v-model="timeModalEndBreak"
-              :return-value.sync="timeEndBreak"
-              persistent
-              lazy
-              full-width
-              width="290px">
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="timeEndBreak"
-                  readonly
-                  v-on="on"
-                  label="Break End Time"></v-text-field>
-              </template>
-              <v-time-picker
-                v-if="timeModalEndBreak"
-                v-model="timeEndBreak"
-                full-width>
-                <v-spacer></v-spacer>
-                <v-btn flat color="primary" @click="timeModalEndBreak = false"
-                  >Cancel</v-btn
-                >
-                <v-btn
-                  flat
-                  color="primary"
-                  @click="$refs.dialog.save(timeEndBreak)"
-                  >OK</v-btn
-                >
-              </v-time-picker>
-            </v-dialog>
-          </v-flex>
+          <v-text-field
+            label="End Time"
+            type="time"
+            v-model="timeSlot.timeEnd"></v-text-field>
         </v-col>
       </v-row>
+      <v-btn flat @click="addTimeSlots()">Add Time Slot</v-btn>
+
+      <v-text-field label="Interval" v-model="this.interval"></v-text-field>
     </v-card-text>
     <v-card-text class="text-center">
       <v-btn
         rounded="pill"
         class="buttonGradient text-white mr-3"
-        @click="closeCreateEventDialog()">
+        @click="closeSaveCreateEventDialog()">
         Save
       </v-btn>
       <v-btn
@@ -209,25 +71,34 @@
 
 <script>
   export default {
-    data: () => ({
-      date: new Date().toISOString().substr(0, 10),
-      dateModal: false,
-      time: null,
-      timeModal: false,
-      timeEnd: null,
-      timeModalEnd: false,
-      timeBreak: null,
-      timeModalBreak: false,
-      timeEndBreak: null,
-      timeModalEndBreak: false,
-      break: true,
-    }),
+    data() {
+      return {
+        eventName: "",
+        date: "",
+        interval: "",
+        baseTimeStart: "",
+        baseTimeEnd: "",
+        timeSlots: [],
+      };
+    },
     methods: {
+      closeSaveCreateEventDialog() {
+        console.log(
+          "EventName: " +
+            this.eventName +
+            " Date: " +
+            this.date +
+            " Interval: " +
+            this.interval
+        );
+        this.$emit("closeCreateEventDialogEvent");
+      },
       closeCreateEventDialog() {
-        this.$emit("closeCreateEventDialogEvent", false);
+        this.$emit("closeCreateEventDialogEvent");
+      },
+      addTimeSlots() {
+        this.timeSlots.push({ timeStart: "", timeEnd: "" });
       },
     },
   };
 </script>
-
-<style></style>

@@ -46,7 +46,7 @@
         <v-dialog v-model="createEventDialog" max-width="600px">
           <AdminCreateEvent
             @closeCreateEventDialogEvent="
-              closeCreateEventDialog
+              this.createEventDialog = false
             "></AdminCreateEvent>
         </v-dialog>
         <v-btn
@@ -57,7 +57,9 @@
         </v-btn>
         <v-dialog v-model="editAdminDialog" max-width="600px">
           <EditAdmins
-            @closeEditAdminDialogEvent="closeEditAdminDialog"></EditAdmins>
+            @closeEditAdminDialogEvent="
+              this.editAdminDialog = false
+            "></EditAdmins>
         </v-dialog>
         <v-btn
           @click="editFacultyDialog = true"
@@ -67,7 +69,9 @@
         </v-btn>
         <v-dialog v-model="editFacultyDialog" max-width="600px">
           <EditFaculty
-            @closeEditFacultyDialogEvent="closeEditFacultyDialog"></EditFaculty>
+            @closeEditFacultyDialogEvent="
+              this.editFacultyDialog = false
+            "></EditFaculty>
         </v-dialog>
         <v-btn
           @click="editStudentsDialog = true"
@@ -78,7 +82,7 @@
         <v-dialog v-model="editStudentsDialog" max-width="600px">
           <EditStudents
             @closeEditStudentsDialogEvent="
-              closeEditStudentsDialog
+              this.editStudentsDialog = false
             "></EditStudents>
         </v-dialog>
         <v-btn
@@ -89,7 +93,9 @@
         </v-btn>
         <v-dialog v-model="editInstDialog" max-width="600px">
           <EditInstruments
-            @closeEditInstDialogEvent="closeEditInstDialog"></EditInstruments>
+            @closeEditInstDialogEvent="
+              this.editInstDialog = false
+            "></EditInstruments>
         </v-dialog>
         <v-btn
           @click="editComposersDialog = true"
@@ -100,7 +106,7 @@
         <v-dialog v-model="editComposersDialog" max-width="600px">
           <EditComposers
             @closeEditComposersDialogEvent="
-              closeEditComposersDialog
+              this.editComposersDialog = false
             "></EditComposers>
         </v-dialog>
         <v-btn
@@ -111,7 +117,9 @@
         </v-btn>
         <v-dialog v-model="sendEmailDialog" max-width="600px">
           <SendEmail
-            @closeSendEmailDialogEvent="closeSendEmailDialog"></SendEmail>
+            @closeSendEmailDialogEvent="
+              this.sendEmailDialog = false
+            "></SendEmail>
         </v-dialog>
       </v-card-text>
     </v-card>

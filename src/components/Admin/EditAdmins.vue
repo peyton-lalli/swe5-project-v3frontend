@@ -29,46 +29,63 @@
           </v-btn>
         </v-col>
       </v-row>
-      <v-card
-        class="repertoireItemGradient fullBorderCurve mainblur ml-3 mr-3 pl-4 pr-4 mb-2">
-        <v-row>
-          <v-col cols="1" align-self="center">
-            <v-avatar class="bg-darkBlue">
-              <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
-            </v-avatar>
-          </v-col>
-          <v-col cols="8" align-self="center">
-            <v-card-title class="pb-0 font-weight-bold"> Name </v-card-title>
-            <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-              Email?
-            </v-card-subtitle>
-          </v-col>
-          <v-col cols="3" align-self="center" class="text-right">
-            <v-btn
-              elevation="0"
-              size="small"
-              rounded="pill"
-              class="buttonWhite text-mediumBlue font-weight-bold">
-              Disable
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-card>
+      <v-row v-for="admin in admins">
+        <v-col>
+          <v-card
+            class="repertoireItemGradient fullBorderCurve mainblur ml-3 mr-3 pl-4 pr-4 mb-2">
+            <v-row>
+              <v-col cols="1" align-self="center">
+                <v-avatar class="bg-darkBlue">
+                  <v-img :src="admin.picture"></v-img>
+                </v-avatar>
+              </v-col>
+              <v-col cols="8" align-self="center">
+                <v-card-title class="pb-0 font-weight-bold">
+                  {{ admin.fName }} {{ admin.lName }}
+                </v-card-title>
+                <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
+                  {{ admin.email }}
+                </v-card-subtitle>
+              </v-col>
+              <v-col cols="3" align-self="center" class="text-right">
+                <v-btn
+                  elevation="0"
+                  size="small"
+                  rounded="pill"
+                  class="buttonWhite text-mediumBlue font-weight-bold">
+                  Disable
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
+  import { useUserStore } from "../../stores/UserStore.js";
+  import { mapStores } from "pinia";
   export default {
     name: "EditAdmins",
     components: {},
     data() {
-      return {};
+      return {
+        admins: [],
+      };
     },
     methods: {
       closeEditAdminsDialog() {
-        this.$emit("closeEditAdminDialogEvent", false);
+        this.$emit("closeEditAdminDialogEvent");
       },
+    },
+    computed: {
+      ...mapStores(useUserStore),
+    },
+    async mounted() {
+      console.log(await this.userStore.getAllAdmin());
+      this.admins = await this.userStore.getAllAdmin();
     },
   };
 </script>

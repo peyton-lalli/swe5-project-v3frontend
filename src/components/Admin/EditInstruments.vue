@@ -59,7 +59,7 @@
     },
     methods: {
       closeEditInstDialog() {
-        this.$emit("closeEditInstDialogEvent", false);
+        this.$emit("closeEditInstDialogEvent");
       },
     },
   };

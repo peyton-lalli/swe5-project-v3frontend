@@ -64,7 +64,7 @@
     },
     methods: {
       closeEditStudentsDialog() {
-        this.$emit("closeEditStudentsDialogEvent", false);
+        this.$emit("closeEditStudentsDialogEvent");
       },
     },
   };

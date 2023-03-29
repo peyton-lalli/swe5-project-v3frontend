@@ -8,23 +8,14 @@ import ComposersDataService from "../services/composers.js";
 import { useUserStore } from "../stores/UserStore.js";
 
 export const useEventsStore = defineStore("events", {
-  state: () => ({ eventsPageShown: false, events: [] }),
+  state: () => ({ events: [] }),
   persist: true,
   getters: {
-    getEventsPageStatus(state) {
-      return state.eventsPageShown;
-    },
     getEventForId: (state) => {
       return (eventId) => state.events.find((event) => event.id === eventId);
     },
   },
   actions: {
-    showEventsPage() {
-      this.eventsPageShown = true;
-    },
-    hideEventsPage() {
-      this.eventsPageShown = false;
-    },
     // Load all events and relevant data in from database
     async setEvents() {
       this.events = [];
@@ -157,11 +148,15 @@ export const useEventsStore = defineStore("events", {
       let eventSignups = new Array();
 
       for (let event of this.events) {
-        eventSignups = eventSignups.concat(
-          event.signups.filter(
-            (s) => s.studentinfoId === userStore.userRoleInfo.id
-          )
-        );
+        // We need to add support for faculty and admin once we update the database design
+        // TODO @ethanimooney: add this
+        if (userStore.userInfo.role === "student") {
+          eventSignups = eventSignups.concat(
+            event.signups.filter(
+              (s) => s.studentinfoId === userStore.userRoleInfo.id
+            )
+          );
+        }
       }
 
       return eventSignups;

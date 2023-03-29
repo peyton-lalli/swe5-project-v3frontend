@@ -62,12 +62,19 @@
                   "></RepertoireCreate>
               </v-dialog>
               <v-btn
+                @click="viewAllRepDialog = true"
                 elevation="0"
                 size="small"
                 rounded="pill"
                 class="buttonGradient text-white font-weight-bold">
                 View All
               </v-btn>
+              <v-dialog v-model="viewAllRepDialog" persistent max-width="600px">
+                <StudentRepertoireViewAll
+                  @closeRepViewAllEvent="
+                    this.viewAllRepDialog = false
+                  "></StudentRepertoireViewAll>
+              </v-dialog>
             </v-col>
           </v-row>
         </v-card-title>
@@ -96,6 +103,7 @@
   import RepertoireComponent from "./RepertoireComponent.vue";
   import CritiqueComponent from "./CritiqueComponent.vue";
   import RepertoireCreate from "./RepertoireCreate.vue";
+  import StudentRepertoireViewAll from "./StudentRepertoireViewAll.vue";
   import { useEventsStore } from "../../stores/EventsStore.js";
   import { useUserStore } from "../../stores/UserStore.js";
   import { mapStores } from "pinia";
@@ -106,11 +114,13 @@
       RepertoireComponent,
       CritiqueComponent,
       RepertoireCreate,
+      StudentRepertoireViewAll,
     },
     data() {
       return {
         toggleText: "Upcoming",
         createDialog: false,
+        viewAllRepDialog: false,
         eventSignups: [],
       };
     },

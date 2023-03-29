@@ -14,7 +14,7 @@
         elevation="0"
         class="mt-16 mb-3"
         style="width: 90%; margin: auto"
-        @click="eventsStore.hideEventsPage">
+        @click="routePage('dashboard')">
         <v-icon size="xx-large">
           <font-awesome-icon
             icon="fa-solid fa-house-chimney"
@@ -27,7 +27,7 @@
         elevation="0"
         class="mt-5"
         style="width: 90%; margin: auto"
-        @click="eventsStore.showEventsPage">
+        @click="routePage('events')">
         <v-icon size="xx-large">
           <font-awesome-icon
             icon="fa-solid fa-calendar"
@@ -116,6 +116,9 @@
         this.$router.push({
           name: "loginPage",
         });
+      },
+      routePage(page) {
+        this.$router.push({ path: page });
       },
     },
   };

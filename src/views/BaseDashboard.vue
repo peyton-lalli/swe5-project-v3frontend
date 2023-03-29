@@ -5,24 +5,23 @@
     <StudentHomeDashboard
       v-if="
         userDashboard === 'StudentDashboard' &&
-        eventsStore.getEventsPageStatus === false
+        this.$route.fullPath != '/events'
       "
       class="dashboardSlot"></StudentHomeDashboard>
     <FacultyHomeDashboard
       v-if="
         userDashboard === 'FacultyDashboard' &&
-        eventsStore.getEventsPageStatus === false
+        this.$route.fullPath != '/events'
       "
       class="dashboardSlot"></FacultyHomeDashboard>
     <AdminHomeDashboard
       v-if="
-        userDashboard === 'AdminDashboard' &&
-        eventsStore.getEventsPageStatus === false
+        userDashboard === 'AdminDashboard' && this.$route.fullPath != '/events'
       "
       class="dashboardSlot"></AdminHomeDashboard>
 
     <EventsDashboard
-      v-if="eventsStore.getEventsPageStatus"
+      v-if="this.$route.fullPath === '/events'"
       class="dashboardSlot"></EventsDashboard>
   </v-container>
 </template>
@@ -34,7 +33,6 @@
   import FacultyHomeDashboard from "../components/Faculty/FacultyHomeDashboard.vue";
   import AdminHomeDashboard from "../components/Admin/AdminHomeDashbaord.vue";
   import EventsDashboard from "../components/Events/EventsDashboard.vue";
-  import { useEventsStore } from "../stores/EventsStore.js";
   import { useUserStore } from "../stores/UserStore.js";
   import { mapStores } from "pinia";
 
@@ -55,7 +53,7 @@
       };
     },
     computed: {
-      ...mapStores(useEventsStore, useUserStore),
+      ...mapStores(useUserStore),
     },
     async mounted() {
       this.retrieveInfo();

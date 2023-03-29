@@ -8,23 +8,14 @@ import ComposersDataService from "../services/composers.js";
 import { useUserStore } from "../stores/UserStore.js";
 
 export const useEventsStore = defineStore("events", {
-  state: () => ({ eventsPageShown: false, events: [] }),
+  state: () => ({ events: [] }),
   persist: true,
   getters: {
-    getEventsPageStatus(state) {
-      return state.eventsPageShown;
-    },
     getEventForId: (state) => {
       return (eventId) => state.events.find((event) => event.id === eventId);
     },
   },
   actions: {
-    showEventsPage() {
-      this.eventsPageShown = true;
-    },
-    hideEventsPage() {
-      this.eventsPageShown = false;
-    },
     // Load all events and relevant data in from database
     async setEvents() {
       this.events = [];

@@ -13,6 +13,12 @@ const router = createRouter({
       component: BaseDashboard,
       name: "baseDashboard",
     },
+    {
+      path: "/dashboard",
+      alias: "/events",
+      component: BaseDashboard,
+      name: "events",
+    },
     { path: "/", alias: "/login", component: LoginPage, name: "loginPage" },
   ],
 });

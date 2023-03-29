@@ -1,27 +1,17 @@
 <template>
-  <v-container fluid class="eventComponent">
-    <v-card class="rounded-lg mainblur">
-      <v-card-title class="font-weight-bold text-darkBlue">
+  <v-container fluid>
+    <v-card class="rounded-lg mainBlur">
+      <v-card-title class="font-weight-bold text-darkBlue ml-4 mt-4">
         <v-row>
-          <v-col class="text-h5 font-weight-bold pb-0 mb-0">
+          <v-col class="text-h5 font-weight-bold pb-0 mb-2">
             {{ eventData.title }} Signup</v-col
           >
-          <v-col class="text-right">
-            <v-btn elevation="0" @click="closeDialog()">
-              <v-icon>
-                <font-awesome-icon
-                  icon="a-solid fa-circle-xmark"
-                  class="text-lightBlue">
-                </font-awesome-icon>
-              </v-icon>
-            </v-btn>
-          </v-col>
         </v-row>
       </v-card-title>
-      <v-card-subtitle class="font-weight-bold text-darkBlue pt-0">
+      <v-card-subtitle class="font-weight-bold text-mediumBlue pt-0 ml-4">
         {{ formatDate(eventData.date) }}
       </v-card-subtitle>
-      <v-card-subtitle class="font-weight-bold text-darkBlue">
+      <v-card-subtitle class="font-weight-bold text-mediumBlue ml-4">
         {{ timesInfoString }}
       </v-card-subtitle>
       <v-card-text>
@@ -29,42 +19,30 @@
           <v-col>
             <v-row>
               <v-col>
-                <v-card-subtitle class="font-weight-bold text-darkGray">
+                <v-card-subtitle class="font-weight-bold text-darkGray pb-2">
                   Private Instructor
                 </v-card-subtitle>
-                <v-row justify="center" class="pl-1 mt-0 mb-1">
-                  <v-col cols="2" align-self="center">
-                    <v-avatar class="bg-darkBlue">
-                      <v-img
-                        :src="
-                          this.userStore.userRoleInfo.instructor.picture
-                        "></v-img>
-                    </v-avatar>
-                  </v-col>
-                  <v-col cols="9">
-                    <v-card-title class="text-darkBlue font-weight-bold pb-2">
-                      {{ this.userStore.userRoleInfo.instructor.name }}
-                    </v-card-title>
-                  </v-col>
-                </v-row>
+                <v-select
+                  class="lighterBlur font-weight-semi-bold text-darkBlue ml-4"
+                  v-model="selectedInstructor"
+                  :items="this.userStore.userRoleInfo.instructors"
+                  item-title="name"
+                  item-value="id"
+                  return-object>
+                </v-select>
               </v-col>
               <v-col>
-                <!-- Database doesn't support this yet, so hard coded for now, doesn't effect anything -->
-                <v-card-subtitle class="font-weight-bold text-darkGray">
+                <v-card-subtitle class="font-weight-bold text-darkGray pb-2">
                   Accompanist
                 </v-card-subtitle>
-                <v-row justify="center" class="pl-1 mt-0 mb-1">
-                  <v-col cols="2" align-self="center">
-                    <v-avatar class="bg-darkBlue">
-                      <v-img></v-img>
-                    </v-avatar>
-                  </v-col>
-                  <v-col cols="9">
-                    <v-card-title class="text-darkBlue font-weight-bold pb-2">
-                      Peyton Lalli
-                    </v-card-title>
-                  </v-col>
-                </v-row>
+                <v-select
+                  class="lighterBlur font-weight-semi-bold text-darkBlue ml-4"
+                  v-model="selectedInstructor"
+                  :items="this.userStore.userRoleInfo.instructors"
+                  item-title="name"
+                  item-value="id"
+                  return-object>
+                </v-select>
               </v-col>
             </v-row>
             <v-row>
@@ -114,20 +92,13 @@
             <v-card-text>
               <v-row>
                 <v-col cols="6">
-                  <v-select
-                    bg-color="lightBlue"
-                    class="text-blue"
-                    placeholder="Search"
-                    item-title="name"
-                    item-value="id"
-                    variant="solo"
-                    text="darkBlue"></v-select>
+                  <v-btn @click="eventRepertoireSelection = true"></v-btn>
                 </v-col>
-                <v-col cols="2"> or </v-col>
+                <v-spacer></v-spacer>
                 <v-col cols="4">
                   <v-btn
                     elevation="0"
-                    rounded="pill"
+                    rounded="lg"
                     class="buttonGradient text-white font-weight-bold">
                     Add New
                   </v-btn>
@@ -190,22 +161,26 @@
           </v-col>
         </v-row>
       </v-card-text>
-      <v-card-text class="text-center">
+      <v-card-actions class="mr-2 mb-2">
         <v-btn
-          rounded="pill"
-          class="buttonGradient text-white mr-3"
-          @click="createSignup()">
-          Signup
-        </v-btn>
-        <v-btn
-          rounded="pill"
-          color="#DA9B9B"
-          class="text-white mr-3"
+          rounded="lg"
+          elevation="0"
+          class="buttonCancel ml-auto mr-3 text-white font-weight-semi-bold"
           @click="closeDialog()">
           Cancel
         </v-btn>
-      </v-card-text>
+        <v-btn
+          rounded="lg"
+          elevation="0"
+          class="buttonGradient text-white font-weight-semi-bold"
+          @click="createSignup()">
+          Signup
+        </v-btn>
+      </v-card-actions>
     </v-card>
+    <v-dialog v-model="eventRepertoireSelection" max-width="800px">
+      <EventRepertoireSelectionBody></EventRepertoireSelectionBody>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -213,6 +188,7 @@
   import { useEventsStore } from "../../stores/EventsStore.js";
   import { useUserStore } from "../../stores/UserStore.js";
   import EventSignUpDataService from "../../services/eventsignup.js";
+  import EventRepertoireSelectionBody from "./EventRepertoireSelectionBody.vue";
   import { mapStores } from "pinia";
   export default {
     name: "EventItemEdit",
@@ -221,7 +197,12 @@
         selectedTimeslot: {},
         // Hard coded for now, needs work!
         selectedPiece: {},
+        selectedInstructor: {},
+        eventRepertoireSelection: false,
       };
+    },
+    components: {
+      EventRepertoireSelectionBody,
     },
     props: {
       eventData: {},
@@ -238,6 +219,8 @@
     mounted() {
       // Set default selected piece
       this.selectedPiece = this.userStore.userRoleInfo.repertoire[0];
+      this.selectedInstructor = this.userStore.userRoleInfo.instructors[0];
+      console.log(this.userStore.userRoleInfo.instructors);
     },
     methods: {
       setSelectedPiece(piece) {

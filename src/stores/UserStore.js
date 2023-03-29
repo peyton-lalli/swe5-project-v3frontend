@@ -84,31 +84,37 @@ export const useUserStore = defineStore("user", {
         this.userRoleInfo.instructorId
       )
         .then((response) => {
+          let ins = [];
+          for (let instructor of response.data.Instructors) {
+            ins.push(instructor);
+          }
           this.userRoleInfo = {
             ...this.userRoleInfo,
-            ...{ instructor: response.data.Instructors[0] },
+            ...{ instructors: ins },
           };
         })
         .catch((e) => {
           console.log(e);
         });
 
+      for (let [i, instructor] of this.userRoleInfo.instructors.entries()) {
+        await UsersDataService.getSingle(instructor.userId)
+          .then((response) => {
+            const user = response.data.Users[0];
+            this.userRoleInfo.instructors[i] = {
+              ...this.userRoleInfo.instructors[i],
+              ...{
+                name: user.fName + " " + user.lName,
+                picture: user.picture,
+                userId: user.id,
+              },
+            };
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
       // Load Student instructor's userInfo into the store, appending userRoleInfo.instructor
-      await UsersDataService.getSingle(this.userRoleInfo.instructor.userId)
-        .then((response) => {
-          const user = response.data.Users[0];
-          this.userRoleInfo.instructor = {
-            ...this.userRoleInfo.instructor,
-            ...{
-              name: user.fName + " " + user.lName,
-              picture: user.picture,
-              userId: user.id,
-            },
-          };
-        })
-        .catch((e) => {
-          console.log(e);
-        });
     },
     async setFacultyRoleInfo() {
       // Load Instructor info into the store

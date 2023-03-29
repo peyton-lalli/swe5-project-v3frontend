@@ -18,33 +18,18 @@
     <v-card-text class="text-center">
       <v-text-field label="Event Name" v-model="this.eventName"></v-text-field>
       <v-text-field label="Date" type="date" v-model="this.date"></v-text-field>
-      <v-row>
-        <v-col>
-          <v-text-field
-            label="Start Time"
-            type="time"
-            v-model="this.baseTimeStart"></v-text-field>
-        </v-col>
-        <v-col>
-          <v-text-field
-            label="End Time"
-            type="time"
-            v-model="this.baseTimeEnd"></v-text-field>
-        </v-col>
-      </v-row>
-
       <v-row v-for="timeSlot in this.timeSlots">
         <v-col>
           <v-text-field
             label="Start Time"
             type="time"
-            v-model="timeSlot.timeStart"></v-text-field>
+            v-model="timeSlot.starttime"></v-text-field>
         </v-col>
         <v-col>
           <v-text-field
             label="End Time"
             type="time"
-            v-model="timeSlot.timeEnd"></v-text-field>
+            v-model="timeSlot.endtime"></v-text-field>
         </v-col>
       </v-row>
       <v-btn flat @click="addTimeSlots()">Add Time Slot</v-btn>
@@ -70,35 +55,49 @@
 </template>
 
 <script>
+  import { useEventsStore } from "../../stores/EventsStore.js";
+  import { mapStores } from "pinia";
   export default {
     data() {
       return {
         eventName: "",
         date: "",
         interval: "",
-        baseTimeStart: "",
-        baseTimeEnd: "",
-        timeSlots: [],
+        timeSlots: [
+          {
+            starttime: "",
+            endtime: "",
+          },
+        ],
       };
     },
     methods: {
-      closeSaveCreateEventDialog() {
-        console.log(
-          "EventName: " +
-            this.eventName +
-            " Date: " +
-            this.date +
-            " Interval: " +
-            this.interval
-        );
+      async closeSaveCreateEventDialog() {
+        let eventData = {
+          type: this.eventName,
+          date: this.date,
+        };
+        let eventTimes = new Array();
+        for (let time of this.timeSlots) {
+          eventTimes.push({
+            starttime: time.starttime,
+            endtime: time.endtime,
+            interval: this.interval,
+            eventId: "",
+          });
+        }
+        await this.eventsStore.createNewEvent(eventData, eventTimes);
         this.$emit("closeCreateEventDialogEvent");
       },
       closeCreateEventDialog() {
         this.$emit("closeCreateEventDialogEvent");
       },
       addTimeSlots() {
-        this.timeSlots.push({ timeStart: "", timeEnd: "" });
+        this.timeSlots.push({ starttime: "", endtime: "" });
       },
+    },
+    computed: {
+      ...mapStores(useEventsStore),
     },
   };
 </script>

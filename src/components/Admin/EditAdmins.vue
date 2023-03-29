@@ -84,7 +84,6 @@
       ...mapStores(useUserStore),
     },
     async mounted() {
-      console.log(await this.userStore.getAllAdmin());
       this.admins = await this.userStore.getAllAdmin();
     },
   };

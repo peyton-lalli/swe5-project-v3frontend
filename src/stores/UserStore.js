@@ -168,5 +168,35 @@ export const useUserStore = defineStore("user", {
         }
       );
     },
+    async getAllStudents() {
+      await UsersDataService.getAll()
+        .then((response) => {
+          return response.data.Users.filter((user) => user.role === "student");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    async getAllFaculty() {
+      await UsersDataService.getAll()
+        .then((response) => {
+          return response.data.Users.filter((user) => user.role === "faculty");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    async getAllAdmin() {
+      let admins = [];
+      await UsersDataService.getAll()
+        .then((response) => {
+          admins = response.data.Users.filter((user) => user.role === "admin");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      return admins;
+    },
   },
 });

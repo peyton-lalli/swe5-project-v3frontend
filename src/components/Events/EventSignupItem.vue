@@ -85,6 +85,8 @@
         // Needs to be implemented
         availabilityDialog: false,
         timesInfoString: "",
+        // Creation of timeslots needs to probably just be moved to the eventsStore
+        // TODO @ethanimooney: Do this
         timeslots: [],
       };
     },

@@ -104,7 +104,8 @@
           this.useClassification = this.userStore.userRoleInfo.classification;
           this.userSemesters = this.userStore.userRoleInfo.semesters;
           this.userLevel = this.userStore.userRoleInfo.level;
-          this.userInstructor = this.userStore.userRoleInfo.instructor;
+          this.userInstructor = this.userStore.userRoleInfo.instructors[0];
+          console.log(this.userInstructor);
           this.setUserLevelPercent(this.userLevel);
           this.setSemestersPercent(this.userSemesters);
         } else if (this.userRole === "faculty") {

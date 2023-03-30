@@ -34,7 +34,9 @@
           <v-col cols="2" align-self="center">
             <v-avatar class="bg-darkBlue">
               <v-img
-                :src="this.userStore.userRoleInfo.instructor.picture"></v-img>
+                :src="
+                  this.userStore.userRoleInfo.instructors[0].picture
+                "></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="10" align-self="center">
@@ -42,7 +44,7 @@
               Private Instructor
             </v-card-title>
             <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-              {{ this.userStore.userRoleInfo.instructor.name }}
+              {{ this.userStore.userRoleInfo.instructors[0].name }}
             </v-card-subtitle>
           </v-col>
         </v-row>

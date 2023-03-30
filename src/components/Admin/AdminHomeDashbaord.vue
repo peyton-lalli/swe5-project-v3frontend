@@ -50,40 +50,16 @@
             "></AdminCreateEvent>
         </v-dialog>
         <v-btn
-          @click="editAdminDialog = true"
+          @click="editUsersDialog = true"
           class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
           block>
-          Edit Administrators
+          Edit Users
         </v-btn>
-        <v-dialog v-model="editAdminDialog" max-width="600px">
-          <EditAdmins
-            @closeEditAdminDialogEvent="
-              this.editAdminDialog = false
-            "></EditAdmins>
-        </v-dialog>
-        <v-btn
-          @click="editFacultyDialog = true"
-          class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
-          block>
-          Edit Faculty/Accompanists
-        </v-btn>
-        <v-dialog v-model="editFacultyDialog" max-width="600px">
-          <EditFaculty
-            @closeEditFacultyDialogEvent="
-              this.editFacultyDialog = false
-            "></EditFaculty>
-        </v-dialog>
-        <v-btn
-          @click="editStudentsDialog = true"
-          class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
-          block>
-          Edit Students
-        </v-btn>
-        <v-dialog v-model="editStudentsDialog" max-width="600px">
-          <EditStudents
-            @closeEditStudentsDialogEvent="
-              this.editStudentsDialog = false
-            "></EditStudents>
+        <v-dialog v-model="editUsersDialog" max-width="1000px">
+          <EditUsers
+            @closeEditUsersDialogEvent="
+              this.editUsersDialog = false
+            "></EditUsers>
         </v-dialog>
         <v-btn
           @click="editInstDialog = true"
@@ -159,9 +135,7 @@
   import StudentComponent from "../Faculty/StudentComponent.vue";
   import AttentionComponent from "../Faculty/AttentionComponent.vue";
   import AdminCreateEvent from "./AdminCreateEvent.vue";
-  import EditAdmins from "./EditAdmins.vue";
-  import EditFaculty from "./EditFaculty.vue";
-  import EditStudents from "./EditStudents.vue";
+  import EditUsers from "./EditUsers.vue";
   import EditInstruments from "./EditInstruments.vue";
   import EditComposers from "./EditComposers.vue";
   import SendEmail from "./SendEmail.vue";
@@ -172,9 +146,7 @@
       StudentComponent,
       AttentionComponent,
       AdminCreateEvent,
-      EditAdmins,
-      EditFaculty,
-      EditStudents,
+      EditUsers,
       EditInstruments,
       EditComposers,
       SendEmail,
@@ -182,9 +154,7 @@
     data() {
       return {
         createEventDialog: false,
-        editAdminDialog: false,
-        editFacultyDialog: false,
-        editStudentsDialog: false,
+        editUsersDialog: false,
         editInstDialog: false,
         editComposersDialog: false,
         sendEmailDialog: false,
@@ -194,14 +164,8 @@
       closeCreateEventDialog(val) {
         this.createEventDialog = val;
       },
-      closeEditAdminDialog(val) {
-        this.editAdminDialog = val;
-      },
-      closeEditFacultyDialog(val) {
-        this.editFacultyDialog = val;
-      },
-      closeEditStudentsDialog(val) {
-        this.editStudentsDialog = val;
+      closeEditUsersDialog(val) {
+        this.editUsersDialog = val;
       },
       closeEditInstDialog(val) {
         this.editInstDialog = val;

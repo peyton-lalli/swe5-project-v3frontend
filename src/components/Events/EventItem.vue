@@ -267,15 +267,21 @@
         return new Date(date).toLocaleDateString("us-EN", options);
       },
       async createSignup() {
-        let data = {
-          timeslot: this.selectedTimeslot.time,
-          eventId: this.eventData.id,
-          studentinfoId: this.userStore.userRoleInfo.id,
-        };
+        if (Object.keys(this.selectedTimeslot).length === 0) {
+          alert("No Timeslot Selected");
+        } else if (Object.keys(this.selectedPiece).length === 0) {
+          alert("No Musical Selection Made");
+        } else {
+          let data = {
+            timeslot: this.selectedTimeslot.time,
+            eventId: this.eventData.id,
+            studentinfoId: this.userStore.userRoleInfo.id,
+          };
 
-        await this.eventsStore.createSignupForEvent(data, this.selectedPiece);
-        this.$emit("regenerateSignups");
-        this.closeDialog();
+          await this.eventsStore.createSignupForEvent(data, this.selectedPiece);
+          this.$emit("regenerateSignups");
+          this.closeDialog();
+        }
       },
     },
   };

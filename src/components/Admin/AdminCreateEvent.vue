@@ -32,7 +32,9 @@
             v-model="timeSlot.endtime"></v-text-field>
         </v-col>
       </v-row>
-      <v-btn flat @click="addTimeSlots()">Add Time Slot</v-btn>
+      <v-btn class="buttonGradient text-white mb-5" @click="addTimeSlots()">
+        Add Time Slot
+      </v-btn>
 
       <v-text-field label="Interval" v-model="this.interval"></v-text-field>
     </v-card-text>
@@ -79,12 +81,14 @@
         };
         let eventTimes = new Array();
         for (let time of this.timeSlots) {
-          eventTimes.push({
-            starttime: time.starttime,
-            endtime: time.endtime,
-            interval: this.interval,
-            eventId: "",
-          });
+          if (time.starttime == "" || time.endtime == "") {
+            eventTimes.push({
+              starttime: time.starttime,
+              endtime: time.endtime,
+              interval: this.interval,
+              eventId: "",
+            });
+          }
         }
         await this.eventsStore.createNewEvent(eventData, eventTimes);
         this.$emit("closeCreateEventDialogEvent");

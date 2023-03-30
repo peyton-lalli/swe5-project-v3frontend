@@ -1,36 +1,44 @@
 <template>
-  <v-container fluid class="eventsMainGrid">
-    <v-card class="studentsPane mainBlur rounded-lg">
-      <v-card-title class="font-weight-bold text-darkBlue">
-        <v-row>
-          <v-col> Students </v-col>
-          <v-col class="text-right">
-            <v-btn
-              elevation="0"
-              size="small"
-              rounded="pill"
-              class="buttonGradient mr-3 text-white font-weight-bold">
-              View All
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-card-title>
-      <v-card-text>
-        <v-row>
-          <StudentComponent />
-        </v-row>
-      </v-card-text>
-    </v-card>
-    <v-card class="attentionPane mainBlur rounded-lg">
-      <v-card-title class="font-weight-bold text-darkBlue">
-        Events Requiring Your Attention
-      </v-card-title>
-      <v-card-text>
-        <v-row>
-          <AttentionComponent />
-        </v-row>
-      </v-card-text>
-    </v-card>
+  <v-container fluid class="adminMainGrid">
+    <v-container fluid class="eventsRepPane adminHomeLeftGrid noPadMarg">
+      <v-card class="eventsPane mainBlur rounded-lg">
+        <v-card-title class="font-weight-bold text-darkBlue">
+          <v-row>
+            <v-col> Events </v-col>
+            <v-col class="text-right">
+              <v-btn
+                @click="createEventDialog = true"
+                elevation="0"
+                size="small"
+                rounded="pill"
+                class="buttonGradient text-white font-weight-bold mr-2">
+                Add new
+              </v-btn>
+              <v-btn
+                elevation="0"
+                size="small"
+                rounded="pill"
+                class="buttonGradient text-white font-weight-bold">
+                View All
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-title>
+        <v-card-text>
+          <v-row>
+            <AttentionComponent />
+          </v-row>
+        </v-card-text>
+      </v-card>
+      <v-card class="attentionPane mainBlur rounded-lg">
+        <v-card-title class="font-weight-bold text-darkBlue">
+          Events Requiring Your Attention
+        </v-card-title>
+        <v-card-text>
+          <v-row> </v-row>
+        </v-card-text>
+      </v-card>
+    </v-container>
     <v-card class="adminControlPane mainBlur rounded-lg">
       <v-card-title class="font-weight-bold text-darkBlue">
         Admin Controls
@@ -99,34 +107,6 @@
         </v-dialog>
       </v-card-text>
     </v-card>
-    <v-card class="eventsPane mainBlur rounded-lg">
-      <v-card-title class="font-weight-bold text-darkBlue">
-        <v-row>
-          <v-col> Events </v-col>
-          <v-col class="text-right">
-            <v-btn
-              elevation="0"
-              size="small"
-              rounded="pill"
-              class="buttonGradient text-white font-weight-bold mr-2">
-              Add new
-            </v-btn>
-            <v-btn
-              elevation="0"
-              size="small"
-              rounded="pill"
-              class="buttonGradient text-white font-weight-bold">
-              View All
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-card-title>
-      <v-card-text>
-        <v-row>
-          <AttentionComponent />
-        </v-row>
-      </v-card-text>
-    </v-card>
   </v-container>
 </template>
 
@@ -188,46 +168,35 @@
   .buttonControl {
     justify-content: left !important;
   }
-  .eventsMainGrid {
+  .adminMainGrid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    grid-template-areas:
-      "studentsPane attentionPane"
-      "adminControlPane eventsPane";
+    grid-template-columns: 4fr 3fr;
+    grid-template-rows: minmax(auto, 1fr);
+    grid-template-areas: "eventsRepPane adminControlPane";
     grid-gap: 1.5rem;
     padding-left: 0;
   }
-  .facultyHomeMainGrid {
+
+  .adminHomeLeftGrid {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: minmax(auto, 1fr), minmax(auto, 1fr);
     grid-template-areas:
-      "studentAttentionPane"
-      "eventsPane";
-    grid-gap: 1.5rem;
-    padding-left: 0;
-  }
-  .facultyHomeTopGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: minmax(auto, 1fr);
-    grid-template-areas: "studentsPane attentionPane";
+      "eventsPane"
+      "attentionPane";
     grid-gap: 1.5rem;
   }
+
   .attentionPane {
     grid-area: attentionPane;
-  }
-  .studentAttentionPane {
-    grid-area: studentAttentionPane;
   }
 
   .eventsPane {
     grid-area: eventsPane;
   }
 
-  .studentsPane {
-    grid-area: studentsPane;
+  .eventsRepPane {
+    grid-area: eventsRepPane;
   }
   .adminControlPane {
     grid-area: adminControlPane;

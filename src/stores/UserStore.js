@@ -174,5 +174,14 @@ export const useUserStore = defineStore("user", {
 
       return users;
     },
+    async getAllStudents() {
+      await UsersDataService.getAll()
+        .then((response) => {
+          return response.data.Users.filter((user) => user.role === "student");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
   },
 });

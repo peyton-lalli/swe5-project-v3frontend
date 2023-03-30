@@ -101,11 +101,6 @@
     props: {
       eventData: {},
     },
-    // watch: {
-    //   eventData(newData) {
-    //     this.timeslots = this.getTimeSlots(newData.times);
-    //   },
-    // },
     methods: {
       createTimesInfoString() {
         let timesString = "";

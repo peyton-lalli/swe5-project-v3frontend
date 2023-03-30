@@ -57,6 +57,80 @@
                 </v-card-subtitle>
               </v-col>
             </v-row>
+            <v-row>
+              <v-col class="">
+                <v-card-subtitle class="font-weight-bold text-darkGray">
+                  Musical Selection
+                </v-card-subtitle>
+                <v-card-text class="">
+                  <v-row>
+                    <v-col cols="auto">
+                      <v-btn
+                        elevation="0"
+                        rounded="lg"
+                        class="text-none searchGradient text-white font-weight-bold"
+                        @click="eventRepertoireSelection = true">
+                        Search your repertoire
+                        <template v-slot:append>
+                          <v-icon
+                            size="sm"
+                            class="font-weight-semi-bold pl-4 pr-4"
+                            ><font-awesome-icon
+                              icon="fa-solid fa-magnifying-glass"
+                              class="text-darkBlue"
+                          /></v-icon>
+                        </template>
+                      </v-btn>
+                    </v-col>
+                    <!-- <v-spacer></v-spacer> -->
+                    <v-col cols="4">
+                      <v-btn
+                        elevation="0"
+                        rounded="lg"
+                        class="text-none buttonGradient text-white font-weight-bold">
+                        Add new
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col class="pb-0">
+                      <v-card class="eventsGradient rounded-lg mainBlur">
+                        <v-card-title
+                          class="font-weight-bold text-white pl-5 pb-0">
+                          Selected
+                        </v-card-title>
+                        <v-card-text class="pb-2">
+                          <v-card
+                            v-if="Object.keys(selectedPiece).length != 0"
+                            class="bg-white rounded-lg lighterBlur my-2">
+                            <v-card-text>
+                              <v-row>
+                                <v-col cols="1">
+                                  <v-avatar class="bg-lightBlue">
+                                    <!-- Need to get composer API working to get image -->
+                                    <v-img></v-img>
+                                  </v-avatar>
+                                </v-col>
+                                <v-col cols="11" class="">
+                                  <v-card-subtitle
+                                    class="font-weight-bold text-darkGray">
+                                    {{ selectedPiece.name }}
+                                  </v-card-subtitle>
+                                  <v-card-subtitle
+                                    class="font-weight-bold text-darkBlue">
+                                    {{ selectedPiece.composer.name }}
+                                  </v-card-subtitle>
+                                </v-col>
+                              </v-row>
+                            </v-card-text>
+                          </v-card>
+                        </v-card-text>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-col>
+            </v-row>
           </v-col>
           <v-col>
             <!-- ***It's currently possible to signup without selecting a timeslot -->
@@ -81,85 +155,6 @@
                   >{{ timeSlot.time }}</v-btn
                 >
               </v-card-text>
-            </v-row>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col class="pb-0">
-            <v-card-subtitle class="font-weight-bold text-darkGray">
-              Musical Selection
-            </v-card-subtitle>
-            <v-card-text class="pb-0">
-              <v-row>
-                <v-col cols="auto">
-                  <v-btn
-                    elevation="0"
-                    rounded="lg"
-                    class="text-none searchGradient text-white font-weight-bold"
-                    @click="eventRepertoireSelection = true">
-                    Search your repertoire
-                    <template v-slot:append>
-                      <v-icon size="sm" class="font-weight-semi-bold pl-4 pr-4"
-                        ><font-awesome-icon
-                          icon="fa-solid fa-magnifying-glass"
-                          class="text-darkBlue"
-                      /></v-icon>
-                    </template>
-                  </v-btn>
-                </v-col>
-                <!-- <v-spacer></v-spacer> -->
-                <v-col cols="4">
-                  <v-btn
-                    elevation="0"
-                    rounded="lg"
-                    class="text-none buttonGradient text-white font-weight-bold">
-                    Add new
-                  </v-btn>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col class="pb-0">
-                  <v-card class="eventsGradient rounded-lg mainBlur">
-                    <v-card-title class="font-weight-bold text-white pl-5 pb-0">
-                      Selected
-                    </v-card-title>
-                    <v-card-text class="pb-2">
-                      <v-card
-                        v-if="Object.keys(selectedPiece).length != 0"
-                        class="bg-white rounded-lg lighterBlur my-2">
-                        <v-card-text>
-                          <v-row>
-                            <v-col cols="1">
-                              <v-avatar class="bg-lightBlue">
-                                <!-- Need to get composer API working to get image -->
-                                <v-img></v-img>
-                              </v-avatar>
-                            </v-col>
-                            <v-col cols="11" class="">
-                              <v-card-subtitle
-                                class="font-weight-bold text-darkGray">
-                                {{ selectedPiece.name }}
-                              </v-card-subtitle>
-                              <v-card-subtitle
-                                class="font-weight-bold text-darkBlue">
-                                {{ selectedPiece.composer.name }}
-                              </v-card-subtitle>
-                            </v-col>
-                          </v-row>
-                        </v-card-text>
-                      </v-card>
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-col>
-          <v-col>
-            <v-row>
-              <v-col class="pb-0">
-                <v-card
-                  class="eventsGradient fullBorderCurve mainblur"></v-card>
-              </v-col>
             </v-row>
           </v-col>
         </v-row>

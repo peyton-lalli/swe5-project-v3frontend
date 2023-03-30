@@ -123,37 +123,27 @@
                     <v-card-title class="font-weight-bold text-white pl-5 pb-0">
                       Selected
                     </v-card-title>
-                    <v-card-text>
+                    <v-card-text class="pb-2">
                       <v-card
-                        class="rounded-lg mt-4 lighterBlur"
-                        v-for="piece in this.userStore.userRoleInfo.repertoire"
-                        @click="setSelectedPiece(piece)"
-                        :class="
-                          this.selectedPiece.id === piece.id
-                            ? 'bg-lightBlue'
-                            : 'bg-white'
-                        ">
-                        <v-card-text class="pt-0">
-                          <v-row justify="center" class="pl-1 mt-0">
-                            <v-col cols="1" align-self="center">
-                              <v-avatar class="bg-darkBlue">
+                        v-if="Object.keys(selectedPiece).length != 0"
+                        class="bg-white rounded-lg lighterBlur my-2">
+                        <v-card-text>
+                          <v-row>
+                            <v-col cols="1">
+                              <v-avatar class="bg-lightBlue">
                                 <!-- Need to get composer API working to get image -->
                                 <v-img></v-img>
                               </v-avatar>
                             </v-col>
-                            <v-col cols="11">
-                              <v-row>
-                                <v-col>
-                                  <v-card-subtitle
-                                    class="mt-2 ml-1 font-weight-bold">
-                                    {{ piece.name }}
-                                  </v-card-subtitle>
-                                  <v-card-subtitle
-                                    class="text-darkBlue font-weight-bold pb-2 ml-1">
-                                    {{ piece.composer.name }}
-                                  </v-card-subtitle>
-                                </v-col>
-                              </v-row>
+                            <v-col cols="11" class="">
+                              <v-card-subtitle
+                                class="font-weight-bold text-darkGray">
+                                {{ selectedPiece.name }}
+                              </v-card-subtitle>
+                              <v-card-subtitle
+                                class="font-weight-bold text-darkBlue">
+                                {{ selectedPiece.composer.name }}
+                              </v-card-subtitle>
                             </v-col>
                           </v-row>
                         </v-card-text>
@@ -174,7 +164,7 @@
           </v-col>
         </v-row>
       </v-card-text>
-      <v-card-actions class="mr-2 mb-2 pt-0">
+      <v-card-actions class="mr-2 mb-2 pt-0 pr-4">
         <v-btn
           rounded="lg"
           elevation="0"
@@ -191,8 +181,13 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <v-dialog v-model="eventRepertoireSelection" max-width="800px">
-      <EventRepertoireSelectionBody></EventRepertoireSelectionBody>
+    <v-dialog v-model="eventRepertoireSelection" max-width="600px">
+      <EventRepertoireSelectionBody
+        :sent-selected-piece="selectedPiece"
+        @setSelectedPiece="setSelectedPiece"
+        @closeEventRepertoireSelection="
+          eventRepertoireSelection = false
+        "></EventRepertoireSelectionBody>
     </v-dialog>
   </v-container>
 </template>
@@ -231,13 +226,13 @@
     },
     mounted() {
       // Set default selected piece
-      this.selectedPiece = this.userStore.userRoleInfo.repertoire[0];
       this.selectedInstructor = this.userStore.userRoleInfo.instructors[0];
       console.log(this.userStore.userRoleInfo.instructors);
     },
     methods: {
       setSelectedPiece(piece) {
         this.selectedPiece = piece;
+        this.eventRepertoireSelection = false;
       },
       setSelectedTimeslot(timeslot) {
         this.selectedTimeslot = timeslot;

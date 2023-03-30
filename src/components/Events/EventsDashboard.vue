@@ -4,23 +4,11 @@
       <v-card-title class="font-weight-bold text-h5 text-darkBlue">
         Open Event Signups
       </v-card-title>
-      <v-card-text v-for="event in openEvents">
+      <v-card-text v-for="event in this.eventsStore.events">
         <v-row>
           <EventSignupItem
             :eventData="event"
             @regenerateSignups="regenerateSignups()" />
-        </v-row>
-      </v-card-text>
-    </v-card>
-    <v-card class="upcomingEventsPane mainBlur rounded-lg">
-      <v-card-title class="font-weight-bold text-darkBlue text-h5">
-        Upcoming Events
-      </v-card-title>
-      <!-- Not yet working with new stores -->
-      <!-- @ethanimooney: Get this working -->
-      <v-card-text v-for="id in upcomingEventIds">
-        <v-row>
-          <!-- <EventUpcomingItem :eventId="id" /> -->
         </v-row>
       </v-card-text>
     </v-card>
@@ -55,7 +43,7 @@
           </v-col>
         </v-row>
       </v-card-title>
-      <v-card-text v-for="event in eventSignups">
+      <v-card-text class="px-8 pt-4" v-for="event in eventSignups">
         <v-row>
           <EventComponent :eventSignUpData="event" />
         </v-row>
@@ -81,10 +69,8 @@
     },
     data() {
       return {
-        openEvents: [],
         toggleText: "Upcoming",
         createDialog: false,
-        upcomingEventIds: [],
         eventSignups: [],
       };
     },
@@ -93,15 +79,8 @@
     },
     mounted() {
       this.eventSignups = this.eventsStore.generateEventSignupsForUser();
-
-      this.generateOpenEventsList();
-      this.generateUpcomingEventIds();
     },
     methods: {
-      generateOpenEventsList() {
-        let events = [this.eventsStore.events[0], this.eventsStore.events[1]];
-        this.openEvents = events;
-      },
       closeCreateDialog(val) {
         this.createDialog = val;
       },
@@ -111,10 +90,6 @@
         } else {
           this.toggleText = "Upcoming";
         }
-      },
-      generateUpcomingEventIds() {
-        let ids = [3, 4];
-        this.upcomingEventIds = ids;
       },
       regenerateSignups() {
         this.eventSignups = this.eventsStore.generateEventSignupsForUser();
@@ -134,11 +109,11 @@
 
   .eventsMainGrid {
     display: grid;
-    grid-template-columns: 5fr 2fr;
+    grid-template-columns: 5fr 3fr;
     grid-template-rows: 1fr 1fr;
     grid-template-areas:
       "openSignupsPane yourEventsPane"
-      "upcomingEventsPane yourEventsPane";
+      "openSignupsPane yourEventsPane";
     grid-gap: 1.5rem;
     padding-left: 0;
   }

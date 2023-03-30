@@ -4,8 +4,8 @@
       >Select piece</v-card-title
     >
     <v-card-text class="">
-      <v-row class="px-4">
-        <v-col class="">
+      <v-row class="mx-4">
+        <v-col class="px-0">
           <v-row class="mb-4">
             <v-text-field
               autofocus
@@ -15,48 +15,58 @@
               single-line
               hide-details></v-text-field>
           </v-row>
-          <v-row v-for="piece in filteredList()" class="mt-4">
-            <v-col class="px-0">
-              <v-card
-                class="rounded-lg"
-                @click="setSelectedPiece(piece)"
-                :class="
-                  this.selectedPiece.id === piece.id
-                    ? 'selectedSong'
-                    : 'unSelectedSong'
-                "
-                :key="piece">
-                <v-card-text>
-                  <v-row>
-                    <v-col cols="1">
-                      <v-avatar class="bg-white">
-                        <!-- Need to get composer API working to get image -->
-                        <v-img></v-img>
-                      </v-avatar>
-                    </v-col>
-                    <v-col cols="11" class="">
-                      <v-card-subtitle
-                        class="font-weight-bold"
-                        :class="
-                          this.selectedPiece.id === piece.id
-                            ? 'text-white'
-                            : 'text-darkGray'
-                        ">
-                        {{ piece.name }}
-                      </v-card-subtitle>
-                      <v-card-subtitle
-                        class="font-weight-bold"
-                        :class="
-                          this.selectedPiece.id === piece.id
-                            ? 'text-lightBlue'
-                            : 'text-darkBlue'
-                        ">
-                        {{ piece.composer.name }}
-                      </v-card-subtitle>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
+          <v-row class="px-0 pt-0">
+            <v-col class="px-0 pt-0">
+              <v-sheet
+                class="overflow-y-auto"
+                max-height="300px"
+                min-height="300px">
+                <v-row v-for="piece in filteredList()" class="mx-0 px-0">
+                  <v-col class="px-0 mx-0">
+                    <v-card
+                      flat
+                      class="rounded-lg"
+                      @click="setSelectedPiece(piece)"
+                      :class="
+                        this.selectedPiece.id === piece.id
+                          ? 'selectedSong'
+                          : 'unSelectedSong'
+                      "
+                      :key="piece">
+                      <v-card-text>
+                        <v-row>
+                          <v-col cols="1">
+                            <v-avatar class="bg-white">
+                              <!-- Need to get composer API working to get image -->
+                              <v-img></v-img>
+                            </v-avatar>
+                          </v-col>
+                          <v-col cols="11" class="">
+                            <v-card-subtitle
+                              class="font-weight-bold"
+                              :class="
+                                this.selectedPiece.id === piece.id
+                                  ? 'text-white'
+                                  : 'text-darkGray'
+                              ">
+                              {{ piece.name }}
+                            </v-card-subtitle>
+                            <v-card-subtitle
+                              class="font-weight-bold"
+                              :class="
+                                this.selectedPiece.id === piece.id
+                                  ? 'text-lightBlue'
+                                  : 'text-darkBlue'
+                              ">
+                              {{ piece.composer.name }}
+                            </v-card-subtitle>
+                          </v-col>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </v-sheet>
             </v-col>
           </v-row>
         </v-col>
@@ -85,6 +95,7 @@
   import { useUserStore } from "../../stores/UserStore.js";
   import { mapStores } from "pinia";
   import { ref } from "vue";
+  import { VVirtualScroll } from "vuetify/labs/VVirtualScroll";
   export default {
     name: "EventRepertoireSelectionBody",
     data() {
@@ -100,6 +111,9 @@
           return {};
         },
       },
+    },
+    components: {
+      VVirtualScroll,
     },
     computed: {
       ...mapStores(useUserStore),

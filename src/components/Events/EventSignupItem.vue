@@ -23,10 +23,8 @@
                 size="small"
                 rounded="pill"
                 class="bg-white text-darkBlue font-weight-bold">
-                <!-- Still need to get this working, will need to generate timeslots in the EventStore -->
-                <!-- @ethanimooney: Do this -->
-                <!-- {{ eventData.timeslots.filled }} /
-                {{ eventData.timeslots.total }} Timeslots Filled -->
+                {{ eventData.signups.length }} /
+                {{ getTotalTimeslots() }} Timeslots Filled
               </v-btn>
             </v-col>
           </v-row>
@@ -57,7 +55,8 @@
                   @closeEventDialogEvent="closeEventDialog"
                   @regenerateSignups="regenerateSignups()"
                   :eventData="eventData"
-                  :timesInfoString="timesInfoString">
+                  :timesInfoString="timesInfoString"
+                  :timeslots="timeslots">
                 </EventItem>
               </v-dialog>
             </v-col>
@@ -86,6 +85,7 @@
         // Needs to be implemented
         availabilityDialog: false,
         timesInfoString: "",
+        timeslots: [],
       };
     },
     computed: {
@@ -94,10 +94,16 @@
     async mounted() {
       this.timesInfoString = this.createTimesInfoString();
       this.checkForPriorSignup();
+      this.timeslots = this.getTimeSlots(this.eventData.times);
     },
     props: {
       eventData: {},
     },
+    // watch: {
+    //   eventData(newData) {
+    //     this.timeslots = this.getTimeSlots(newData.times);
+    //   },
+    // },
     methods: {
       createTimesInfoString() {
         let timesString = "";
@@ -156,6 +162,40 @@
         } else {
           this.hasPriorSignup = false;
         }
+      },
+      getTimeSlots(times) {
+        let counter = 1;
+        let totalSlots = [];
+
+        for (let time of times) {
+          let slots = [];
+          let intervalMillis = time.interval * 60 * 1000;
+
+          let startTime = new Date(time.startTime);
+          let endTime = new Date(time.endTime);
+
+          while (startTime < endTime) {
+            let mins = (startTime.getMinutes() + "0").slice(0, 2);
+            slots.push({
+              id: counter,
+              time: startTime.getHours() + ":" + mins,
+            });
+            startTime.setTime(startTime.getTime() + intervalMillis);
+            counter++;
+          }
+
+          totalSlots.push(slots);
+        }
+
+        return totalSlots;
+      },
+      getTotalTimeslots() {
+        let total = 0;
+        for (let time of this.timeslots) {
+          total += time.length;
+        }
+
+        return total;
       },
     },
   };

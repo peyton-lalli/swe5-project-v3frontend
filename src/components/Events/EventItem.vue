@@ -82,8 +82,8 @@
                         </template>
                       </v-btn>
                     </v-col>
-                    <!-- <v-spacer></v-spacer> -->
-                    <v-col cols="4">
+                    <v-spacer></v-spacer>
+                    <v-col cols="auto">
                       <v-btn
                         elevation="0"
                         rounded="lg"
@@ -139,7 +139,7 @@
               Timeslot Selection
             </v-card-subtitle>
             <v-row class="pt-3">
-              <v-card-text v-for="slotsList in getTimeSlots(eventData.times)">
+              <v-card-text v-for="slotsList in timeslots">
                 <v-btn
                   v-for="timeSlot in slotsList"
                   @click="setSelectedTimeslot(timeSlot)"
@@ -190,7 +190,6 @@
 <script>
   import { useEventsStore } from "../../stores/EventsStore.js";
   import { useUserStore } from "../../stores/UserStore.js";
-  import EventSignUpDataService from "../../services/eventsignup.js";
   import EventRepertoireSelectionBody from "./EventRepertoireSelectionBody.vue";
   import { mapStores } from "pinia";
   export default {
@@ -198,7 +197,6 @@
     data() {
       return {
         selectedTimeslot: {},
-        // Hard coded for now, needs work!
         selectedPiece: {},
         selectedInstructor: {},
         eventRepertoireSelection: false,
@@ -210,6 +208,7 @@
     props: {
       eventData: {},
       timesInfoString: "",
+      timeslots: [],
     },
     computed: {
       ...mapStores(useEventsStore, useUserStore),
@@ -234,33 +233,6 @@
       },
       closeDialog() {
         this.$emit("closeEventDialogEvent", false);
-      },
-      // Given all of the time sections for an event, return a 2d array of timeslots
-      getTimeSlots(times) {
-        let counter = 1;
-        let totalSlots = [];
-
-        for (let time of times) {
-          let slots = [];
-          let intervalMillis = time.interval * 60 * 1000;
-
-          let startTime = new Date(time.startTime);
-          let endTime = new Date(time.endTime);
-
-          while (startTime < endTime) {
-            let mins = (startTime.getMinutes() + "0").slice(0, 2);
-            slots.push({
-              id: counter,
-              time: startTime.getHours() + ":" + mins,
-            });
-            startTime.setTime(startTime.getTime() + intervalMillis);
-            counter++;
-          }
-
-          totalSlots.push(slots);
-        }
-
-        return totalSlots;
       },
       formatDate(date) {
         const options = { year: "numeric", month: "numeric", day: "numeric" };

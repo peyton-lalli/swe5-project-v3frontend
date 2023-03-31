@@ -15,9 +15,6 @@ class UsersDataService {
   getEmail(id) {
     return http.get(`/performance-t3/users/email/${id}`);
   }
-  getRole(id) {
-    return http.get(`/performance-t3/users/role/${id}`);
-  }
   getFirstName(id) {
     return http.get(`/performance-t3/users/first-name/${id}`);
   }

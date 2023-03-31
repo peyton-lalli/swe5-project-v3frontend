@@ -38,7 +38,7 @@
                 @click="
                   this.userStore.userInfo.role === 'student'
                     ? hasPriorSignup
-                      ? (editDialog = true)
+                      ? (signUpDialog = true)
                       : (signUpDialog = true)
                     : (availabilityDialog = true)
                 ">
@@ -55,6 +55,8 @@
                   @closeEventDialogEvent="closeEventDialog"
                   @regenerateSignups="regenerateSignups()"
                   :eventData="eventData"
+                  :priorSignupData="priorSignup"
+                  :sentBool="isEdit"
                   :timesInfoString="timesInfoString"
                   :timeslots="timeslots">
                 </EventItem>
@@ -82,12 +84,14 @@
       return {
         signUpDialog: false,
         hasPriorSignup: false,
+        priorSignup: {},
         // Needs to be implemented
         availabilityDialog: false,
         timesInfoString: "",
         // Creation of timeslots needs to probably just be moved to the eventsStore
         // TODO @ethanimooney: Do this
         timeslots: [],
+        isEdit: this.hasPriorSignup ? true : false,
       };
     },
     computed: {
@@ -96,6 +100,7 @@
     async mounted() {
       this.timesInfoString = this.createTimesInfoString();
       this.checkForPriorSignup();
+      this.isEdit = this.hasPriorSignup ? true : false;
       this.timeslots = this.getTimeSlots(this.eventData.times);
     },
     props: {
@@ -130,17 +135,25 @@
         return new Date(date).toLocaleDateString("us-EN", options);
       },
       checkForPriorSignup() {
-        this.hasPriorSignup = this.eventsStore.hasUserSignedUpForEvent(
+        console.log("Prior Signup Check");
+        this.priorSignup = this.eventsStore.hasUserSignedUpForEvent(
           this.eventData.id
         );
+        console.log(this.priorSignup);
+
+        Object.keys(this.priorSignup).length != 0
+          ? (this.hasPriorSignup = true)
+          : (this.hasPriorSignup = false);
       },
       regenerateSignups() {
         this.$emit("regenerateSignups");
+        this.isEdit = this.hasPriorSignup ? true : false;
+
         this.checkForPriorSignup();
       },
       async closeEventDialog(val) {
         this.signUpDialog = val;
-        await this.getPriorSignup();
+        // this.checkForPriorSignup();
       },
       async getPriorSignup() {
         let oldSignups = 0;

@@ -40,8 +40,7 @@
                   v-model="selectedInstructor"
                   :items="this.userStore.userRoleInfo.instructors"
                   item-title="name"
-                  item-value="id"
-                  return-object>
+                  item-value="id">
                 </v-select>
               </v-col>
             </v-row>
@@ -172,7 +171,7 @@
           elevation="0"
           class="text-none buttonGradient text-white font-weight-bold"
           @click="createSignup()">
-          Signup
+          {{ isEdit ? "Save" : "Signup" }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -196,8 +195,9 @@
     name: "EventItemEdit",
     data() {
       return {
+        isEdit: this.sentBool,
         selectedTimeslot: {},
-        selectedPiece: {},
+        selectedPiece: this.isEdit ? this.priorSignupData.songs[0] : {},
         selectedInstructor: {},
         eventRepertoireSelection: false,
       };
@@ -209,6 +209,8 @@
       eventData: {},
       timesInfoString: "",
       timeslots: [],
+      sentBool: false,
+      priorSignupData: {},
     },
     computed: {
       ...mapStores(useEventsStore, useUserStore),
@@ -217,11 +219,31 @@
       timesInfoString(str) {
         this.timesInfoString = str;
       },
+      sentBool(newBool) {
+        this.isEdit = newBool;
+      },
+      priorSignupData(newData) {
+        this.selectedPiece = newData.songs[0];
+
+        for (let time of this.timeslots) {
+          for (let ts of time) {
+            if (ts.time === newData.timeslot) {
+              this.selectedTimeslot = ts;
+            }
+          }
+        }
+      },
     },
     mounted() {
       // Set default selected piece
       this.selectedInstructor = this.userStore.userRoleInfo.instructors[0];
-      console.log(this.userStore.userRoleInfo.instructors);
+      for (let time of this.timeslots) {
+        for (let ts of time) {
+          if (ts.time === this.priorSignupData.timeslot) {
+            this.selectedTimeslot = ts;
+          }
+        }
+      }
     },
     methods: {
       setSelectedPiece(piece) {

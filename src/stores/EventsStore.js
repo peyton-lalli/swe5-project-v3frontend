@@ -164,14 +164,13 @@ export const useEventsStore = defineStore("events", {
     // Return true if the user is signed up for the event coorespinding to the eventId passed in
     hasUserSignedUpForEvent(eventId) {
       let userStore = useUserStore();
-      let pastSignups = this.events
+      let pastSignup = this.events
         .filter((e) => e.id === eventId)[0]
         .signups.filter((s) => (s.studentinfoId = userStore.userRoleInfo.id));
-
-      if (pastSignups.length != 0) {
-        return true;
+      if (pastSignup.length != 0) {
+        return pastSignup[0];
       } else {
-        return false;
+        return {};
       }
     },
     // Return and event object from this.events for the passed in id
@@ -186,6 +185,37 @@ export const useEventsStore = defineStore("events", {
     },
     // Generate a signup for an event based on the passed in signup
     async createSignupForEvent(data, piece) {
+      let songData = {};
+
+      // Post the change to the database
+      await EventSignUpDataService.create(data)
+        .then(async (response) => {
+          await EventSongsDataService.create({
+            pieceId: piece.id,
+            eventsignupId: response.data.id,
+          })
+            .then(async (sResponse) => {
+              // Build the song data to be loaded in the local copy
+              songData = {
+                ...sResponse.data,
+                ...piece,
+              };
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      // Update the EventsStore.events with the new data
+      this.events[
+        this.events.findIndex((e) => e.id === data.eventId)
+      ].signups.push({ ...data, ...{ songs: new Array(songData) } });
+    },
+    // Generate a signup for an event based on the passed in signup
+    async editSignupForEvent(data, piece) {
       let songData = {};
 
       // Post the change to the database

@@ -15,6 +15,9 @@ class EventSignUpDataService {
   getEventId(id) {
     return http.get(`/performance-t3/eventsignup/eventid/${id}`);
   }
+  getNeedsApproval(id) {
+    return http.get(`/performance-t3/eventsignup/needsAdminApproval/${id}`);
+  }
   getStudentId(id) {
     return http.get(`/performance-t3/eventsignup/studentid/${id}`);
   }

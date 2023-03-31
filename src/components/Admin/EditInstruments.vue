@@ -16,14 +16,13 @@
       </v-row>
     </v-card-title>
     <v-card-text>
-      <v-row>
+      <v-row class="mb-3">
         <v-col cols="8" class="pl-6">
           <v-text-field></v-text-field>
         </v-col>
-        <v-col cols="4" class="pl-11">
+        <v-col cols="4" class="pl-15">
           <v-btn
             elevation="0"
-            size="large"
             class="buttonGradient text-white font-weight-bold">
             Add New
           </v-btn>

@@ -168,6 +168,21 @@ export const useUserStore = defineStore("user", {
         }
       );
     },
+    async getUserFromStudentInfoId(id) {
+      await StudentInfoDataService.getUserId(id)
+        .then((response) => {
+          UsersDataService.getSingle(response)
+            .then((response) => {
+              return response;
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     async getAllUsers() {
       let users = [];
       await UsersDataService.getAll()

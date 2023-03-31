@@ -15,29 +15,29 @@
         </v-col>
       </v-row>
     </v-card-title>
-    <v-card-text class="text-center">
-      <v-text-field label="Event Name" v-model="this.eventName"></v-text-field>
-      <v-text-field label="Date" type="date" v-model="this.date"></v-text-field>
-      <v-row v-for="timeSlot in this.timeSlots">
+    <v-card-subtitle class="text-left">
+      Event Name
+      <v-text-field v-model="this.eventName" class="mb-3"></v-text-field>
+      Date
+      <v-text-field type="date" v-model="this.date" class="mb-3"></v-text-field>
+      <v-row v-for="timeSlot in this.timeSlots" class="mb-3">
         <v-col>
-          <v-text-field
-            label="Start Time"
-            type="time"
-            v-model="timeSlot.starttime"></v-text-field>
+          Start Time
+          <v-text-field type="time" v-model="timeSlot.starttime"></v-text-field>
         </v-col>
         <v-col>
-          <v-text-field
-            label="End Time"
-            type="time"
-            v-model="timeSlot.endtime"></v-text-field>
+          End Time
+          <v-text-field type="time" v-model="timeSlot.endtime"></v-text-field>
         </v-col>
       </v-row>
-      <v-btn class="buttonGradient text-white mb-5" @click="addTimeSlots()">
-        Add Time Slot
-      </v-btn>
-
-      <v-text-field label="Interval" v-model="this.interval"></v-text-field>
-    </v-card-text>
+      <v-card-text class="text-center">
+        <v-btn class="buttonGradient text-white mb-3" @click="addTimeSlots()">
+          Add Time Slot
+        </v-btn>
+      </v-card-text>
+      Interval
+      <v-text-field v-model="this.interval" class="mb-3"></v-text-field>
+    </v-card-subtitle>
     <v-card-text class="text-center">
       <v-btn
         rounded="pill"

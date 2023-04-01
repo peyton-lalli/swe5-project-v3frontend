@@ -78,7 +78,7 @@
         isFaculty: false,
         userId: 2,
         userPicture: "",
-        userRoles: [],
+        userDefaultRole: {},
         userName: "John Doe",
         userTitleOrMajor: "",
         userClassification: "Senior",
@@ -97,11 +97,11 @@
     },
     methods: {
       retrieveInfo() {
-        this.userRoles = this.userStore.userInfo.roles;
+        this.userDefaultRole = this.userStore.userInfo.roles.default;
         this.userName = this.userStore.getFullName;
         this.userPicture = this.userStore.userInfo.picture;
 
-        if (this.userRoles[0].roleId === 1) {
+        if (this.userDefaultRole.roleId === 1) {
           this.isStudent = true;
           this.userTitleOrMajor = this.userStore.userRoleInfo.major;
           this.useClassification = this.userStore.userRoleInfo.classification;
@@ -111,7 +111,7 @@
           console.log(this.userInstructor);
           this.setUserLevelPercent(this.userLevel);
           this.setSemestersPercent(this.userSemesters);
-        } else if (this.userRoles[0].roleId === 2) {
+        } else if (this.userDefaultRole.roleId === 2) {
           this.isFaculty = true;
           this.userTitleOrMajor = this.userStore.userRoleInfo.title;
         }

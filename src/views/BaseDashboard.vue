@@ -61,14 +61,14 @@
     },
     methods: {
       async retrieveInfo() {
-        this.userRole = this.userStore.userInfo.role;
+        this.userRole = this.userStore.userInfo.roles[0].roleId;
       },
       setUserDashboard() {
-        if (this.userRole === "student") {
+        if (this.userRole === 1) {
           this.userDashboard = "StudentDashboard";
-        } else if (this.userRole === "faculty") {
+        } else if (this.userRole === 2) {
           this.userDashboard = "FacultyDashboard";
-        } else if (this.userRole === "admin") {
+        } else if (this.userRole === 3) {
           this.userDashboard = "AdminDashboard";
         }
       },

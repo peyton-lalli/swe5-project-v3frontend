@@ -48,7 +48,7 @@
     },
     data() {
       return {
-        userRole: "",
+        userDefaultRole: "",
         userDashboard: "",
       };
     },
@@ -61,14 +61,14 @@
     },
     methods: {
       async retrieveInfo() {
-        this.userRole = this.userStore.userInfo.roles[0].roleId;
+        this.userDefaultRole = this.userStore.userInfo.roles.default;
       },
       setUserDashboard() {
-        if (this.userRole === 1) {
+        if (this.userDefaultRole.roleId === 1) {
           this.userDashboard = "StudentDashboard";
-        } else if (this.userRole === 2) {
+        } else if (this.userDefaultRole.roleId === 2) {
           this.userDashboard = "FacultyDashboard";
-        } else if (this.userRole === 3) {
+        } else if (this.userDefaultRole.roleId === 3) {
           this.userDashboard = "AdminDashboard";
         }
       },

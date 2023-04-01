@@ -30,13 +30,13 @@ export const useUserStore = defineStore("user", {
     },
     // Set the userRoleInfo based on the users role
     async setUserRoleInfo() {
-      let role = this.userInfo.role;
+      let roles = this.userInfo.roles;
 
-      if (role === "student") {
+      if (roles[0].roleId === 1) {
         await this.setStudentRoleInfo();
-      } else if (role === "faculty") {
+      } else if (roles[0].roleId === 2) {
         await this.setFacultyRoleInfo();
-      } else if (role === "admin") {
+      } else if (roles[0].roleId === 3) {
       }
     },
     async setStudentRoleInfo() {

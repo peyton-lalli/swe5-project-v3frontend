@@ -150,7 +150,7 @@ export const useEventsStore = defineStore("events", {
       for (let event of this.events) {
         // We need to add support for faculty and admin once we update the database design
         // TODO @ethanimooney: add this
-        if (userStore.userInfo.role === "student") {
+        if (userStore.userInfo.roles[0].roleId === 1) {
           eventSignups = eventSignups.concat(
             event.signups.filter(
               (s) => s.studentinfoId === userStore.userRoleInfo.id

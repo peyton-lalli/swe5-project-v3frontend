@@ -61,6 +61,19 @@
                   </v-col>
                 </v-row>
               </v-col>
+              <v-col
+                cols="4"
+                align-self="center"
+                class="text-right pr-7 pl-7"
+                v-if="user.role == 'student'">
+                <v-btn
+                  elevation="0"
+                  size="small"
+                  rounded="pill"
+                  class="buttonWhite text-mediumBlue font-weight-bold">
+                  Edit
+                </v-btn>
+              </v-col>
             </v-row>
           </v-card>
         </v-col>

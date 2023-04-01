@@ -36,14 +36,14 @@
                 rounded="pill"
                 class="buttonGradient text-white font-weight-bold text-capitalize"
                 @click="
-                  this.userStore.userInfo.role === 'student'
+                  this.userStore.userInfo.roles[0].roleId === 1
                     ? hasPriorSignup
                       ? (signUpDialog = true)
                       : (signUpDialog = true)
                     : (availabilityDialog = true)
                 ">
                 {{
-                  this.userStore.userInfo.role === "student"
+                  this.userStore.userInfo.roles[0].roleId === 1
                     ? hasPriorSignup
                       ? "Edit"
                       : "Signup"

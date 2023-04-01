@@ -13,11 +13,11 @@
         {{ userTitleOrMajor }}
       </v-card-subtitle>
       <v-card-subtitle
-        v-if="userRole === 'student'"
+        v-if="isStudent"
         class="font-weight-medium text-mediumBlue">
         {{ userClassification }}
       </v-card-subtitle>
-      <v-card-text v-if="userRole === 'student'">
+      <v-card-text v-if="isStudent">
         <v-row>
           <v-col cols="12">
             <v-card-subtitle class="text-darkBlue pl-0">
@@ -74,9 +74,11 @@
     components: { NotificationItem },
     data() {
       return {
+        isStudent: false,
+        isFaculty: false,
         userId: 2,
         userPicture: "",
-        userRole: "",
+        userRoles: [],
         userName: "John Doe",
         userTitleOrMajor: "",
         userClassification: "Senior",
@@ -95,11 +97,12 @@
     },
     methods: {
       retrieveInfo() {
-        this.userRole = this.userStore.userInfo.role;
+        this.userRoles = this.userStore.userInfo.roles;
         this.userName = this.userStore.getFullName;
         this.userPicture = this.userStore.userInfo.picture;
 
-        if (this.userRole === "student") {
+        if (this.userRoles[0].roleId === 1) {
+          this.isStudent = true;
           this.userTitleOrMajor = this.userStore.userRoleInfo.major;
           this.useClassification = this.userStore.userRoleInfo.classification;
           this.userSemesters = this.userStore.userRoleInfo.semesters;
@@ -108,7 +111,8 @@
           console.log(this.userInstructor);
           this.setUserLevelPercent(this.userLevel);
           this.setSemestersPercent(this.userSemesters);
-        } else if (this.userRole === "faculty") {
+        } else if (this.userRoles[0].roleId === 2) {
+          this.isFaculty = true;
           this.userTitleOrMajor = this.userStore.userRoleInfo.title;
         }
       },

@@ -33,7 +33,7 @@
               cols="6"
               :sm="12"
               :md="12"
-              :lg="12"
+              :lg="6"
               :xl="6"
               v-for="event in eventSignups">
               <EventComponent :eventSignUpData="event" />

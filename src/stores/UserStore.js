@@ -21,6 +21,14 @@ export const useUserStore = defineStore("user", {
     // Set the login user, and load their specific role info
     async setUser(user) {
       this.userInfo = user;
+      let roles = {
+        default: this.userInfo.roles[0],
+        additional: this.userInfo.roles.shift(),
+      };
+
+      delete this.userInfo.roles;
+      this.userInfo.roles = roles;
+
       await this.setUserRoleInfo();
     },
     // Clear the login user info, logging them out
@@ -30,13 +38,13 @@ export const useUserStore = defineStore("user", {
     },
     // Set the userRoleInfo based on the users role
     async setUserRoleInfo() {
-      let role = this.userInfo.role;
+      let defaultRole = this.userInfo.roles.default;
 
-      if (role === "student") {
+      if (defaultRole.roleId === 1) {
         await this.setStudentRoleInfo();
-      } else if (role === "faculty") {
+      } else if (defaultRole.roleId === 2) {
         await this.setFacultyRoleInfo();
-      } else if (role === "admin") {
+      } else if (defaultRole.roleId === 3) {
       }
     },
     async setStudentRoleInfo() {

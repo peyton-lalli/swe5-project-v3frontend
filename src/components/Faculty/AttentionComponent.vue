@@ -23,7 +23,7 @@
               rounded="pill"
               class="buttonWhite text-mediumBlue font-weight-bold ml-1"
               @click="viewSignUpsDialog = true"
-              v-if="this.userStore.userInfo.role == 'admin'">
+              v-if="this.userStore.userInfo.roles.default.roleId === 3">
               View Signups
             </v-btn>
             <v-dialog v-model="viewSignUpsDialog" max-width="1000px">
@@ -39,7 +39,7 @@
               size="small"
               rounded="pill"
               class="buttonWhite text-mediumBlue font-weight-bold"
-              v-if="this.userStore.userInfo.role == 'faculty'">
+              v-if="this.userStore.userInfo.roles.default.roleId === 2">
               Critiques
             </v-btn>
             <v-dialog v-model="critiqueDialog" max-width="1000px">

@@ -29,7 +29,7 @@
               <v-col cols="7" align-self="center">
                 <v-card-title class="pb-0 font-weight-bold">
                   {{ user.lName }}, {{ user.fName }} -
-                  {{ user.role.toUpperCase() }}
+                  {{ user.role }}
                 </v-card-title>
                 <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
                   {{ user.email }}
@@ -102,7 +102,7 @@
       ...mapStores(useUserStore),
     },
     async mounted() {
-      this.users = await this.userStore.getAllUsers();
+      this.users = this.userStore.userRoleInfo.users;
       this.users.sort(function (a, b) {
         // Extract the last name from the "last_name" column of each result
         var lastNameA = a.lName.toUpperCase();

@@ -34,7 +34,7 @@
       <v-card-text>
         <v-card
           class="repertoireItemGradient fullBorderCurve mainblur ml-3 mr-3 pl-4 pr-4 mb-2"
-          v-for="signUp in eventData.signups">
+          v-for="signup in eventData.signups">
           <v-row>
             <v-col cols="1" align-self="center">
               <v-avatar class="bg-darkBlue">
@@ -43,20 +43,37 @@
             </v-col>
             <v-col cols="3" align-self="center">
               <v-card-title class="pb-0 font-weight-bold">
-                student.fName
+                {{
+                  this.userStore.userRoleInfo.users.filter(
+                    (u) => u.studentInfoId === signup.studentinfoId
+                  )[0].fName
+                }}
+                {{
+                  this.userStore.userRoleInfo.users.filter(
+                    (u) => u.studentInfoId === signup.studentinfoId
+                  )[0].lName
+                }}
               </v-card-title>
               <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-                student.level
+                Level:
+                {{
+                  this.userStore.userRoleInfo.users.filter(
+                    (u) => u.studentInfoId === signup.studentinfoId
+                  )[0].level
+                }}
               </v-card-subtitle>
             </v-col>
-            <v-col cols="2" align-self="center">
+            <v-col cols="3" align-self="center">
               <v-btn
                 elevation="0"
                 size="small"
                 rounded="pill"
-                width="85"
                 class="buttonWhite text-mediumBlue font-weight-bold">
-                student.type
+                {{
+                  this.userStore.userRoleInfo.users.filter(
+                    (u) => u.studentInfoId === signup.studentinfoId
+                  )[0].major
+                }}
               </v-btn>
             </v-col>
             <v-col cols="2" align-self="center">
@@ -65,10 +82,10 @@
                 size="small"
                 rounded="pill"
                 class="buttonGradient text-white font-weight-bold">
-                student.time
+                {{ signup.timeslot }}
               </v-btn>
             </v-col>
-            <v-col cols="4" align-self="center" class="text-right">
+            <v-col cols="3" align-self="center" class="text-right">
               <v-btn
                 elevation="0"
                 size="small"
@@ -101,10 +118,6 @@
       return {};
     },
     methods: {
-      printVal(val) {
-        console.log(val);
-        console.log("I Printed");
-      },
       closeViewSignUpsDialog() {
         this.$emit("closeViewSignUpsDialogEvent", false);
       },

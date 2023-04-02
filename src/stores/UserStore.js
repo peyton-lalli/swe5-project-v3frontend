@@ -45,6 +45,7 @@ export const useUserStore = defineStore("user", {
       } else if (defaultRole.roleId === 2) {
         await this.setFacultyRoleInfo();
       } else if (defaultRole.roleId === 3) {
+        await this.setAdminRoleInfo();
       }
     },
     async setStudentRoleInfo() {
@@ -148,6 +149,36 @@ export const useUserStore = defineStore("user", {
           console.log(e);
         });
     },
+    async setAdminRoleInfo() {
+      await UsersDataService.getAll()
+        .then(async (response) => {
+          this.userRoleInfo = {
+            ...this.userRoleInfo,
+            ...{ users: response.data.Users },
+          };
+
+          for (let [i, user] of this.userRoleInfo.users.entries()) {
+            // Load StudentInfo into the store
+            await StudentInfoDataService.getUserId(user.id)
+              .then((response) => {
+                let userId = user.id;
+                this.userRoleInfo.users[i] = {
+                  ...this.userRoleInfo.users[i],
+                  ...response.data.StudentInfo[0],
+                };
+                this.userRoleInfo.users[i].studentInfoId =
+                  this.userRoleInfo.users[i].id;
+                this.userRoleInfo.users[i].id = userId;
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     // Post update to the DB, then update store
     // This needs to be used carefully, it's not really safe to use yet
     // @ethanimooney: Fix?
@@ -175,33 +206,6 @@ export const useUserStore = defineStore("user", {
           console.log(e);
         }
       );
-    },
-    async getUserFromStudentInfoId(id) {
-      await StudentInfoDataService.getUserId(id)
-        .then((response) => {
-          UsersDataService.getSingle(response)
-            .then((response) => {
-              return response;
-            })
-            .catch((e) => {
-              console.log(e);
-            });
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    async getAllUsers() {
-      let users = [];
-      await UsersDataService.getAll()
-        .then((response) => {
-          users = response.data.Users;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-
-      return users;
     },
   },
 });

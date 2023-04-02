@@ -37,9 +37,7 @@
                 class="buttonGradient text-white font-weight-bold text-capitalize"
                 @click="
                   this.userStore.userInfo.roles.default.roleId === 1
-                    ? hasPriorSignup
-                      ? (signUpDialog = true)
-                      : (signUpDialog = true)
+                    ? openEventSignupDialog()
                     : (availabilityDialog = true)
                 ">
                 {{
@@ -51,15 +49,12 @@
                 }}
               </v-btn>
               <v-dialog v-model="signUpDialog" persistent max-width="1000px">
-                <EventItem
+                <EventSignupDialogBody
                   @closeEventDialogEvent="closeEventDialog"
                   @regenerateSignups="regenerateSignups()"
-                  :eventData="eventData"
-                  :priorSignupData="priorSignup"
-                  :sentBool="isEdit"
-                  :timesInfoString="timesInfoString"
-                  :timeslots="timeslots">
-                </EventItem>
+                  :signupData="signupData"
+                  :sentBool="isEdit">
+                </EventSignupDialogBody>
               </v-dialog>
             </v-col>
           </v-row>
@@ -70,7 +65,7 @@
 </template>
 
 <script>
-  import EventItem from "./EventItem.vue";
+  import EventSignupDialogBody from "./EventSignupDialogBody.vue";
   import { useEventsStore } from "../../stores/EventsStore.js";
   import { useUserStore } from "../../stores/UserStore.js";
   import { mapStores } from "pinia";
@@ -78,11 +73,12 @@
   export default {
     name: "EventSignupItem",
     components: {
-      EventItem,
+      EventSignupDialogBody,
     },
     data() {
       return {
         signUpDialog: false,
+        signupData: {},
         hasPriorSignup: false,
         priorSignup: {},
         // Needs to be implemented
@@ -188,7 +184,12 @@
             let mins = (startTime.getMinutes() + "0").slice(0, 2);
             slots.push({
               id: counter,
-              time: startTime.getHours() + ":" + mins,
+              time:
+                (startTime.getHours() < 10 ? "0" : "") +
+                startTime.getHours() +
+                ":" +
+                mins +
+                ":00",
             });
             startTime.setTime(startTime.getTime() + intervalMillis);
             counter++;
@@ -206,6 +207,34 @@
         }
 
         return total;
+      },
+      openEventSignupDialog() {
+        this.signupData = {
+          ...this.eventData,
+          ...{
+            eventId: this.eventData.id,
+            timeslots: this.timeslots,
+            timesInfoString: this.timesInfoString,
+            selectedPiece: {},
+            selectedInstructor: {},
+            selectedTimeslot: "",
+            signupId: this.priorSignup.id,
+          },
+        };
+
+        delete this.signupData.id;
+
+        if (this.hasPriorSignup) {
+          this.signupData.id = this.priorSignup.id;
+          // this.signupData.selectedPiece =
+          //   this.userStore.userRoleInfo.repertoire.filter(
+          //     (id) => id === this.priorSignup.songs[0].pieceId
+          //   )[0];
+          this.signupData.selectedPiece = this.priorSignup.songs[0];
+          this.signupData.selectedTimeslot = this.priorSignup.timeslot;
+        }
+
+        this.signUpDialog = true;
       },
     },
   };

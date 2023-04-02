@@ -4,12 +4,12 @@
       <v-card-title class="font-weight-bold text-darkBlue ml-4 mt-4">
         <v-row>
           <v-col class="text-h5 font-weight-bold pb-0 mb-2">
-            {{ eventData.title }} Signup</v-col
+            {{ signupData.title }} Signup</v-col
           >
         </v-row>
       </v-card-title>
       <v-card-subtitle class="font-weight-bold text-mediumBlue pt-0 ml-4">
-        {{ formatDate(eventData.date) }}
+        {{ formatDate(signupData.date) }}
       </v-card-subtitle>
       <v-card-subtitle class="font-weight-bold text-mediumBlue ml-4">
         {{ timesInfoString }}
@@ -151,7 +151,15 @@
                   rounded="lg"
                   size="x-small"
                   class="text-white font-weight-bold mr-2"
-                  >{{ timeSlot.time }}</v-btn
+                  >{{
+                    parseInt(timeSlot.time.substring(0, 2)) > 12
+                      ? parseInt(timeSlot.time.substring(0, 2)) -
+                        12 +
+                        timeSlot.time.substring(2, timeSlot.time.length - 3)
+                      : parseInt(timeSlot.time.substring(0, 2)) < 10
+                      ? timeSlot.time.substring(1, timeSlot.time.length - 3)
+                      : timeSlot.time.substring(0, timeSlot.time.length - 3)
+                  }}</v-btn
                 >
               </v-card-text>
             </v-row>
@@ -170,7 +178,7 @@
           rounded="lg"
           elevation="0"
           class="text-none buttonGradient text-white font-weight-bold"
-          @click="createSignup()">
+          @click="createOrEditSignup()">
           {{ isEdit ? "Save" : "Signup" }}
         </v-btn>
       </v-card-actions>
@@ -192,12 +200,14 @@
   import EventRepertoireSelectionBody from "./EventRepertoireSelectionBody.vue";
   import { mapStores } from "pinia";
   export default {
-    name: "EventItemEdit",
+    name: "EventSignupDialogBody",
     data() {
       return {
         isEdit: this.sentBool,
+        timeslots: this.signupData.timeslots,
+        timesInfoString: this.signupData.timesInfoString,
         selectedTimeslot: {},
-        selectedPiece: this.isEdit ? this.priorSignupData.songs[0] : {},
+        selectedPiece: this.signupData.selectedPiece,
         selectedInstructor: {},
         eventRepertoireSelection: false,
       };
@@ -206,48 +216,46 @@
       EventRepertoireSelectionBody,
     },
     props: {
-      eventData: {},
-      timesInfoString: "",
-      timeslots: [],
+      signupData: {},
       sentBool: false,
-      priorSignupData: {},
     },
     computed: {
       ...mapStores(useEventsStore, useUserStore),
     },
     watch: {
-      timesInfoString(str) {
-        this.timesInfoString = str;
-      },
       sentBool(newBool) {
         this.isEdit = newBool;
-      },
-      priorSignupData(newData) {
-        this.selectedPiece = newData.songs[0];
-
-        for (let time of this.timeslots) {
-          for (let ts of time) {
-            if (ts.time === newData.timeslot) {
-              this.selectedTimeslot = ts;
-            }
-          }
-        }
       },
     },
     mounted() {
       // Set default selected piece
-      this.selectedInstructor = this.userStore.userRoleInfo.instructors[0];
+      Object.keys(this.signupData.selectedInstructor).length === 0
+        ? (this.selectedInstructor = this.userStore.userRoleInfo.instructors[0])
+        : (this.selectedInstructor = this.signupData.selectedInstructor);
+
       for (let time of this.timeslots) {
         for (let ts of time) {
-          if (ts.time === this.priorSignupData.timeslot) {
+          if (ts.time === this.signupData.selectedTimeslot) {
             this.selectedTimeslot = ts;
+            console.log(this.selectedTimeslot);
+            break;
           }
         }
       }
     },
     methods: {
       setSelectedPiece(piece) {
-        this.selectedPiece = piece;
+        if (this.isEdit) {
+          let pieceId = piece.id;
+          delete piece.id;
+          this.selectedPiece = {
+            ...{ id: this.selectedPiece.id },
+            ...piece,
+            ...{ pieceId: pieceId },
+          };
+        } else {
+          this.selectedPiece = piece;
+        }
         this.eventRepertoireSelection = false;
       },
       setSelectedTimeslot(timeslot) {
@@ -260,19 +268,35 @@
         const options = { year: "numeric", month: "numeric", day: "numeric" };
         return new Date(date).toLocaleDateString("us-EN", options);
       },
-      async createSignup() {
+      async createOrEditSignup() {
         if (Object.keys(this.selectedTimeslot).length === 0) {
           alert("No Timeslot Selected");
         } else if (Object.keys(this.selectedPiece).length === 0) {
           alert("No Musical Selection Made");
         } else {
-          let data = {
-            timeslot: this.selectedTimeslot.time,
-            eventId: this.eventData.id,
-            studentinfoId: this.userStore.userRoleInfo.id,
-          };
+          if (this.isEdit) {
+            let data = {
+              id: this.signupData.id,
+              timeslot: this.selectedTimeslot.time,
+              eventId: this.signupData.eventId,
+              studentinfoId: this.userStore.userRoleInfo.id,
+            };
+            await this.eventsStore.updateSignupForEvent(
+              data,
+              this.selectedPiece
+            );
+          } else {
+            let data = {
+              timeslot: this.selectedTimeslot.time,
+              eventId: this.signupData.eventId,
+              studentinfoId: this.userStore.userRoleInfo.id,
+            };
+            await this.eventsStore.createSignupForEvent(
+              data,
+              this.selectedPiece
+            );
+          }
 
-          await this.eventsStore.createSignupForEvent(data, this.selectedPiece);
           this.$emit("regenerateSignups");
           this.closeDialog();
         }

@@ -120,6 +120,11 @@
     },
     methods: {
       filteredList() {
+        console.log(
+          this.userStore.userRoleInfo.repertoire.filter((piece) =>
+            piece.name.toLowerCase().includes(this.input.toLowerCase())
+          )
+        );
         return this.userStore.userRoleInfo.repertoire.filter((piece) =>
           piece.name.toLowerCase().includes(this.input.toLowerCase())
         );
@@ -136,6 +141,7 @@
     },
     watch: {
       sentSelectedPiece(newPiece) {
+        console.log(newPiece);
         this.selectedPiece = newPiece;
       },
     },

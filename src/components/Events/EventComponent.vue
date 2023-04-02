@@ -17,8 +17,9 @@
                 Edit
               </v-btn>
               <v-dialog v-model="editDialog" persistent max-width="1000px">
-                <EventItem @closeEventDialogEvent="closeEventDialog">
-                </EventItem>
+                <EventSignupDialogBody
+                  @closeEventDialogEvent="closeEventDialog">
+                </EventSignupDialogBody>
               </v-dialog>
             </v-col>
           </v-row>
@@ -95,14 +96,14 @@
 </template>
 
 <script>
-  import EventItem from "./EventItem.vue";
+  import EventSignupDialogBody from "./EventSignupDialogBody.vue";
   import { useEventsStore } from "../../stores/EventsStore.js";
   import { useUserStore } from "../../stores/UserStore.js";
   import { mapStores } from "pinia";
   export default {
     name: "EventComponent",
     components: {
-      EventItem,
+      EventSignupDialogBody,
     },
     data() {
       return {

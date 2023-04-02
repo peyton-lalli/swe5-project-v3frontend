@@ -89,6 +89,8 @@ export const useEventsStore = defineStore("events", {
       let data = {};
       await PiecesDataService.getId(id)
         .then((response) => {
+          response.data.Pieces[0].pieceId = response.data.Pieces[0].id;
+          delete response.data.Pieces[0].id;
           data = {
             ...this.data,
             // This might be an issue, as it would have two 'id' fields - may need to change to mimmick composer below
@@ -168,6 +170,7 @@ export const useEventsStore = defineStore("events", {
         .filter((e) => e.id === eventId)[0]
         .signups.filter((s) => (s.studentinfoId = userStore.userRoleInfo.id));
       if (pastSignup.length != 0) {
+        console.log(pastSignup[0]);
         return pastSignup[0];
       } else {
         return {};
@@ -215,15 +218,18 @@ export const useEventsStore = defineStore("events", {
       ].signups.push({ ...data, ...{ songs: new Array(songData) } });
     },
     // Generate a signup for an event based on the passed in signup
-    async editSignupForEvent(data, piece) {
+    async updateSignupForEvent(data, piece) {
+      console.log("*******UPDATE");
+      console.log(data);
+      console.log(piece);
       let songData = {};
 
       // Post the change to the database
-      await EventSignUpDataService.create(data)
+      await EventSignUpDataService.update(data.id, data)
         .then(async (response) => {
-          await EventSongsDataService.create({
-            pieceId: piece.id,
-            eventsignupId: response.data.id,
+          await EventSongsDataService.update(piece.id, {
+            pieceId: piece.pieceId,
+            eventsignupId: data.id,
           })
             .then(async (sResponse) => {
               // Build the song data to be loaded in the local copy
@@ -241,9 +247,15 @@ export const useEventsStore = defineStore("events", {
         });
 
       // Update the EventsStore.events with the new data
-      this.events[
-        this.events.findIndex((e) => e.id === data.eventId)
-      ].signups.push({ ...data, ...{ songs: new Array(songData) } });
+
+      let index = this.events.findIndex((e) => e.id === data.eventId);
+      let signupIndex = this.events[index].signups.findIndex(
+        (id) => id === data.id
+      );
+      this.events[index].signups[signupIndex] = {
+        ...data,
+        ...{ songs: new Array(songData) },
+      };
     },
 
     async createNewEvent(eventData, timeData) {

@@ -81,14 +81,12 @@
         };
         let eventTimes = new Array();
         for (let time of this.timeSlots) {
-          if (time.starttime == "" || time.endtime == "") {
-            eventTimes.push({
-              starttime: time.starttime,
-              endtime: time.endtime,
-              interval: this.interval,
-              eventId: "",
-            });
-          }
+          eventTimes.push({
+            starttime: time.starttime,
+            endtime: time.endtime,
+            interval: this.interval,
+            eventId: "",
+          });
         }
         await this.eventsStore.createNewEvent(eventData, eventTimes);
         this.$emit("closeCreateEventDialogEvent");

@@ -170,7 +170,7 @@ export default {
     };
   },
   props: {
-    currentEvent: Array,
+    currentEvent: {},
   },
   async mounted() {
     await this.getStudents();

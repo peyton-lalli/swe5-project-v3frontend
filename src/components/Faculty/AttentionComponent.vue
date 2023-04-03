@@ -10,10 +10,7 @@
               </v-row>
             </v-card-title>
             <v-card-subtitle class="font-weight-bold text-darkBlue">
-              {{ event.date }}
-            </v-card-subtitle>
-            <v-card-subtitle class="font-weight-bold text-darkBlue pb-1">
-              {{ event.time }}
+              {{ event.date.split("T")[0] }}
             </v-card-subtitle>
           </v-card>
           <v-card-actions class="pt-0">
@@ -21,23 +18,25 @@
               elevation="0"
               size="small"
               rounded="pill"
-              class="buttonWhite text-mediumBlue font-weight-bold ml-1">
+              class="buttonWhite text-mediumBlue font-weight-bold ml-1"
+            >
               View Signups
             </v-btn>
             <v-btn
+              v-if="this.userStore.userInfo.roles.additional.roleId == 2"
               @click="critiqueDialog = true"
               elevation="0"
               size="small"
               rounded="pill"
               class="buttonWhite text-mediumBlue font-weight-bold"
-              v-if="this.userStore.userInfo.role == 'faculty'">
+            >
               Critiques
             </v-btn>
             <v-dialog v-model="critiqueDialog" max-width="1000px">
               <CritiqueListComponent
-                @closeCritiqueDialogEvent="
-                  closeCritiqueDialog
-                "></CritiqueListComponent>
+                @closeCritiqueDialogEvent="closeCritiqueDialog"
+                :currentEvent="event"
+              />
             </v-dialog>
           </v-card-actions>
         </v-card>
@@ -47,52 +46,50 @@
 </template>
 
 <script>
-  import CritiqueListComponent from "./CritiqueListComponent.vue";
-  import { useUserStore } from "../../stores/UserStore.js";
-  import { mapStores } from "pinia";
-  export default {
-    name: "AttentionComponent",
-    components: {
-      CritiqueListComponent,
+import CritiqueListComponent from "./CritiqueListComponent.vue";
+import { useUserStore } from "../../stores/UserStore.js";
+import { useEventsStore } from "../../stores/EventsStore.js";
+import { mapStores } from "pinia";
+export default {
+  name: "AttentionComponent",
+  components: {
+    CritiqueListComponent,
+  },
+  data() {
+    return {
+      critiqueDialog: false,
+      events: [],
+    };
+  },
+  methods: {
+    closeCritiqueDialog(val) {
+      this.critiqueDialog = val;
     },
-    data() {
-      return {
-        critiqueDialog: false,
-        events: [
-          {
-            title: "Vocal Jury",
-            date: "04/22/2023",
-            time: "1:00 PM - 5:00 PM",
-          },
-        ],
-      };
-    },
-    methods: {
-      closeCritiqueDialog(val) {
-        this.critiqueDialog = val;
-      },
-    },
-    computed: {
-      ...mapStores(useUserStore),
-    },
-  };
+  },
+  computed: {
+    ...mapStores(useUserStore, useEventsStore),
+  },
+  mounted() {
+    this.events = this.eventsStore.events;
+  },
+};
 </script>
 
 <style scoped>
-  /* Overwrites the opacity filter put on card subtitles */
-  .v-card-subtitle {
-    opacity: 100%;
-  }
-  .outlined.v-btn {
-    background: linear-gradient(white, white) padding-box,
-      linear-gradient(to right, #aabed2, #ddeaf6) border-box;
-    border-radius: 50em;
-    border: 4px solid transparent;
-  }
-  .outlined.v-card {
-    background: linear-gradient(white, white) padding-box,
-      linear-gradient(to right, #aabed2, #ddeaf6) border-box;
-    border-radius: 10px;
-    border: 7px solid transparent;
-  }
+/* Overwrites the opacity filter put on card subtitles */
+.v-card-subtitle {
+  opacity: 100%;
+}
+.outlined.v-btn {
+  background: linear-gradient(white, white) padding-box,
+    linear-gradient(to right, #aabed2, #ddeaf6) border-box;
+  border-radius: 50em;
+  border: 4px solid transparent;
+}
+.outlined.v-card {
+  background: linear-gradient(white, white) padding-box,
+    linear-gradient(to right, #aabed2, #ddeaf6) border-box;
+  border-radius: 10px;
+  border: 7px solid transparent;
+}
 </style>

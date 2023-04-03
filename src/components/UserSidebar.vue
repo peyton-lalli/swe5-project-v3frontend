@@ -58,9 +58,7 @@
       <v-card-title class="text-white font-weight-bold text-h5 pb-4">
         Notifications
       </v-card-title>
-      <v-card-text class="pb-0">
-        <NotificationItem></NotificationItem>
-      </v-card-text>
+      <v-card-text class="pb-0"> </v-card-text>
     </v-card>
   </v-container>
 </template>

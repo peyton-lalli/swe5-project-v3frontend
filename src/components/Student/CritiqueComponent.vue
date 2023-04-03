@@ -18,7 +18,7 @@
         Jurors
       </v-card-title>
       <v-card-text class="pl-0">
-        <v-row justify="center" class="pl-5 mt-0">
+        <v-row justify="center" class="pl-5 mt-0" v-for="juror in jurors">
           <v-col cols="1" align-self="center">
             <v-avatar class="bg-darkBlue">
               <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
@@ -26,31 +26,7 @@
           </v-col>
           <v-col cols="11">
             <v-card-title class="text-darkBlue font-weight-bold pb-2">
-              {{ jurors.at(0) }}
-            </v-card-title>
-          </v-col>
-        </v-row>
-        <v-row justify="center" class="pl-5 mt-0">
-          <v-col cols="1" align-self="center">
-            <v-avatar class="bg-darkBlue">
-              <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
-            </v-avatar>
-          </v-col>
-          <v-col cols="11">
-            <v-card-title class="text-darkBlue font-weight-bold pb-2">
-              {{ jurors.at(1) }}
-            </v-card-title>
-          </v-col>
-        </v-row>
-        <v-row justify="center" class="pl-5 mt-0">
-          <v-col cols="1" align-self="center">
-            <v-avatar class="bg-darkBlue">
-              <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
-            </v-avatar>
-          </v-col>
-          <v-col cols="11">
-            <v-card-title class="text-darkBlue font-weight-bold pb-2">
-              {{ jurors.at(2) }}
+              {{ juror }}
             </v-card-title>
           </v-col>
         </v-row>
@@ -60,33 +36,13 @@
           Musical Selection
         </v-card-title>
         <v-card-text class="pl-0">
-          <v-row justify="center">
+          <v-row justify="center" v-for="song in songs">
             <v-col align-self="center">
               <v-card-title class="pb-0 font-weight-bold">
-                {{ songs.at(0).name }}
+                {{ song.name }}
               </v-card-title>
               <v-card-subtitle class="text-darkBlue font-weight-bold">
-                {{ songs.at(0).person }}
-              </v-card-subtitle>
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-col align-self="center">
-              <v-card-title class="pb-0 font-weight-bold">
-                {{ songs.at(0).name }}
-              </v-card-title>
-              <v-card-subtitle class="text-darkBlue font-weight-bold">
-                {{ songs.at(0).person }}
-              </v-card-subtitle>
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-col align-self="center">
-              <v-card-title class="pb-0 font-weight-bold">
-                {{ songs.at(0).name }}
-              </v-card-title>
-              <v-card-subtitle class="text-darkBlue font-weight-bold">
-                {{ songs.at(0).person }}
+                {{ song.person }}
               </v-card-subtitle>
             </v-col>
           </v-row>
@@ -113,7 +69,7 @@
         title: "Jury Critique",
         type: "Soprano",
         date: "04/22/2023",
-        jurors: ["Nathan Lalli", "Peyton Powell", "Logan Demaray"],
+        jurors: ["Nathan Lalli", "Peyton Lalli", "Logan Demaray"],
         songs: [
           {
             name: "Bird Upon The Tree",

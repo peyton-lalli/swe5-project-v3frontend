@@ -1,8 +1,7 @@
 <template>
   <v-container fluid class="studentComponent">
     <v-card
-      elevation="12"
-      class="fullBorderCurve mb-4"
+      class="fullBorderCurve mb-4 mainBlur"
       v-for="students in this.students">
       <v-card-text class="pt-0">
         <v-row justify="left" class="mt-0 flex-nowrap">

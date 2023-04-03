@@ -2,7 +2,7 @@
   <v-container fluid class="eventComponent pt-5">
     <v-row>
       <v-col>
-        <v-card class="eventsGradient fullBorderCurve mainblur">
+        <v-card class="eventsGradient fullBorderCurve mainBlur">
           <v-card class="ma-3 fullBorderCurve" elevation="0">
             <v-card-title class="font-weight-bold text-black">
               <v-row>
@@ -23,15 +23,15 @@
               rounded="pill"
               class="buttonWhite text-mediumBlue font-weight-bold ml-1"
               @click="viewSignUpsDialog = true"
-              v-if="this.userStore.userInfo.roles.default.roleId === 3"
-            >
+              v-if="this.userStore.userInfo.roles.default.roleId === 3">
               View Signups
             </v-btn>
             <v-dialog v-model="viewSignUpsDialog" max-width="1000px">
               <ViewSignUps
                 :eventData="eventData"
-                @closeViewSignUpsDialogEvent="closeViewSignUpsDialog"
-              ></ViewSignUps>
+                @closeViewSignUpsDialogEvent="
+                  closeViewSignUpsDialog
+                "></ViewSignUps>
             </v-dialog>
             <v-btn
               @click="critiqueDialog = true"
@@ -39,15 +39,15 @@
               size="small"
               rounded="pill"
               class="buttonWhite text-mediumBlue font-weight-bold"
-              v-if="this.userStore.userInfo.roles.default.roleId === 2"
-            >
+              v-if="this.userStore.userInfo.roles.default.roleId === 2">
               Critiques
             </v-btn>
             <v-dialog v-model="critiqueDialog" max-width="1000px">
               <CritiqueListComponent
                 :currentEvent="eventData"
-                @closeCritiqueDialogEvent="closeCritiqueDialog"
-              ></CritiqueListComponent>
+                @closeCritiqueDialogEvent="
+                  closeCritiqueDialog
+                "></CritiqueListComponent>
             </v-dialog>
           </v-card-actions>
         </v-card>
@@ -57,83 +57,83 @@
 </template>
 
 <script>
-import CritiqueListComponent from "./CritiqueListComponent.vue";
-import ViewSignUps from "./ViewSignUps.vue";
-import { useUserStore } from "../../stores/UserStore.js";
-import { useEventsStore } from "../../stores/EventsStore.js";
-import { mapStores } from "pinia";
-export default {
-  name: "AttentionComponent",
-  components: {
-    CritiqueListComponent,
-    ViewSignUps,
-  },
-  data() {
-    return {
-      viewSignUpsDialog: false,
-      critiqueDialog: false,
-    };
-  },
-  props: {
-    eventData: {},
-  },
-  methods: {
-    printEvents(event) {
-      console.log(event);
+  import CritiqueListComponent from "./CritiqueListComponent.vue";
+  import ViewSignUps from "./ViewSignUps.vue";
+  import { useUserStore } from "../../stores/UserStore.js";
+  import { useEventsStore } from "../../stores/EventsStore.js";
+  import { mapStores } from "pinia";
+  export default {
+    name: "AttentionComponent",
+    components: {
+      CritiqueListComponent,
+      ViewSignUps,
     },
-    closeCritiqueDialog(val) {
-      this.critiqueDialog = val;
+    data() {
+      return {
+        viewSignUpsDialog: false,
+        critiqueDialog: false,
+      };
     },
-    closeViewSignUpsDialog(val) {
-      this.viewSignUpsDialog = val;
+    props: {
+      eventData: {},
     },
-    formatDate(date) {
-      const options = { year: "numeric", month: "numeric", day: "numeric" };
-      return new Date(date).toLocaleDateString("us-EN", options);
-    },
-    createTimesInfoString(event) {
-      let timesString = "";
-      for (let i = 0; i < event.times.length; i++) {
-        timesString +=
-          this.get12HourTimeString(new Date(event.times[i].startTime)) +
-          " - " +
-          this.get12HourTimeString(new Date(event.times[i].endTime));
-        if (i + 1 < event.times.length) {
-          timesString += " & ";
+    methods: {
+      printEvents(event) {
+        console.log(event);
+      },
+      closeCritiqueDialog(val) {
+        this.critiqueDialog = val;
+      },
+      closeViewSignUpsDialog(val) {
+        this.viewSignUpsDialog = val;
+      },
+      formatDate(date) {
+        const options = { year: "numeric", month: "numeric", day: "numeric" };
+        return new Date(date).toLocaleDateString("us-EN", options);
+      },
+      createTimesInfoString(event) {
+        let timesString = "";
+        for (let i = 0; i < event.times.length; i++) {
+          timesString +=
+            this.get12HourTimeString(new Date(event.times[i].startTime)) +
+            " - " +
+            this.get12HourTimeString(new Date(event.times[i].endTime));
+          if (i + 1 < event.times.length) {
+            timesString += " & ";
+          }
         }
-      }
 
-      return timesString;
+        return timesString;
+      },
+      get12HourTimeString(t) {
+        let hours = t.getHours();
+        let suffix = hours >= 12 ? "PM" : "AM";
+        hours = ((hours + 11) % 12) + 1;
+        let minutes = t.getMinutes() === 0 ? "00" : t.getMinutes();
+        return hours + ":" + minutes + suffix;
+      },
     },
-    get12HourTimeString(t) {
-      let hours = t.getHours();
-      let suffix = hours >= 12 ? "PM" : "AM";
-      hours = ((hours + 11) % 12) + 1;
-      let minutes = t.getMinutes() === 0 ? "00" : t.getMinutes();
-      return hours + ":" + minutes + suffix;
+    computed: {
+      ...mapStores(useEventsStore, useUserStore),
     },
-  },
-  computed: {
-    ...mapStores(useEventsStore, useUserStore),
-  },
-};
+  };
 </script>
 
 <style scoped>
-/* Overwrites the opacity filter put on card subtitles */
-.v-card-subtitle {
-  opacity: 100%;
-}
-.outlined.v-btn {
-  background: linear-gradient(white, white) padding-box,
-    linear-gradient(to right, #aabed2, #ddeaf6) border-box;
-  border-radius: 50em;
-  border: 4px solid transparent;
-}
-.outlined.v-card {
-  background: linear-gradient(white, white) padding-box,
-    linear-gradient(to right, #aabed2, #ddeaf6) border-box;
-  border-radius: 10px;
-  border: 7px solid transparent;
-}
+  /* Overwrites the opacity filter put on card subtitles */
+  .v-card-subtitle {
+    opacity: 100%;
+  }
+  .outlined.v-btn {
+    background: linear-gradient(white, white) padding-box,
+      linear-gradient(to right, #aabed2, #ddeaf6) border-box;
+    border-radius: 50em;
+    border: 4px solid transparent;
+  }
+  .outlined.v-card {
+    background: linear-gradient(white, white) padding-box,
+      linear-gradient(to right, #aabed2, #ddeaf6) border-box;
+    border-radius: 10px;
+    border: 7px solid transparent;
+  }
 </style>

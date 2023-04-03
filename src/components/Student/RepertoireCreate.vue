@@ -21,17 +21,12 @@
     <v-card-text>
       <v-select
         bg-color="lightBlue"
-        placeholder="Instrument"
         :items="['Voice', 'Piano', 'Trumpet']"
         variant="solo"></v-select>
     </v-card-text>
     <v-card-subtitle class="font-weight-bold"> Piece Title </v-card-subtitle>
     <v-card-text>
-      <v-text-field
-        bg-color="lightBlue"
-        placeholder="Piece Title"
-        variant="solo"
-        class="text-mediumBlue">
+      <v-text-field bg-color="lightBlue" variant="solo" class="text-mediumBlue">
       </v-text-field>
     </v-card-text>
     <v-card-subtitle class="font-weight-bold"> Composer </v-card-subtitle>
@@ -39,39 +34,39 @@
       <v-select
         bg-color="lightBlue"
         class="text-blue"
-        placeholder="Start typing for suggestions"
-        :items="['Beethoven', 'Bach', 'Tchaikovsky']"
+        :items="this.composerList"
         variant="solo"></v-select>
     </v-card-text>
     <v-card-text>
       <v-row>
-        <v-col
-          ><v-checkbox class="font-weight-bold" label="Foreign"></v-checkbox
+        <v-col cols="6"
+          ><v-checkbox
+            class="font-weight-bold"
+            label="Foreign"
+            v-model="foreign"></v-checkbox
         ></v-col>
         <!-- Opens missing information pop-up-->
-        <v-col class="text-right">
-          <v-btn
-            @click="createDialog = true"
-            elevation="0"
-            class="text-lightBlue mt-16">
-            Missing some information? Request it here.
-          </v-btn>
-          <v-dialog v-model="createDialog" persistent max-width="600px">
-            <MissingInformation
-              @closeCourseDialogEvent="closeCreateDialog"></MissingInformation>
-          </v-dialog>
+        <v-col v-if="foreign">
+          <v-card-subtitle class="font-weight-bold"> Language </v-card-subtitle>
+          <v-text-field
+            bg-color="lightBlue"
+            variant="solo"
+            class="text-mediumBlue"></v-text-field>
         </v-col>
       </v-row>
     </v-card-text>
     <v-card-subtitle> Translation </v-card-subtitle>
     <v-card-text>
-      <v-text-field
-        bg-color="lightBlue"
-        placeholder="Translation"
-        variant="solo"
-        color="mediumBlue">
-      </v-text-field>
+      <v-textarea bg-color="lightBlue" variant="solo" color="mediumBlue">
+      </v-textarea>
     </v-card-text>
+    <v-btn @click="createDialog = true" elevation="0" class="text-darkBlue">
+      Missing some information? Request it here.
+    </v-btn>
+    <v-dialog v-model="createDialog" persistent max-width="600px">
+      <MissingInformation
+        @closeCourseDialogEvent="closeCreateDialog"></MissingInformation>
+    </v-dialog>
     <v-card-actions class="mx-auto font-weight-bold">
       <v-btn @click="closeDialog()" color="darkBlue">Add</v-btn>
       <v-btn @click="closeDialog()" color="red">Cancel</v-btn>
@@ -81,6 +76,7 @@
 
 <script>
   import MissingInformation from "../MissingInformation.vue";
+  import ComposerDataService from "../../services/composers.js";
   export default {
     name: "RepertoireCreate",
     components: {
@@ -94,8 +90,14 @@
             person: "Blitzstein, Marc",
           },
         ],
+        composers: [],
         createDialog: false,
+        foreign: false,
       };
+    },
+    computed: {
+      composers: ComposerDataService.getAll(),
+      composerList: this.getNamesForComposers(composers),
     },
     methods: {
       closeDialog() {
@@ -104,6 +106,14 @@
 
       closeCreateDialog(val) {
         this.createDialog = val;
+      },
+
+      getNamesForComposers(composers) {
+        let composerList = [];
+        for (let composer of composers) {
+          composerList.push(composer.name);
+        }
+        return composerList;
       },
     },
   };

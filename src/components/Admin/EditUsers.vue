@@ -27,9 +27,20 @@
                 </v-avatar>
               </v-col>
               <v-col cols="7" align-self="center">
-                <v-card-title class="pb-0 font-weight-bold">
-                  {{ user.lName }}, {{ user.fName }} -
-                  {{ user.role.toUpperCase() }}
+                <v-card-title
+                  class="pb-0 font-weight-bold"
+                  v-if="user.roleId === 1">
+                  {{ user.lName }}, {{ user.fName }} - Student
+                </v-card-title>
+                <v-card-title
+                  class="pb-0 font-weight-bold"
+                  v-if="user.roleId === 2">
+                  {{ user.lName }}, {{ user.fName }} - Faculty
+                </v-card-title>
+                <v-card-title
+                  class="pb-0 font-weight-bold"
+                  v-if="user.roleId === 3">
+                  {{ user.lName }}, {{ user.fName }} - Admin
                 </v-card-title>
                 <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
                   {{ user.email }}
@@ -102,7 +113,8 @@
       ...mapStores(useUserStore),
     },
     async mounted() {
-      this.users = await this.userStore.getAllUsers();
+      this.users = this.userStore.userRoleInfo.users;
+      console.log(this.users[0]);
       this.users.sort(function (a, b) {
         // Extract the last name from the "last_name" column of each result
         var lastNameA = a.lName.toUpperCase();

@@ -1,16 +1,19 @@
 <template>
   <v-container fluid class="eventComponent pt-5">
-    <v-row v-for="event in this.events">
+    <v-row>
       <v-col>
         <v-card class="eventsGradient fullBorderCurve mainblur">
           <v-card class="ma-3 fullBorderCurve" elevation="0">
             <v-card-title class="font-weight-bold text-black">
               <v-row>
-                <v-col class="pb-0">{{ event.title }}</v-col>
+                <v-col class="pb-0">{{ eventData.type }} </v-col>
               </v-row>
             </v-card-title>
             <v-card-subtitle class="font-weight-bold text-darkBlue">
-              {{ event.date.split("T")[0] }}
+              {{ formatDate(eventData.date) }}
+            </v-card-subtitle>
+            <v-card-subtitle class="font-weight-bold text-darkBlue pb-1">
+              {{ createTimesInfoString(eventData) }}
             </v-card-subtitle>
           </v-card>
           <v-card-actions class="pt-0">
@@ -19,9 +22,17 @@
               size="small"
               rounded="pill"
               class="buttonWhite text-mediumBlue font-weight-bold ml-1"
+              @click="viewSignUpsDialog = true"
+              v-if="this.userStore.userInfo.roles.default.roleId === 3"
             >
               View Signups
             </v-btn>
+            <v-dialog v-model="viewSignUpsDialog" max-width="1000px">
+              <ViewSignUps
+                :eventData="eventData"
+                @closeViewSignUpsDialogEvent="closeViewSignUpsDialog"
+              ></ViewSignUps>
+            </v-dialog>
             <v-btn
               v-if="this.userStore.userInfo.roles.additional.roleId == 2"
               @click="critiqueDialog = true"
@@ -29,6 +40,7 @@
               size="small"
               rounded="pill"
               class="buttonWhite text-mediumBlue font-weight-bold"
+              v-if="this.userStore.userInfo.roles.default.roleId === 2"
             >
               Critiques
             </v-btn>
@@ -47,6 +59,7 @@
 
 <script>
 import CritiqueListComponent from "./CritiqueListComponent.vue";
+import ViewSignUps from "./ViewSignUps.vue";
 import { useUserStore } from "../../stores/UserStore.js";
 import { useEventsStore } from "../../stores/EventsStore.js";
 import { mapStores } from "pinia";
@@ -54,23 +67,55 @@ export default {
   name: "AttentionComponent",
   components: {
     CritiqueListComponent,
+    ViewSignUps,
   },
   data() {
     return {
+      viewSignUpsDialog: false,
       critiqueDialog: false,
-      events: [],
     };
   },
+  props: {
+    eventData: {},
+  },
   methods: {
+    printEvents(event) {
+      console.log(event);
+    },
     closeCritiqueDialog(val) {
       this.critiqueDialog = val;
     },
+    closeViewSignUpsDialog(val) {
+      this.viewSignUpsDialog = val;
+    },
+    formatDate(date) {
+      const options = { year: "numeric", month: "numeric", day: "numeric" };
+      return new Date(date).toLocaleDateString("us-EN", options);
+    },
+    createTimesInfoString(event) {
+      let timesString = "";
+      for (let i = 0; i < event.times.length; i++) {
+        timesString +=
+          this.get12HourTimeString(new Date(event.times[i].startTime)) +
+          " - " +
+          this.get12HourTimeString(new Date(event.times[i].endTime));
+        if (i + 1 < event.times.length) {
+          timesString += " & ";
+        }
+      }
+
+      return timesString;
+    },
+    get12HourTimeString(t) {
+      let hours = t.getHours();
+      let suffix = hours >= 12 ? "PM" : "AM";
+      hours = ((hours + 11) % 12) + 1;
+      let minutes = t.getMinutes() === 0 ? "00" : t.getMinutes();
+      return hours + ":" + minutes + suffix;
+    },
   },
   computed: {
-    ...mapStores(useUserStore, useEventsStore),
-  },
-  mounted() {
-    this.events = this.eventsStore.events;
+    ...mapStores(useEventsStore, useUserStore),
   },
 };
 </script>

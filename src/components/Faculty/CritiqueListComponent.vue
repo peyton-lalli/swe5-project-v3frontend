@@ -21,7 +21,7 @@
     <v-row>
       <v-col>
         <v-card-subtitle class="font-weight-bold text-darkBlue">
-          {{ this.currentEvent.date.split("T")[0] }}
+          {{ this.currentEvent.date }}
         </v-card-subtitle>
         <v-card-subtitle
           class="font-weight-bold text-darkBlue"

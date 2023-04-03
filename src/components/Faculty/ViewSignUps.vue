@@ -45,12 +45,12 @@
               <v-card-title class="pb-0 font-weight-bold">
                 {{
                   this.userStore.userRoleInfo.users.filter(
-                    (u) => u.studentInfoId === signup.studentinfoId
+                    (u) => u.studentinfoId === signup.studentinfoId
                   )[0].fName
                 }}
                 {{
                   this.userStore.userRoleInfo.users.filter(
-                    (u) => u.studentInfoId === signup.studentinfoId
+                    (u) => u.studentinfoId === signup.studentinfoId
                   )[0].lName
                 }}
               </v-card-title>
@@ -58,7 +58,7 @@
                 Level:
                 {{
                   this.userStore.userRoleInfo.users.filter(
-                    (u) => u.studentInfoId === signup.studentinfoId
+                    (u) => u.studentinfoId === signup.studentinfoId
                   )[0].level
                 }}
               </v-card-subtitle>
@@ -71,7 +71,7 @@
                 class="buttonWhite text-mediumBlue font-weight-bold">
                 {{
                   this.userStore.userRoleInfo.users.filter(
-                    (u) => u.studentInfoId === signup.studentinfoId
+                    (u) => u.studentinfoId === signup.studentinfoId
                   )[0].major
                 }}
               </v-btn>

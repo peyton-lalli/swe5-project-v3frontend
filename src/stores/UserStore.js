@@ -4,6 +4,7 @@ import PiecesDataService from "../services/pieces.js";
 import ComposersDataService from "../services/composers.js";
 import InstructorDataService from "../services/instructors.js";
 import UsersDataService from "../services/users.js";
+import UsersRoleDataService from "../services/userrole.js";
 
 export const useUserStore = defineStore("user", {
   state: () => ({ userInfo: "", userRoleInfo: "" }),
@@ -156,19 +157,44 @@ export const useUserStore = defineStore("user", {
             ...this.userRoleInfo,
             ...{ users: response.data.Users },
           };
-
           for (let [i, user] of this.userRoleInfo.users.entries()) {
-            // Load StudentInfo into the store
-            await StudentInfoDataService.getUserId(user.id)
-              .then((response) => {
-                let userId = user.id;
+            await UsersRoleDataService.getRolesByUserId(user.id)
+              .then(async (roleResponse) => {
+                let roles = roleResponse.data.UserRoles;
+
+                let additionalRoleData = {};
+                if (roles[0].roleId === 1) {
+                  await StudentInfoDataService.getUserId(user.id)
+                    .then((response) => {
+                      let userId = user.id;
+                      additionalRoleData = response.data.StudentInfo[0];
+                      let sId = additionalRoleData.id;
+                      additionalRoleData.id = userId;
+                      additionalRoleData.studentinfoId = sId;
+                    })
+                    .catch((e) => {
+                      console.log(e);
+                    });
+                } else if (roles[0].roleId === 2) {
+                  await InstructorDataService.getSingle(user.id)
+                    .then(async (response) => {
+                      let userId = user.id;
+                      additionalRoleData = response.data.Instructors[0];
+                      let sId = additionalRoleData.id;
+                      additionalRoleData.id = userId;
+                      additionalRoleData.instructorId = sId;
+                    })
+                    .catch((e) => {
+                      console.log(e);
+                    });
+                }
+
                 this.userRoleInfo.users[i] = {
-                  ...this.userRoleInfo.users[i],
-                  ...response.data.StudentInfo[0],
+                  ...additionalRoleData,
+                  ...user,
+                  ...roles[0],
                 };
-                this.userRoleInfo.users[i].studentInfoId =
-                  this.userRoleInfo.users[i].id;
-                this.userRoleInfo.users[i].id = userId;
+                console.log(this.userRoleInfo.users[i]);
               })
               .catch((e) => {
                 console.log(e);

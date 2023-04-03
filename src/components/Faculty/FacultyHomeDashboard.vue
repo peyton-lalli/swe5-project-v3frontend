@@ -28,8 +28,8 @@
           Events Requiring Your Attention
         </v-card-title>
         <v-card-text>
-          <v-row>
-            <AttentionComponent />
+          <v-row v-for="event in this.eventsStore.events">
+            <AttentionComponent :eventData="event" />
           </v-row>
         </v-card-text>
       </v-card>
@@ -77,6 +77,8 @@
 import EventComponent from "../Events/EventComponent.vue";
 import StudentComponent from "./StudentComponent.vue";
 import AttentionComponent from "./AttentionComponent.vue";
+import { useEventsStore } from "../../stores/EventsStore.js";
+import { mapStores } from "pinia";
 export default {
   name: "FacultyHomeDashboard",
   components: {
@@ -88,6 +90,9 @@ export default {
     return {
       toggleText: "Upcoming",
     };
+  },
+  computed: {
+    ...mapStores(useEventsStore),
   },
   methods: {
     changeText() {

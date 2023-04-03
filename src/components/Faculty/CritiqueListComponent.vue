@@ -181,23 +181,25 @@ export default {
   methods: {
     async getStudents() {
       for (let i = 0; i < this.currentEvent.signups.length; i++) {
+        var userId = 0;
         var tempstudent = {
           name: "",
           classification: "",
-          time: this.currentEvent.signups[i].time,
+          time: this.currentEvent.signups[i].timeslot,
           type: "TEMP",
           picture: "",
         };
-        var userId = "";
         await studentinfo
-          .getUserId(this.currentEvent.signups[i].studentId)
+          .getUserId(this.currentEvent.signups[i].studentinfoId)
           .then((response) => {
-            userId = response.data.userId;
-            tempstudent.classification = response.data.classification;
+            userId = response.data.StudentInfo[i].userId;
+            tempstudent.classification =
+              response.data.StudentInfo[i].classification;
           });
         await users.getSingle(userId).then((response) => {
-          tempstudent.picture = response.data.type;
-          tempstudent.name = response.data.fName + " " + response.data.lName;
+          tempstudent.picture = response.data.Users[i].picture;
+          tempstudent.name =
+            response.data.Users[i].fName + " " + response.data.Users[i].lName;
           this.students.push(tempstudent);
         });
       }

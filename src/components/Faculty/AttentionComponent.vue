@@ -34,7 +34,6 @@
               ></ViewSignUps>
             </v-dialog>
             <v-btn
-              v-if="this.userStore.userInfo.roles.additional.roleId == 2"
               @click="critiqueDialog = true"
               elevation="0"
               size="small"
@@ -46,9 +45,9 @@
             </v-btn>
             <v-dialog v-model="critiqueDialog" max-width="1000px">
               <CritiqueListComponent
+                :currentEvent="eventData"
                 @closeCritiqueDialogEvent="closeCritiqueDialog"
-                :currentEvent="event"
-              />
+              ></CritiqueListComponent>
             </v-dialog>
           </v-card-actions>
         </v-card>

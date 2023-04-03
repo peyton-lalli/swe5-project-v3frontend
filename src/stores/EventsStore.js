@@ -89,6 +89,8 @@ export const useEventsStore = defineStore("events", {
       let data = {};
       await PiecesDataService.getId(id)
         .then((response) => {
+          response.data.Pieces[0].pieceId = response.data.Pieces[0].id;
+          delete response.data.Pieces[0].id;
           data = {
             ...this.data,
             // This might be an issue, as it would have two 'id' fields - may need to change to mimmick composer below
@@ -164,14 +166,13 @@ export const useEventsStore = defineStore("events", {
     // Return true if the user is signed up for the event coorespinding to the eventId passed in
     hasUserSignedUpForEvent(eventId) {
       let userStore = useUserStore();
-      let pastSignups = this.events
+      let pastSignup = this.events
         .filter((e) => e.id === eventId)[0]
         .signups.filter((s) => (s.studentinfoId = userStore.userRoleInfo.id));
-
-      if (pastSignups.length != 0) {
-        return true;
+      if (pastSignup.length != 0) {
+        return pastSignup[0];
       } else {
-        return false;
+        return {};
       }
     },
     // Return and event object from this.events for the passed in id
@@ -187,13 +188,51 @@ export const useEventsStore = defineStore("events", {
     // Generate a signup for an event based on the passed in signup
     async createSignupForEvent(data, piece) {
       let songData = {};
+      let signupId = 0;
 
       // Post the change to the database
       await EventSignUpDataService.create(data)
         .then(async (response) => {
+          signupId = response.data.id;
           await EventSongsDataService.create({
             pieceId: piece.id,
             eventsignupId: response.data.id,
+          })
+            .then(async (sResponse) => {
+              // Build the song data to be loaded in the local copy
+              let sId = sResponse.data.id;
+              songData = {
+                ...sResponse.data,
+                ...piece,
+              };
+              songData.id = sId;
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      // Update the EventsStore.events with the new data
+      this.events[
+        this.events.findIndex((e) => e.id === data.eventId)
+      ].signups.push({
+        ...data,
+        ...{ songs: new Array(songData), ...{ id: signupId } },
+      });
+    },
+    // Generate a signup for an event based on the passed in signup
+    async updateSignupForEvent(data, piece) {
+      let songData = {};
+
+      // Post the change to the database
+      await EventSignUpDataService.update(data.id, data)
+        .then(async (response) => {
+          await EventSongsDataService.update(piece.id, {
+            pieceId: piece.pieceId,
+            eventsignupId: data.id,
           })
             .then(async (sResponse) => {
               // Build the song data to be loaded in the local copy
@@ -211,9 +250,15 @@ export const useEventsStore = defineStore("events", {
         });
 
       // Update the EventsStore.events with the new data
-      this.events[
-        this.events.findIndex((e) => e.id === data.eventId)
-      ].signups.push({ ...data, ...{ songs: new Array(songData) } });
+
+      let index = this.events.findIndex((e) => e.id === data.eventId);
+      let signupIndex = this.events[index].signups.findIndex(
+        (s) => s.id === data.id
+      );
+      this.events[index].signups[signupIndex] = {
+        ...data,
+        ...{ songs: new Array(songData) },
+      };
     },
 
     async createNewEvent(eventData, timeData) {

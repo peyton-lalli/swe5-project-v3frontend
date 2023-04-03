@@ -37,9 +37,7 @@
                 class="buttonGradient text-white font-weight-bold text-capitalize"
                 @click="
                   this.userStore.userInfo.roles.default.roleId === 1
-                    ? hasPriorSignup
-                      ? (editDialog = true)
-                      : (signUpDialog = true)
+                    ? openEventSignupDialog()
                     : (availabilityDialog = true)
                 ">
                 {{
@@ -51,13 +49,12 @@
                 }}
               </v-btn>
               <v-dialog v-model="signUpDialog" persistent max-width="1000px">
-                <EventItem
+                <EventSignupDialogBody
                   @closeEventDialogEvent="closeEventDialog"
                   @regenerateSignups="regenerateSignups()"
-                  :eventData="eventData"
-                  :timesInfoString="timesInfoString"
-                  :timeslots="timeslots">
-                </EventItem>
+                  :signupData="signupData"
+                  :sentBool="isEdit">
+                </EventSignupDialogBody>
               </v-dialog>
             </v-col>
           </v-row>
@@ -68,7 +65,7 @@
 </template>
 
 <script>
-  import EventItem from "./EventItem.vue";
+  import EventSignupDialogBody from "./EventSignupDialogBody.vue";
   import { useEventsStore } from "../../stores/EventsStore.js";
   import { useUserStore } from "../../stores/UserStore.js";
   import { mapStores } from "pinia";
@@ -76,26 +73,30 @@
   export default {
     name: "EventSignupItem",
     components: {
-      EventItem,
+      EventSignupDialogBody,
     },
     data() {
       return {
         signUpDialog: false,
+        signupData: {},
         hasPriorSignup: false,
+        priorSignup: {},
         // Needs to be implemented
         availabilityDialog: false,
         timesInfoString: "",
         // Creation of timeslots needs to probably just be moved to the eventsStore
         // TODO @ethanimooney: Do this
         timeslots: [],
+        isEdit: this.hasPriorSignup ? true : false,
       };
     },
     computed: {
       ...mapStores(useEventsStore, useUserStore),
     },
-    async mounted() {
+    mounted() {
       this.timesInfoString = this.createTimesInfoString();
       this.checkForPriorSignup();
+      this.isEdit = this.hasPriorSignup ? true : false;
       this.timeslots = this.getTimeSlots(this.eventData.times);
     },
     props: {
@@ -130,35 +131,21 @@
         return new Date(date).toLocaleDateString("us-EN", options);
       },
       checkForPriorSignup() {
-        this.hasPriorSignup = this.eventsStore.hasUserSignedUpForEvent(
+        this.priorSignup = this.eventsStore.hasUserSignedUpForEvent(
           this.eventData.id
         );
+
+        Object.keys(this.priorSignup).length != 0
+          ? (this.hasPriorSignup = true)
+          : (this.hasPriorSignup = false);
       },
       regenerateSignups() {
         this.$emit("regenerateSignups");
         this.checkForPriorSignup();
+        this.isEdit = this.hasPriorSignup ? true : false;
       },
       async closeEventDialog(val) {
         this.signUpDialog = val;
-        await this.getPriorSignup();
-      },
-      async getPriorSignup() {
-        let oldSignups = 0;
-        await EventSignUpDataService.getEventId(this.eventData.id)
-          .then((response) => {
-            oldSignups = response.data.EventSignUp.filter((es) => {
-              return es.studentinfoId === this.userStore.userRoleInfo.id;
-            });
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-
-        if (oldSignups.length >= 1) {
-          this.hasPriorSignup = true;
-        } else {
-          this.hasPriorSignup = false;
-        }
       },
       getTimeSlots(times) {
         let counter = 1;
@@ -175,7 +162,12 @@
             let mins = (startTime.getMinutes() + "0").slice(0, 2);
             slots.push({
               id: counter,
-              time: startTime.getHours() + ":" + mins,
+              time:
+                (startTime.getHours() < 10 ? "0" : "") +
+                startTime.getHours() +
+                ":" +
+                mins +
+                ":00",
             });
             startTime.setTime(startTime.getTime() + intervalMillis);
             counter++;
@@ -193,6 +185,30 @@
         }
 
         return total;
+      },
+      openEventSignupDialog() {
+        this.signupData = {
+          ...this.eventData,
+          ...{
+            eventId: this.eventData.id,
+            timeslots: this.timeslots,
+            timesInfoString: this.timesInfoString,
+            selectedPiece: {},
+            selectedInstructor: {},
+            selectedTimeslot: "",
+            signupId: this.priorSignup.id,
+          },
+        };
+
+        delete this.signupData.id;
+
+        if (this.hasPriorSignup) {
+          this.signupData.id = this.priorSignup.id;
+          this.signupData.selectedPiece = this.priorSignup.songs[0];
+          this.signupData.selectedTimeslot = this.priorSignup.timeslot;
+        }
+
+        this.signUpDialog = true;
       },
     },
   };

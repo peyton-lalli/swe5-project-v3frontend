@@ -28,7 +28,7 @@
                       class="rounded-lg"
                       @click="setSelectedPiece(piece)"
                       :class="
-                        this.selectedPiece.id === piece.id
+                        this.selectedPiece.pieceId === piece.id
                           ? 'selectedSong'
                           : 'unSelectedSong'
                       "
@@ -45,7 +45,7 @@
                             <v-card-subtitle
                               class="font-weight-bold"
                               :class="
-                                this.selectedPiece.id === piece.id
+                                this.selectedPiece.pieceId === piece.id
                                   ? 'text-white'
                                   : 'text-darkGray'
                               ">
@@ -54,7 +54,7 @@
                             <v-card-subtitle
                               class="font-weight-bold"
                               :class="
-                                this.selectedPiece.id === piece.id
+                                this.selectedPiece.pieceId === piece.id
                                   ? 'text-lightBlue'
                                   : 'text-darkBlue'
                               ">
@@ -111,6 +111,7 @@
           return {};
         },
       },
+      isEdit: false,
     },
     components: {
       VVirtualScroll,
@@ -126,6 +127,7 @@
       },
       setSelectedPiece(piece) {
         this.selectedPiece = piece;
+        this.selectedPiece.pieceId = piece.id;
       },
       emitSelectedPiece() {
         this.$emit("setSelectedPiece", this.selectedPiece);

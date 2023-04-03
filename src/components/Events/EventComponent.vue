@@ -8,7 +8,7 @@
               {{ eventData.type }}
             </v-col>
             <v-col class="text-right">
-              <v-btn
+              <!-- <v-btn
                 elevation="0"
                 rounded="pill"
                 size="small"
@@ -17,9 +17,10 @@
                 Edit
               </v-btn>
               <v-dialog v-model="editDialog" persistent max-width="1000px">
-                <EventItem @closeEventDialogEvent="closeEventDialog">
-                </EventItem>
-              </v-dialog>
+                <EventSignupDialogBody
+                  @closeEventDialogEvent="closeEventDialog">
+                </EventSignupDialogBody>
+              </v-dialog> -->
             </v-col>
           </v-row>
         </v-card-title>
@@ -27,7 +28,25 @@
           {{ formatDate(new Date(eventData.date)) }}
         </v-card-subtitle>
         <v-card-subtitle class="font-weight-semi-bold text-darkBlue pt-0">
-          {{ eventSignUpData.timeslot }}
+          {{
+            parseInt(eventSignUpData.timeslot.substring(0, 2)) > 12
+              ? parseInt(eventSignUpData.timeslot.substring(0, 2)) -
+                12 +
+                eventSignUpData.timeslot.substring(
+                  2,
+                  eventSignUpData.timeslot.length - 3
+                ) +
+                " PM"
+              : parseInt(eventSignUpData.timeslot.substring(0, 2)) < 10
+              ? eventSignUpData.timeslot.substring(
+                  1,
+                  eventSignUpData.timeslot.length - 3
+                ) + " AM"
+              : eventSignUpData.timeslot.substring(
+                  0,
+                  eventSignUpData.timeslot.length - 3
+                ) + " AM"
+          }}
         </v-card-subtitle>
 
         <v-row justify="center" class="pl-5">
@@ -95,14 +114,14 @@
 </template>
 
 <script>
-  import EventItem from "./EventItem.vue";
+  import EventSignupDialogBody from "./EventSignupDialogBody.vue";
   import { useEventsStore } from "../../stores/EventsStore.js";
   import { useUserStore } from "../../stores/UserStore.js";
   import { mapStores } from "pinia";
   export default {
     name: "EventComponent",
     components: {
-      EventItem,
+      EventSignupDialogBody,
     },
     data() {
       return {

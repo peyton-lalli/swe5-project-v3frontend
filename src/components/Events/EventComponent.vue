@@ -8,7 +8,7 @@
               {{ eventData.type }}
             </v-col>
             <v-col class="text-right">
-              <v-btn
+              <!-- <v-btn
                 elevation="0"
                 rounded="pill"
                 size="small"
@@ -20,7 +20,7 @@
                 <EventSignupDialogBody
                   @closeEventDialogEvent="closeEventDialog">
                 </EventSignupDialogBody>
-              </v-dialog>
+              </v-dialog> -->
             </v-col>
           </v-row>
         </v-card-title>

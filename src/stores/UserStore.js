@@ -73,12 +73,14 @@ export const useUserStore = defineStore("user", {
       await ComposersDataService.getAll()
         .then((response) => {
           for (let piece in this.userRoleInfo.repertoire) {
+            let composer = response.data.Composers.filter(
+              (c) => c.id === this.userRoleInfo.repertoire[piece].composerId
+            )[0];
+            delete composer.id;
             this.userRoleInfo.repertoire[piece] = {
               ...this.userRoleInfo.repertoire[piece],
               ...{
-                composer: response.data.Composers.filter(
-                  (c) => c.id === this.userRoleInfo.repertoire[piece].composerId
-                )[0],
+                composer: composer,
               },
             };
           }

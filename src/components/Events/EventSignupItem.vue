@@ -93,7 +93,7 @@
     computed: {
       ...mapStores(useEventsStore, useUserStore),
     },
-    async mounted() {
+    mounted() {
       this.timesInfoString = this.createTimesInfoString();
       this.checkForPriorSignup();
       this.isEdit = this.hasPriorSignup ? true : false;
@@ -131,11 +131,9 @@
         return new Date(date).toLocaleDateString("us-EN", options);
       },
       checkForPriorSignup() {
-        console.log("Prior Signup Check");
         this.priorSignup = this.eventsStore.hasUserSignedUpForEvent(
           this.eventData.id
         );
-        console.log(this.priorSignup);
 
         Object.keys(this.priorSignup).length != 0
           ? (this.hasPriorSignup = true)
@@ -143,31 +141,11 @@
       },
       regenerateSignups() {
         this.$emit("regenerateSignups");
-        this.isEdit = this.hasPriorSignup ? true : false;
-
         this.checkForPriorSignup();
+        this.isEdit = this.hasPriorSignup ? true : false;
       },
       async closeEventDialog(val) {
         this.signUpDialog = val;
-        // this.checkForPriorSignup();
-      },
-      async getPriorSignup() {
-        let oldSignups = 0;
-        await EventSignUpDataService.getEventId(this.eventData.id)
-          .then((response) => {
-            oldSignups = response.data.EventSignUp.filter((es) => {
-              return es.studentinfoId === this.userStore.userRoleInfo.id;
-            });
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-
-        if (oldSignups.length >= 1) {
-          this.hasPriorSignup = true;
-        } else {
-          this.hasPriorSignup = false;
-        }
       },
       getTimeSlots(times) {
         let counter = 1;
@@ -226,10 +204,6 @@
 
         if (this.hasPriorSignup) {
           this.signupData.id = this.priorSignup.id;
-          // this.signupData.selectedPiece =
-          //   this.userStore.userRoleInfo.repertoire.filter(
-          //     (id) => id === this.priorSignup.songs[0].pieceId
-          //   )[0];
           this.signupData.selectedPiece = this.priorSignup.songs[0];
           this.signupData.selectedTimeslot = this.priorSignup.timeslot;
         }

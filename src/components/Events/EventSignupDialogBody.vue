@@ -186,6 +186,7 @@
     <v-dialog v-model="eventRepertoireSelection" max-width="600px">
       <EventRepertoireSelectionBody
         :sent-selected-piece="selectedPiece"
+        :is-edit="isEdit"
         @setSelectedPiece="setSelectedPiece"
         @closeEventRepertoireSelection="
           eventRepertoireSelection = false
@@ -208,6 +209,7 @@
         timesInfoString: this.signupData.timesInfoString,
         selectedTimeslot: {},
         selectedPiece: this.signupData.selectedPiece,
+        selectedEventSong: this.signupData.selectedPiece,
         selectedInstructor: {},
         eventRepertoireSelection: false,
       };
@@ -237,7 +239,6 @@
         for (let ts of time) {
           if (ts.time === this.signupData.selectedTimeslot) {
             this.selectedTimeslot = ts;
-            console.log(this.selectedTimeslot);
             break;
           }
         }
@@ -246,13 +247,16 @@
     methods: {
       setSelectedPiece(piece) {
         if (this.isEdit) {
+          this.selectedPiece = piece;
           let pieceId = piece.id;
-          delete piece.id;
-          this.selectedPiece = {
-            ...{ id: this.selectedPiece.id },
+          let selectedEventId = this.selectedEventSong.id;
+          this.selectedEventSong = {
             ...piece,
             ...{ pieceId: pieceId },
           };
+
+          delete this.selectedEventSong.id;
+          this.selectedEventSong.id = selectedEventId;
         } else {
           this.selectedPiece = piece;
         }
@@ -281,9 +285,10 @@
               eventId: this.signupData.eventId,
               studentinfoId: this.userStore.userRoleInfo.id,
             };
+
             await this.eventsStore.updateSignupForEvent(
               data,
-              this.selectedPiece
+              this.selectedEventSong
             );
           } else {
             let data = {

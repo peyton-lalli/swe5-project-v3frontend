@@ -28,7 +28,25 @@
           {{ formatDate(new Date(eventData.date)) }}
         </v-card-subtitle>
         <v-card-subtitle class="font-weight-semi-bold text-darkBlue pt-0">
-          {{ eventSignUpData.timeslot }}
+          {{
+            parseInt(eventSignUpData.timeslot.substring(0, 2)) > 12
+              ? parseInt(eventSignUpData.timeslot.substring(0, 2)) -
+                12 +
+                eventSignUpData.timeslot.substring(
+                  2,
+                  eventSignUpData.timeslot.length - 3
+                ) +
+                " PM"
+              : parseInt(eventSignUpData.timeslot.substring(0, 2)) < 10
+              ? eventSignUpData.timeslot.substring(
+                  1,
+                  eventSignUpData.timeslot.length - 3
+                ) + " AM"
+              : eventSignUpData.timeslot.substring(
+                  0,
+                  eventSignUpData.timeslot.length - 3
+                ) + " AM"
+          }}
         </v-card-subtitle>
 
         <v-row justify="center" class="pl-5">

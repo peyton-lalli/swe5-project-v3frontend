@@ -170,7 +170,6 @@ export const useEventsStore = defineStore("events", {
         .filter((e) => e.id === eventId)[0]
         .signups.filter((s) => (s.studentinfoId = userStore.userRoleInfo.id));
       if (pastSignup.length != 0) {
-        console.log(pastSignup[0]);
         return pastSignup[0];
       } else {
         return {};
@@ -189,20 +188,24 @@ export const useEventsStore = defineStore("events", {
     // Generate a signup for an event based on the passed in signup
     async createSignupForEvent(data, piece) {
       let songData = {};
+      let signupId = 0;
 
       // Post the change to the database
       await EventSignUpDataService.create(data)
         .then(async (response) => {
+          signupId = response.data.id;
           await EventSongsDataService.create({
             pieceId: piece.id,
             eventsignupId: response.data.id,
           })
             .then(async (sResponse) => {
               // Build the song data to be loaded in the local copy
+              let sId = sResponse.data.id;
               songData = {
                 ...sResponse.data,
                 ...piece,
               };
+              songData.id = sId;
             })
             .catch((e) => {
               console.log(e);
@@ -215,13 +218,13 @@ export const useEventsStore = defineStore("events", {
       // Update the EventsStore.events with the new data
       this.events[
         this.events.findIndex((e) => e.id === data.eventId)
-      ].signups.push({ ...data, ...{ songs: new Array(songData) } });
+      ].signups.push({
+        ...data,
+        ...{ songs: new Array(songData), ...{ id: signupId } },
+      });
     },
     // Generate a signup for an event based on the passed in signup
     async updateSignupForEvent(data, piece) {
-      console.log("*******UPDATE");
-      console.log(data);
-      console.log(piece);
       let songData = {};
 
       // Post the change to the database
@@ -250,7 +253,7 @@ export const useEventsStore = defineStore("events", {
 
       let index = this.events.findIndex((e) => e.id === data.eventId);
       let signupIndex = this.events[index].signups.findIndex(
-        (id) => id === data.id
+        (s) => s.id === data.id
       );
       this.events[index].signups[signupIndex] = {
         ...data,

@@ -4,6 +4,7 @@ import PiecesDataService from "../services/pieces.js";
 import ComposersDataService from "../services/composers.js";
 import InstructorDataService from "../services/instructors.js";
 import UsersDataService from "../services/users.js";
+import UsersRoleDataService from "../services/userrole.js";
 
 export const useUserStore = defineStore("user", {
   state: () => ({ userInfo: "", userRoleInfo: "" }),
@@ -45,6 +46,7 @@ export const useUserStore = defineStore("user", {
       } else if (defaultRole.roleId === 2) {
         await this.setFacultyRoleInfo();
       } else if (defaultRole.roleId === 3) {
+        await this.setAdminRoleInfo();
       }
     },
     async setStudentRoleInfo() {
@@ -150,6 +152,61 @@ export const useUserStore = defineStore("user", {
           console.log(e);
         });
     },
+    async setAdminRoleInfo() {
+      await UsersDataService.getAll()
+        .then(async (response) => {
+          this.userRoleInfo = {
+            ...this.userRoleInfo,
+            ...{ users: response.data.Users },
+          };
+          for (let [i, user] of this.userRoleInfo.users.entries()) {
+            await UsersRoleDataService.getRolesByUserId(user.id)
+              .then(async (roleResponse) => {
+                let roles = roleResponse.data.UserRoles;
+
+                let additionalRoleData = {};
+                if (roles[0].roleId === 1) {
+                  await StudentInfoDataService.getUserId(user.id)
+                    .then((response) => {
+                      let userId = user.id;
+                      additionalRoleData = response.data.StudentInfo[0];
+                      let sId = additionalRoleData.id;
+                      additionalRoleData.id = userId;
+                      additionalRoleData.studentinfoId = sId;
+                    })
+                    .catch((e) => {
+                      console.log(e);
+                    });
+                } else if (roles[0].roleId === 2) {
+                  await InstructorDataService.getSingle(user.id)
+                    .then(async (response) => {
+                      let userId = user.id;
+                      additionalRoleData = response.data.Instructors[0];
+                      let sId = additionalRoleData.id;
+                      additionalRoleData.id = userId;
+                      additionalRoleData.instructorId = sId;
+                    })
+                    .catch((e) => {
+                      console.log(e);
+                    });
+                }
+
+                this.userRoleInfo.users[i] = {
+                  ...additionalRoleData,
+                  ...user,
+                  ...roles[0],
+                };
+                console.log(this.userRoleInfo.users[i]);
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     // Post update to the DB, then update store
     // This needs to be used carefully, it's not really safe to use yet
     // @ethanimooney: Fix?
@@ -177,18 +234,6 @@ export const useUserStore = defineStore("user", {
           console.log(e);
         }
       );
-    },
-    async getAllUsers() {
-      let users = [];
-      await UsersDataService.getAll()
-        .then((response) => {
-          users = response.data.Users;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-
-      return users;
     },
   },
 });

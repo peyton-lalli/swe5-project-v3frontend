@@ -7,7 +7,7 @@ class UserRoleDataService {
     return http.put(`/performance-t3/userrole/${id}`, data);
   }
   getRolesByUserId(id) {
-    return http.get(`/performance-t3/userrole/user/${id}`);
+    return http.get(`/performance-t3/userrole/userId/${id}`);
   }
   getAll() {
     return http.get("/performance-t3/userrole");

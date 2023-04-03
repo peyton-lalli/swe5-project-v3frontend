@@ -25,8 +25,8 @@
           </v-row>
         </v-card-title>
         <v-card-text>
-          <v-row>
-            <AttentionComponent />
+          <v-row v-for="event in this.eventsStore.events">
+            <AttentionComponent :eventData="event" />
           </v-row>
         </v-card-text>
       </v-card>
@@ -119,6 +119,8 @@
   import EditInstruments from "./EditInstruments.vue";
   import EditComposers from "./EditComposers.vue";
   import SendEmail from "./SendEmail.vue";
+  import { useEventsStore } from "../../stores/EventsStore.js";
+  import { mapStores } from "pinia";
   export default {
     name: "AdminHomeDashboard",
     components: {
@@ -156,6 +158,9 @@
       closeSendEmailDialog(val) {
         this.sendEmailDialog = val;
       },
+    },
+    computed: {
+      ...mapStores(useEventsStore),
     },
   };
 </script>

@@ -29,15 +29,11 @@
     components: {
       AttentionComponent,
     },
-    data() {
-      return {};
-    },
     methods: {
       closeViewAllEventsDialog() {
         this.$emit("closeViewAllEventsDialogEvent");
       },
     },
-    computed: {},
     props: {
       eventsData: {},
     },

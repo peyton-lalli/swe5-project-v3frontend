@@ -23,8 +23,9 @@
         v-model="roles"
         bg-color="lightBlue"
         class="text-blue"
-        :items="['Student', 'Faculty', 'Accompanist', 'Admin']"
+        :options="roleItems"
         variant="solo"
+        return-object
         multiple>
       </v-select>
     </v-card-subtitle>
@@ -57,7 +58,17 @@
     data() {
       return {
         roles: [],
+        roleItems: [
+          { value: 1, label: "Student" },
+          { value: 2, label: "Faculty" },
+          { value: 3, label: "Admin" },
+          { value: 4, label: "Accompanist" },
+        ],
       };
+    },
+    mounted() {
+      this.setRoles();
+      console.log(this.roles);
     },
     methods: {
       closeEditSingleUserDialog() {
@@ -72,19 +83,19 @@
           return "Admin";
         }
       },
-    },
-    created: {
       setRoles() {
-        console.log("Setting Roles");
         if (this.userData.roleId === 1) {
-          this.roles.push("Student");
+          this.roles.push(this.roleItems[0]);
         } else if (this.userData.roleId === 2) {
-          this.roles.push("Faculty");
+          this.roles.push(this.roleItems[1]);
         } else if (this.userData.roleId === 3) {
-          this.roles.push("Admin");
+          this.roles.push(this.roleItems[2]);
+        } else if (this.userData.roleId === 4) {
+          this.roles.push(this.roleItems[3]);
         }
       },
     },
+
     props: {
       userData: {},
     },

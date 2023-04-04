@@ -70,11 +70,13 @@
   import { useUserStore } from "../../stores/UserStore.js";
   import { mapStores } from "pinia";
   import EventSignUpDataService from "../../services/eventsignup.js";
+  import { DateTimeMixin } from "../../mixins/DateTimeMixin.js";
   export default {
     name: "EventSignupItem",
     components: {
       EventSignupDialogBody,
     },
+    mixins: [DateTimeMixin],
     data() {
       return {
         signUpDialog: false,
@@ -94,7 +96,7 @@
       ...mapStores(useEventsStore, useUserStore),
     },
     mounted() {
-      this.timesInfoString = this.createTimesInfoString();
+      this.timesInfoString = this.createTimesInfoString(this.eventData.times);
       this.checkForPriorSignup();
       this.isEdit = this.hasPriorSignup ? true : false;
       this.timeslots = this.getTimeSlots(this.eventData.times);
@@ -103,33 +105,6 @@
       eventData: {},
     },
     methods: {
-      createTimesInfoString() {
-        let timesString = "";
-        for (let i = 0; i < this.eventData.times.length; i++) {
-          timesString +=
-            this.get12HourTimeString(
-              new Date(this.eventData.times[i].startTime)
-            ) +
-            " - " +
-            this.get12HourTimeString(new Date(this.eventData.times[i].endTime));
-          if (i + 1 < this.eventData.times.length) {
-            timesString += " & ";
-          }
-        }
-
-        return timesString;
-      },
-      get12HourTimeString(t) {
-        let hours = t.getHours();
-        let suffix = hours >= 12 ? "PM" : "AM";
-        hours = ((hours + 11) % 12) + 1;
-        let minutes = t.getMinutes() === 0 ? "00" : t.getMinutes();
-        return hours + ":" + minutes + suffix;
-      },
-      formatDate(date) {
-        const options = { year: "numeric", month: "numeric", day: "numeric" };
-        return new Date(date).toLocaleDateString("us-EN", options);
-      },
       checkForPriorSignup() {
         this.priorSignup = this.eventsStore.hasUserSignedUpForEvent(
           this.eventData.id

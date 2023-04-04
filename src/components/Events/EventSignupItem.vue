@@ -76,7 +76,6 @@
     components: {
       EventSignupDialogBody,
     },
-    mixins: [DateTimeMixin],
     data() {
       return {
         signUpDialog: false,
@@ -92,6 +91,7 @@
         isEdit: this.hasPriorSignup ? true : false,
       };
     },
+    mixins: [DateTimeMixin],
     computed: {
       ...mapStores(useEventsStore, useUserStore),
     },

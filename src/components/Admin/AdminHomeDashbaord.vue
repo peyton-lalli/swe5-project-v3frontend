@@ -15,12 +15,20 @@
                 Add new
               </v-btn>
               <v-btn
+                @click="viewAllEvents = true"
                 elevation="0"
                 size="small"
                 rounded="pill"
                 class="buttonGradient text-white font-weight-bold">
                 View All
               </v-btn>
+              <v-dialog v-model="viewAllEvents" max-width="800px">
+                <ViewAllEvents
+                  :eventsData="this.eventsStore.events"
+                  @closeViewAllEventsDialogEvent="
+                    this.viewAllEvents = false
+                  "></ViewAllEvents>
+              </v-dialog>
             </v-col>
           </v-row>
         </v-card-title>
@@ -32,7 +40,7 @@
       </v-card>
       <v-card class="attentionPane mainBlur rounded-lg">
         <v-card-title class="font-weight-bold text-darkBlue">
-          Events Requiring Your Attention
+          Alerts Requiring Your Attention
         </v-card-title>
         <v-card-text>
           <v-row> </v-row>
@@ -119,6 +127,7 @@
   import EditInstruments from "./EditInstruments.vue";
   import EditComposers from "./EditComposers.vue";
   import SendEmail from "./SendEmail.vue";
+  import ViewAllEvents from "./ViewAllEvents.vue";
   import { useEventsStore } from "../../stores/EventsStore.js";
   import { mapStores } from "pinia";
   export default {
@@ -132,6 +141,7 @@
       EditInstruments,
       EditComposers,
       SendEmail,
+      ViewAllEvents,
     },
     data() {
       return {
@@ -140,25 +150,10 @@
         editInstDialog: false,
         editComposersDialog: false,
         sendEmailDialog: false,
+        viewAllEvents: false,
       };
     },
-    methods: {
-      closeCreateEventDialog(val) {
-        this.createEventDialog = val;
-      },
-      closeEditUsersDialog(val) {
-        this.editUsersDialog = val;
-      },
-      closeEditInstDialog(val) {
-        this.editInstDialog = val;
-      },
-      closeEditComposersDialog(val) {
-        this.editComposersDialog = val;
-      },
-      closeSendEmailDialog(val) {
-        this.sendEmailDialog = val;
-      },
-    },
+    methods: {},
     computed: {
       ...mapStores(useEventsStore),
     },

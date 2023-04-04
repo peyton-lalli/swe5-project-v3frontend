@@ -200,6 +200,7 @@
   import { useUserStore } from "../../stores/UserStore.js";
   import EventRepertoireSelectionBody from "./EventRepertoireSelectionBody.vue";
   import { mapStores } from "pinia";
+  import { DateTimeMixin } from "../../mixins/DateTimeMixin.js";
   export default {
     name: "EventSignupDialogBody",
     data() {
@@ -214,6 +215,7 @@
         eventRepertoireSelection: false,
       };
     },
+    mixins: [DateTimeMixin],
     components: {
       EventRepertoireSelectionBody,
     },
@@ -267,10 +269,6 @@
       },
       closeDialog() {
         this.$emit("closeEventDialogEvent", false);
-      },
-      formatDate(date) {
-        const options = { year: "numeric", month: "numeric", day: "numeric" };
-        return new Date(date).toLocaleDateString("us-EN", options);
       },
       async createOrEditSignup() {
         if (Object.keys(this.selectedTimeslot).length === 0) {

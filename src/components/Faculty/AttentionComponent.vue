@@ -13,7 +13,7 @@
               {{ formatDate(eventData.date) }}
             </v-card-subtitle>
             <v-card-subtitle class="font-weight-bold text-darkBlue pb-1">
-              {{ createTimesInfoString(eventData) }}
+              {{ createTimesInfoString(eventData.times) }}
             </v-card-subtitle>
           </v-card>
           <v-card-actions class="pt-0">
@@ -62,6 +62,7 @@
   import { useUserStore } from "../../stores/UserStore.js";
   import { useEventsStore } from "../../stores/EventsStore.js";
   import { mapStores } from "pinia";
+  import { DateTimeMixin } from "../../mixins/DateTimeMixin.js";
   export default {
     name: "AttentionComponent",
     components: {
@@ -74,6 +75,7 @@
         critiqueDialog: false,
       };
     },
+    mixins: [DateTimeMixin],
     props: {
       eventData: {},
     },
@@ -86,31 +88,6 @@
       },
       closeViewSignUpsDialog(val) {
         this.viewSignUpsDialog = val;
-      },
-      formatDate(date) {
-        const options = { year: "numeric", month: "numeric", day: "numeric" };
-        return new Date(date).toLocaleDateString("us-EN", options);
-      },
-      createTimesInfoString(event) {
-        let timesString = "";
-        for (let i = 0; i < event.times.length; i++) {
-          timesString +=
-            this.get12HourTimeString(new Date(event.times[i].startTime)) +
-            " - " +
-            this.get12HourTimeString(new Date(event.times[i].endTime));
-          if (i + 1 < event.times.length) {
-            timesString += " & ";
-          }
-        }
-
-        return timesString;
-      },
-      get12HourTimeString(t) {
-        let hours = t.getHours();
-        let suffix = hours >= 12 ? "PM" : "AM";
-        hours = ((hours + 11) % 12) + 1;
-        let minutes = t.getMinutes() === 0 ? "00" : t.getMinutes();
-        return hours + ":" + minutes + suffix;
       },
     },
     computed: {

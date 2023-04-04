@@ -118,6 +118,8 @@
   import { useEventsStore } from "../../stores/EventsStore.js";
   import { useUserStore } from "../../stores/UserStore.js";
   import { mapStores } from "pinia";
+  import { DateTimeMixin } from "../../mixins/DateTimeMixin.js";
+
   export default {
     name: "EventComponent",
     components: {
@@ -129,6 +131,7 @@
         eventData: [],
       };
     },
+    mixins: [DateTimeMixin],
     props: {
       eventSignUpData: {},
     },
@@ -146,10 +149,6 @@
         this.eventData = this.eventsStore.findEventForId(
           this.eventSignUpData.eventId
         );
-      },
-      formatDate(date) {
-        const options = { year: "numeric", month: "numeric", day: "numeric" };
-        return new Date(date).toLocaleDateString("us-EN", options);
       },
     },
   };

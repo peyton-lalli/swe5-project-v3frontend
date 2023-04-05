@@ -2,13 +2,16 @@
   <v-card>
     <v-card-title class="font-weight-bold text-darkBlue">
       <v-row>
-        <v-col class="text-h5 font-weight-bold"> {{ title }} Critique</v-col>
+        <v-col class="text-h5 font-weight-bold">
+          {{ this.currentEvent.title }} Critique</v-col
+        >
         <v-col class="text-right">
           <v-btn elevation="0" @click="closeCritiqueEditDialog()">
             <v-icon>
               <font-awesome-icon
                 icon="a-solid fa-circle-xmark"
-                class="text-lightBlue">
+                class="text-lightBlue"
+              >
               </font-awesome-icon>
             </v-icon>
           </v-btn>
@@ -16,7 +19,7 @@
       </v-row>
     </v-card-title>
     <v-card-subtitle class="font-weight-bold text-darkBlue">
-      {{ date }}
+      {{ this.currentEvent.date }}
     </v-card-subtitle>
     <v-card-subtitle class="font-weight-bold text-darkBlue">
       {{ type }}
@@ -33,7 +36,7 @@
                 Student
               </v-card-title>
               <v-card-subtitle class="text-darkBlue font-weight-bold pb-2">
-                {{ student }}
+                {{ this.currentStudent.name }}
               </v-card-subtitle>
             </v-col>
           </v-row>
@@ -75,7 +78,8 @@
                       <v-avatar class="bg-darkBlue">
                         <font-awesome-icon
                           icon="fa-solid fa-user"
-                          class="text-white" />
+                          class="text-white"
+                        />
                       </v-avatar>
                     </v-col>
                     <v-col cols="11" class="pt-0 pb-0">
@@ -83,7 +87,8 @@
                         {{ songs.at(0).name }}
                       </v-card-title>
                       <v-card-subtitle
-                        class="text-darkBlue font-weight-medium pb-2">
+                        class="text-darkBlue font-weight-medium pb-2"
+                      >
                         {{ songs.at(0).person }}
                       </v-card-subtitle>
                     </v-col>
@@ -104,7 +109,8 @@
                       <v-avatar class="bg-darkBlue">
                         <font-awesome-icon
                           icon="fa-solid fa-user"
-                          class="text-white" />
+                          class="text-white"
+                        />
                       </v-avatar>
                     </v-col>
                     <v-col cols="11" class="pt-0 pb-0">
@@ -112,7 +118,8 @@
                         {{ songs.at(0).name }}
                       </v-card-title>
                       <v-card-subtitle
-                        class="text-darkBlue font-weight-medium pb-2">
+                        class="text-darkBlue font-weight-medium pb-2"
+                      >
                         {{ songs.at(0).person }}
                       </v-card-subtitle>
                     </v-col>
@@ -133,7 +140,8 @@
                   <v-avatar class="bg-darkBlue">
                     <font-awesome-icon
                       icon="fa-solid fa-user"
-                      class="text-white" />
+                      class="text-white"
+                    />
                   </v-avatar>
                 </v-col>
                 <v-col cols="11">
@@ -147,7 +155,8 @@
                   <v-avatar class="bg-darkBlue">
                     <font-awesome-icon
                       icon="fa-solid fa-user"
-                      class="text-white" />
+                      class="text-white"
+                    />
                   </v-avatar>
                 </v-col>
                 <v-col cols="11">
@@ -161,7 +170,8 @@
                   <v-avatar class="bg-darkBlue">
                     <font-awesome-icon
                       icon="fa-solid fa-user"
-                      class="text-white" />
+                      class="text-white"
+                    />
                   </v-avatar>
                 </v-col>
                 <v-col cols="11">
@@ -184,7 +194,8 @@
               rounded="pill"
               class="buttonGradient ml-4 text-white font-weight-bold"
               v-on:click="isExpand = !isExpand"
-              v-if="!isExpand">
+              v-if="!isExpand"
+            >
               Make Expanded View
             </v-btn>
             <v-btn
@@ -193,7 +204,8 @@
               rounded="pill"
               class="buttonGradient ml-4 text-white font-weight-bold"
               v-on:click="isExpand = !isExpand"
-              v-if="isExpand">
+              v-if="isExpand"
+            >
               Make Simplified View
             </v-btn>
           </v-card-title>
@@ -212,14 +224,16 @@
                   </v-card-title>
                   <v-card
                     elevation="0"
-                    class="eventsGradient fullBorderCurve ma-1">
+                    class="eventsGradient fullBorderCurve ma-1"
+                  >
                     <v-card-text class="pt-0">
                       <v-row justify="center" class="pl-0 mt-0">
                         <v-col cols="1" align-self="center">
                           <v-avatar class="bg-darkBlue">
                             <font-awesome-icon
                               icon="fa-solid fa-user"
-                              class="text-white" />
+                              class="text-white"
+                            />
                           </v-avatar>
                         </v-col>
                         <v-col cols="11" class="pt-0 pb-0">
@@ -227,7 +241,8 @@
                             {{ songs.at(0).name }}
                           </v-card-title>
                           <v-card-subtitle
-                            class="text-darkBlue font-weight-medium pb-2">
+                            class="text-darkBlue font-weight-medium pb-2"
+                          >
                             {{ songs.at(0).person }}
                           </v-card-subtitle>
                         </v-col>
@@ -236,14 +251,16 @@
                   </v-card>
                   <v-card
                     elevation="0"
-                    class="eventsGradient fullBorderCurve ma-1">
+                    class="eventsGradient fullBorderCurve ma-1"
+                  >
                     <v-card-text class="pt-0">
                       <v-row justify="center" class="pl-0 mt-0">
                         <v-col cols="1" align-self="center">
                           <v-avatar class="bg-darkBlue">
                             <font-awesome-icon
                               icon="fa-solid fa-user"
-                              class="text-white" />
+                              class="text-white"
+                            />
                           </v-avatar>
                         </v-col>
                         <v-col cols="11" class="pt-0 pb-0">
@@ -251,7 +268,8 @@
                             {{ songs.at(0).name }}
                           </v-card-title>
                           <v-card-subtitle
-                            class="text-darkBlue font-weight-medium pb-2">
+                            class="text-darkBlue font-weight-medium pb-2"
+                          >
                             {{ songs.at(0).person }}
                           </v-card-subtitle>
                         </v-col>
@@ -270,7 +288,8 @@
                           label="Rating"
                           :items="ratings"
                           variant="solo"
-                          size="small" />
+                          size="small"
+                        />
                       </v-col>
                     </v-row>
                   </v-card-title>
@@ -285,7 +304,8 @@
                           label="Rating"
                           :items="ratings"
                           variant="solo"
-                          size="small" />
+                          size="small"
+                        />
                       </v-col>
                     </v-row>
                   </v-card-title>
@@ -301,14 +321,16 @@
       <v-btn
         rounded="pill"
         class="buttonGradient text-white mr-3"
-        @click="closeCritiqueEditDialog()">
+        @click="closeCritiqueEditDialog()"
+      >
         Save
       </v-btn>
       <v-btn
         rounded="pill"
         color="#DA9B9B"
         class="text-white mr-3"
-        @click="closeCritiqueEditDialog()">
+        @click="closeCritiqueEditDialog()"
+      >
         Cancel
       </v-btn>
     </v-card-text>
@@ -316,64 +338,65 @@
 </template>
 
 <script>
-  export default {
-    name: "CritiqueFacultyComponent",
-    components: {},
-    data() {
-      return {
-        isExpand: false,
-        changeButtonLabel: "Make Expanded Critique",
-        title: "Vocal Jury",
-        date: "4/22/23",
-        type: "Soprano",
-        student: "John Doe",
-        instructors: [
-          {
-            position: "Private Instructor",
-            name: "Jane Doe",
-          },
-          {
-            position: "Accompanist",
-            name: "Jess Doe",
-          },
-        ],
-        jurors: ["Jane Doe", "James Doe", "Jeff Doe"],
-        songs: [
-          {
-            name: "Bird Upon The Tree",
-            person: "Blitzstein, Marc",
-          },
-        ],
-        ratings: ["Poor", "Fair", "Good", "Excellent"],
-        sections: [
-          {
-            first: "Deportment",
-            second: "Diction",
-          },
-          {
-            first: "Tone",
-            second: "Interpretation, Musicianship",
-          },
-          {
-            first: "Accuracy/Intonation",
-            second: "Balence Blend",
-          },
-        ],
-      };
+export default {
+  name: "CritiqueFacultyComponent",
+  components: {},
+  props: {
+    currentEvent: {},
+    currentStudent: {},
+  },
+  data() {
+    return {
+      isExpand: false,
+      changeButtonLabel: "Make Expanded Critique",
+      type: "TEMP",
+      instructors: [
+        {
+          position: "Private Instructor",
+          name: "Jane Doe",
+        },
+        {
+          position: "Accompanist",
+          name: "Jess Doe",
+        },
+      ],
+      jurors: ["Jane Doe", "James Doe", "Jeff Doe"],
+      songs: [
+        {
+          name: "Bird Upon The Tree",
+          person: "Blitzstein, Marc",
+        },
+      ],
+      ratings: ["Poor", "Fair", "Good", "Excellent"],
+      sections: [
+        {
+          first: "Deportment",
+          second: "Diction",
+        },
+        {
+          first: "Tone",
+          second: "Interpretation, Musicianship",
+        },
+        {
+          first: "Accuracy/Intonation",
+          second: "Balence Blend",
+        },
+      ],
+    };
+  },
+  methods: {
+    closeCritiqueEditDialog() {
+      this.$emit("closeCritiqueEditDialogEvent", false);
     },
-    methods: {
-      closeCritiqueEditDialog() {
-        this.$emit("closeCritiqueEditDialogEvent", false);
-      },
-      changeButton() {
-        if (isExpand) {
-          this.changeButtonLabel = "Make Simplified Critique";
-        } else {
-          this.changeButtonLabel = "Make Expanded Critique";
-        }
-      },
+    changeButton() {
+      if (isExpand) {
+        this.changeButtonLabel = "Make Simplified Critique";
+      } else {
+        this.changeButtonLabel = "Make Expanded Critique";
+      }
     },
-  };
+  },
+};
 </script>
 
 <style></style>

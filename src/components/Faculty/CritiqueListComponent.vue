@@ -139,6 +139,8 @@
                   </v-btn>
                 </template>
                 <CritiqueFacultyComponent
+                  :currentStudent="student"
+                  :currentEvent="this.currentEvent"
                   @closeCritiqueEditDialogEvent="closeCritiqueEditDialog"
                 ></CritiqueFacultyComponent>
               </v-dialog>

@@ -79,7 +79,7 @@
           </v-row>
         </v-card-title>
         <v-card-text>
-          <v-row v-for="piece in this.userStore.userRoleInfo.repertoire">
+          <v-row v-for="piece in this.userStore.userRoleInfo.repertoire.pieces">
             <RepertoireComponent :sentPiece="piece" />
           </v-row>
         </v-card-text>

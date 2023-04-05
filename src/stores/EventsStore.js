@@ -155,7 +155,7 @@ export const useEventsStore = defineStore("events", {
         if (userStore.userInfo.roles.default.roleId === 1) {
           eventSignups = eventSignups.concat(
             event.signups.filter(
-              (s) => s.studentinfoId === userStore.userRoleInfo.studentId
+              (s) => s.studentId === userStore.userRoleInfo.studentId
             )
           );
         }
@@ -169,7 +169,7 @@ export const useEventsStore = defineStore("events", {
       let pastSignup = this.events
         .filter((e) => e.id === eventId)[0]
         .signups.filter(
-          (s) => (s.studentinfoId = userStore.userRoleInfo.studentId)
+          (s) => (s.studentId = userStore.userRoleInfo.studentId)
         );
       if (pastSignup.length != 0) {
         return pastSignup[0];
@@ -197,7 +197,7 @@ export const useEventsStore = defineStore("events", {
         .then(async (response) => {
           signupId = response.data.id;
           await EventSongsDataService.create({
-            pieceId: piece.id,
+            pieceId: piece.pieceId,
             eventsignupId: response.data.id,
           })
             .then(async (sResponse) => {
@@ -232,7 +232,7 @@ export const useEventsStore = defineStore("events", {
       // Post the change to the database
       await EventSignUpDataService.update(data.id, data)
         .then(async (response) => {
-          await EventSongsDataService.update(piece.id, {
+          await EventSongsDataService.update(piece.pieceId, {
             pieceId: piece.pieceId,
             eventsignupId: data.id,
           })

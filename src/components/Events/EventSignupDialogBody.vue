@@ -256,7 +256,7 @@
       setSelectedPiece(piece) {
         if (this.isEdit) {
           this.selectedPiece = piece;
-          let pieceId = piece.id;
+          let pieceId = piece.pieceId;
           let selectedEventId = this.selectedEventSong.id;
           this.selectedEventSong = {
             ...piece,
@@ -287,7 +287,7 @@
               id: this.signupData.id,
               timeslot: this.selectedTimeslot.time,
               eventId: this.signupData.eventId,
-              studentinfoId: this.userStore.userRoleInfo.id,
+              studentId: this.userStore.userRoleInfo.studentId,
             };
 
             await this.eventsStore.updateSignupForEvent(
@@ -298,7 +298,7 @@
             let data = {
               timeslot: this.selectedTimeslot.time,
               eventId: this.signupData.eventId,
-              studentinfoId: this.userStore.userRoleInfo.id,
+              studentId: this.userStore.userRoleInfo.studentId,
             };
             await this.eventsStore.createSignupForEvent(
               data,

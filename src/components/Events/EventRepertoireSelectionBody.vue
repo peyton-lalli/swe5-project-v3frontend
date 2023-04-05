@@ -28,7 +28,7 @@
                       class="rounded-lg"
                       @click="setSelectedPiece(piece)"
                       :class="
-                        this.selectedPiece.pieceId === piece.id
+                        this.selectedPiece.pieceId === piece.pieceId
                           ? 'selectedSong'
                           : 'unSelectedSong'
                       "
@@ -45,7 +45,7 @@
                             <v-card-subtitle
                               class="font-weight-bold"
                               :class="
-                                this.selectedPiece.pieceId === piece.id
+                                this.selectedPiece.pieceId === piece.pieceId
                                   ? 'text-white'
                                   : 'text-darkGray'
                               ">
@@ -54,7 +54,7 @@
                             <v-card-subtitle
                               class="font-weight-bold"
                               :class="
-                                this.selectedPiece.pieceId === piece.id
+                                this.selectedPiece.pieceId === piece.pieceId
                                   ? 'text-lightBlue'
                                   : 'text-darkBlue'
                               ">
@@ -121,13 +121,13 @@
     },
     methods: {
       filteredList() {
-        return this.userStore.userRoleInfo.repertoire.filter((piece) =>
+        return this.userStore.userRoleInfo.repertoire.pieces.filter((piece) =>
           piece.name.toLowerCase().includes(this.input.toLowerCase())
         );
       },
       setSelectedPiece(piece) {
         this.selectedPiece = piece;
-        this.selectedPiece.pieceId = piece.id;
+        this.selectedPiece.pieceId = piece.pieceId;
       },
       emitSelectedPiece() {
         this.$emit("setSelectedPiece", this.selectedPiece);

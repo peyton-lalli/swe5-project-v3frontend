@@ -37,8 +37,8 @@
                 </v-card-subtitle>
                 <v-select
                   class="lighterBlur font-weight-semi-bold text-darkBlue ml-4"
-                  v-model="selectedInstructor"
-                  :items="this.userStore.userRoleInfo.instructors"
+                  v-model="selectedAccompanist"
+                  :items="this.userStore.userRoleInfo.accompanists"
                   item-title="name"
                   item-value="id">
                 </v-select>
@@ -212,6 +212,7 @@
         selectedPiece: this.signupData.selectedPiece,
         selectedEventSong: this.signupData.selectedPiece,
         selectedInstructor: {},
+        selectedAccompanist: {},
         eventRepertoireSelection: false,
       };
     },
@@ -237,6 +238,11 @@
         ? (this.selectedInstructor = this.userStore.userRoleInfo.instructors[0])
         : (this.selectedInstructor = this.signupData.selectedInstructor);
 
+      Object.keys(this.signupData.selectedAccompanist).length === 0
+        ? (this.selectedAccompanist =
+            this.userStore.userRoleInfo.accompanists[0])
+        : (this.selectedAccompanist = this.signupData.selectedAccompanist);
+
       for (let time of this.timeslots) {
         for (let ts of time) {
           if (ts.time === this.signupData.selectedTimeslot) {
@@ -250,7 +256,7 @@
       setSelectedPiece(piece) {
         if (this.isEdit) {
           this.selectedPiece = piece;
-          let pieceId = piece.id;
+          let pieceId = piece.pieceId;
           let selectedEventId = this.selectedEventSong.id;
           this.selectedEventSong = {
             ...piece,
@@ -281,7 +287,7 @@
               id: this.signupData.id,
               timeslot: this.selectedTimeslot.time,
               eventId: this.signupData.eventId,
-              studentinfoId: this.userStore.userRoleInfo.id,
+              studentId: this.userStore.userRoleInfo.studentId,
             };
 
             await this.eventsStore.updateSignupForEvent(
@@ -292,7 +298,7 @@
             let data = {
               timeslot: this.selectedTimeslot.time,
               eventId: this.signupData.eventId,
-              studentinfoId: this.userStore.userRoleInfo.id,
+              studentId: this.userStore.userRoleInfo.studentId,
             };
             await this.eventsStore.createSignupForEvent(
               data,

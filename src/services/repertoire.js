@@ -7,7 +7,7 @@ class RepertoireDataService {
     return http.put(`/performance-t3/repertoire/${id}`, data);
   }
   getStudentId(id) {
-    return http.get(`/performance-t3/repertoire/studentinfoid/${id}`);
+    return http.get(`/performance-t3/repertoire/studentid/${id}`);
   }
   getAll() {
     return http.get("/performance-t3/repertoire");

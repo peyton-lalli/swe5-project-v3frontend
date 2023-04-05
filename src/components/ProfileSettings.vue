@@ -26,7 +26,7 @@
       userName.toUpperCase()
     }}</v-card-title>
     <v-card-title class="mx-auto text-lightBlue"> {{ userEmail }}</v-card-title>
-    <v-card-text v-if="userRole === 'student'">
+    <v-card-text v-if="userRole === 1">
       <v-select
         bg-color="lightBlue"
         class="text-blue"
@@ -35,10 +35,10 @@
         variant="solo"
         text="darkBlue"></v-select>
     </v-card-text>
-    <v-card-text v-if="userRole === 'faculty' || userRole === 'admin'">
+    <v-card-text v-if="userRole === 2 || userRole === 3">
       <v-text-field :placeholder="userTitleOrMajor"></v-text-field>
     </v-card-text>
-    <v-card-text v-if="userRole === 'student'">
+    <v-card-text v-if="userRole === 1">
       <v-select
         bg-color="lightBlue"
         class="text-blue"
@@ -47,7 +47,7 @@
         variant="solo"
         text="darkBlue"></v-select>
     </v-card-text>
-    <v-card-text v-if="userRole === 'student'">
+    <v-card-text v-if="userRole === 1">
       <v-select
         bg-color="lightBlue"
         class="text-blue"
@@ -71,7 +71,6 @@
 
 <script>
   import InstructorsDataService from "../services/instructors.js";
-  import StudentInfoDataService from "../services/studentinfo.js";
   import { mapStores } from "pinia";
   import { useUserStore } from "../stores/UserStore.js";
 
@@ -97,13 +96,13 @@
     },
     methods: {
       retrieveInfo() {
-        this.userRole = this.userStore.userInfo.role;
+        this.userRole = this.userStore.userInfo.roles.default;
         this.userName = this.userStore.getFullName;
         this.userEmail = this.userStore.userInfo.email;
         this.userPictureLink = this.userStore.userInfo.picture;
-        if (this.userRole === "student") {
+        if (this.userRole === 1) {
           this.userTitleOrMajor = this.userStore.userRoleInfo.major;
-        } else if (this.userRole === "faculty") {
+        } else if (this.userRole === 2) {
           this.userTitleOrMajor = this.userStore.userRoleInfo.title;
         }
       },

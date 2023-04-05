@@ -155,7 +155,7 @@ export const useEventsStore = defineStore("events", {
         if (userStore.userInfo.roles.default.roleId === 1) {
           eventSignups = eventSignups.concat(
             event.signups.filter(
-              (s) => s.studentinfoId === userStore.userRoleInfo.id
+              (s) => s.studentinfoId === userStore.userRoleInfo.studentId
             )
           );
         }
@@ -168,7 +168,9 @@ export const useEventsStore = defineStore("events", {
       let userStore = useUserStore();
       let pastSignup = this.events
         .filter((e) => e.id === eventId)[0]
-        .signups.filter((s) => (s.studentinfoId = userStore.userRoleInfo.id));
+        .signups.filter(
+          (s) => (s.studentinfoId = userStore.userRoleInfo.studentId)
+        );
       if (pastSignup.length != 0) {
         return pastSignup[0];
       } else {

@@ -3,11 +3,11 @@
     <v-card class="userProfilePane mainBlur rounded-lg pa-3">
       <v-card-title class="pt-4">
         <v-avatar size="68" class="bg-darkBlue">
-          <v-img :src="userPicture"></v-img>
+          <v-img :src="this.userStore.userInfo.picture"></v-img>
         </v-avatar>
       </v-card-title>
       <v-card-title class="text-h5 fontWeightBlackOverride text-darkGray pb-0">
-        {{ userName.toUpperCase() }}
+        {{ this.userStore.getFullName.toUpperCase() }}
       </v-card-title>
       <v-card-subtitle class="font-weight-medium text-darkBlue">
         {{ userTitleOrMajor }}
@@ -15,13 +15,13 @@
       <v-card-subtitle
         v-if="isStudent"
         class="font-weight-medium text-mediumBlue">
-        {{ userClassification }}
+        {{ this.userStore.userRoleInfo.classification }}
       </v-card-subtitle>
       <v-card-text v-if="isStudent">
         <v-row>
           <v-col cols="12">
             <v-card-subtitle class="text-darkBlue pl-0">
-              {{ "Vocal Level " + userLevel }}
+              {{ "Vocal Level " + this.userStore.userRoleInfo.level }}
             </v-card-subtitle>
             <v-progress-linear
               rounded
@@ -34,16 +34,19 @@
               <v-row justify="center" class="pl-5 pt-t pb-0">
                 <v-col cols="2" align-self="center">
                   <v-avatar class="bg-darkBlue">
-                    <v-img :src="userInstructor.picture"></v-img>
+                    <v-img
+                      :src="
+                        this.userStore.userRoleInfo.instructors[0].picture
+                      "></v-img>
                   </v-avatar>
                 </v-col>
                 <v-col cols="10" align-self="center">
                   <v-card-title class="pb-0 font-weight-semi-bold text-h6">
-                    {{ userInstructor.title }}
+                    {{ this.userStore.userRoleInfo.instructors[0].title }}
                   </v-card-title>
                   <v-card-subtitle
                     class="text-darkBlue font-weight-bold pb-2 font-weight-bold">
-                    {{ userInstructor.name }}
+                    {{ this.userStore.userRoleInfo.instructors[0].name }}
                   </v-card-subtitle>
                 </v-col>
               </v-row>
@@ -74,17 +77,7 @@
       return {
         isStudent: false,
         isFaculty: false,
-        userId: 2,
-        userPicture: "",
-        userDefaultRole: {},
-        userName: "John Doe",
         userTitleOrMajor: "",
-        userClassification: "Senior",
-        userLevel: 0,
-        userLevelPercent: 0,
-        userSemestersPercent: 0,
-        userSemesters: 8,
-        userInstructor: {},
       };
     },
     computed: {
@@ -95,30 +88,17 @@
     },
     methods: {
       retrieveInfo() {
-        this.userDefaultRole = this.userStore.userInfo.roles.default;
-        this.userName = this.userStore.getFullName;
-        this.userPicture = this.userStore.userInfo.picture;
-
-        if (this.userDefaultRole.roleId === 1) {
+        if (this.userStore.userInfo.roles.default.roleId === 1) {
           this.isStudent = true;
           this.userTitleOrMajor = this.userStore.userRoleInfo.major;
-          this.useClassification = this.userStore.userRoleInfo.classification;
-          this.userSemesters = this.userStore.userRoleInfo.semesters;
-          this.userLevel = this.userStore.userRoleInfo.level;
-          this.userInstructor = this.userStore.userRoleInfo.instructors[0];
-          console.log(this.userInstructor);
-          this.setUserLevelPercent(this.userLevel);
-          this.setSemestersPercent(this.userSemesters);
-        } else if (this.userDefaultRole.roleId === 2) {
+          this.setUserLevelPercent(this.userStore.userRoleInfo.level);
+        } else if (this.userStore.userInfo.roles.default.roleId === 2) {
           this.isFaculty = true;
           this.userTitleOrMajor = this.userStore.userRoleInfo.title;
         }
       },
       setUserLevelPercent(level) {
         this.userLevelPercent = level * 10;
-      },
-      setSemestersPercent(semesters) {
-        this.userSemestersPercent = semesters * 10;
       },
     },
   };

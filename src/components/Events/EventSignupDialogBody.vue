@@ -37,8 +37,8 @@
                 </v-card-subtitle>
                 <v-select
                   class="lighterBlur font-weight-semi-bold text-darkBlue ml-4"
-                  v-model="selectedInstructor"
-                  :items="this.userStore.userRoleInfo.instructors"
+                  v-model="selectedAccompanist"
+                  :items="this.userStore.userRoleInfo.accompanists"
                   item-title="name"
                   item-value="id">
                 </v-select>
@@ -212,6 +212,7 @@
         selectedPiece: this.signupData.selectedPiece,
         selectedEventSong: this.signupData.selectedPiece,
         selectedInstructor: {},
+        selectedAccompanist: {},
         eventRepertoireSelection: false,
       };
     },
@@ -236,6 +237,11 @@
       Object.keys(this.signupData.selectedInstructor).length === 0
         ? (this.selectedInstructor = this.userStore.userRoleInfo.instructors[0])
         : (this.selectedInstructor = this.signupData.selectedInstructor);
+
+      Object.keys(this.signupData.selectedAccompanist).length === 0
+        ? (this.selectedAccompanist =
+            this.userStore.userRoleInfo.accompanists[0])
+        : (this.selectedAccompanist = this.signupData.selectedAccompanist);
 
       for (let time of this.timeslots) {
         for (let ts of time) {

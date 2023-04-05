@@ -88,6 +88,7 @@
           .then(async (response) => {
             this.user = response.data;
             await this.userStore.setUser(this.user);
+            console.log(this.userStore.userInfo);
             await this.eventsStore.setEvents();
 
             this.fName = this.user.fName;

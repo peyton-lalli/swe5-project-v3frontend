@@ -18,6 +18,14 @@ export const useEventsStore = defineStore("events", {
   actions: {
     // Load all events and relevant data in from database
     async setEvents() {
+      await EventDataService.getAllEventsWithInfo()
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
       this.events = [];
 
       // Load all the events in, creating a custom object array with the needed data.

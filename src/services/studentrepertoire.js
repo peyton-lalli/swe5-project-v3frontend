@@ -15,9 +15,6 @@ class StudentRepertoireDataService {
   getRepertoire(id) {
     return http.get(`/performance-t3/studentrepertoire/repertoireId/${id}`);
   }
-  getInstrument(id) {
-    return http.get(`/performance-t3/studentrepertoire/instrumentId/${id}`);
-  }
   delete(id) {
     return http.delete(`/performance-t3/studentrepertoire/${id}`);
   }

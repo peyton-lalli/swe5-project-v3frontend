@@ -9,6 +9,9 @@ class RepertoireDataService {
   getAll() {
     return http.get("/performance-t3/repertoire");
   }
+  getInstrument(id) {
+    return http.get(`/performance-t3/repertoire/instrumentId/${id}`);
+  }
   delete(id) {
     return http.delete(`/performance-t3/repertoire/${id}`);
   }

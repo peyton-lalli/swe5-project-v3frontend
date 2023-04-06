@@ -25,7 +25,7 @@ class PiecesDataService {
     return http.get(`/performance-t3/pieces/language/${id}`);
   }
   getRepertoire(id) {
-    return http.get(`/performance-t3/pieces/studentrepertoireid/${id}`);
+    return http.get(`/performance-t3/pieces/repertoireid/${id}`);
   }
   delete(id) {
     return http.delete(`/performance-t3/pieces/${id}`);

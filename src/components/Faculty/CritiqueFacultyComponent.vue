@@ -338,6 +338,14 @@
 </template>
 
 <script>
+import EventSignUpJurorDataService from "../../services/eventsignupjuror.js";
+import InstructorsDataService from "../../services/instructors.js";
+import UsersDataService from "../../services/users.js";
+import StudentRepertoireDataService from "../../services/studentrepertoire.js";
+import RepertoireDataService from "../../services/repertoire.js";
+import PiecesDataService from "../../services/pieces.js";
+import AccompanistsDataService from "../../services/accompanists.js";
+
 export default {
   name: "CritiqueFacultyComponent",
   components: {},
@@ -350,6 +358,7 @@ export default {
       isExpand: false,
       changeButtonLabel: "Make Expanded Critique",
       type: "TEMP",
+      // instructor and accompanist are now part of the eventsignup and will be in the store
       instructors: [
         {
           position: "Private Instructor",
@@ -360,13 +369,8 @@ export default {
           name: "Jess Doe",
         },
       ],
-      jurors: ["Jane Doe", "James Doe", "Jeff Doe"],
-      songs: [
-        {
-          name: "Bird Upon The Tree",
-          person: "Blitzstein, Marc",
-        },
-      ],
+      jurors: [],
+      songs: [],
       ratings: ["Poor", "Fair", "Good", "Excellent"],
       sections: [
         {
@@ -384,7 +388,91 @@ export default {
       ],
     };
   },
+  async mounted() {
+    await this.getInstructors();
+    await this.getJurors();
+    await this.getSongs();
+  },
   methods: {
+    async getInstructors() {
+      //Need to get the names of the instructor and the accompanist
+    },
+    async getJurors() {
+      var jurorIds = [];
+      var userIds = [];
+      await EventSignUpJurorDataService.getEventSignUpJurorByEventSignUp(
+        this.currentStudent.signUp.id
+      )
+        .then((response) => {
+          jurorIds = response.data.EventSignUpJuror;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      for (var i = 0; i < jurorIds.length; i++) {
+        await InstructorsDataService.getInstructor(jurorIds[i].jurorId)
+          .then((response) => {
+            userIds = response.data.Instructors;
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+
+      for (var i = 0; i < userIds.length; i++) {
+        await UsersDataService.getSingle(userIds[i].userId)
+          .then((response) => {
+            this.jurors.push =
+              response.data.Users[i].fName + " " + response.data.Users[i].lName;
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+    },
+    async getSongs() {
+      var repertoireIds = [];
+      var correctRepertoire = 0;
+      var tempSongs = [];
+      await StudentRepertoireDataService.getStudent(this.currentStudent.id)
+        .then((response) => {
+          repertoireIds = response.data.StudentRepertoire;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      for (var i = 0; i < repertoireIds.length; i++) {
+        await RepertoireDataService.getInstrument(repertoireIds[i].repertoireId)
+          .then((response) => {
+            //this will need to be changed once the instrument data service is created
+            if (
+              response.data.Repertoire.instrument == this.currentStudent.type
+            ) {
+              correctRepertoire = repertoireIds[i].repertoireId;
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+
+      await PiecesDataService.getRepertoire(correctRepertoire)
+        .then((response) => {
+          tempSongs = response.data.Pieces;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      for (var i = 0; i < tempSongs.length; i++) {
+        this.songs.push = {
+          name: tempSongs[i].name,
+          person: tempSongs[i].composer,
+        };
+      }
+    },
     closeCritiqueEditDialog() {
       this.$emit("closeCritiqueEditDialogEvent", false);
     },

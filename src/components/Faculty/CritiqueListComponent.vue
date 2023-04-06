@@ -188,8 +188,10 @@ export default {
           name: "",
           classification: "",
           time: this.currentEvent.signups[i].timeslot,
+          signUp: this.currentEvent.signups[i],
           type: "TEMP",
           picture: "",
+          id: this.currentEvent.signups[i].studentinfoId,
         };
         await StudentsDataService.getUserId(
           this.currentEvent.signups[i].studentinfoId

@@ -25,7 +25,7 @@ class EventSignUpDataService {
     return http.get(`/performance-t3/eventsignup/ensembleid/${id}`);
   }
   delete(id) {
-    return http.delete(`/performance-t3/event/${id}`);
+    return http.delete(`/performance-t3/eventsignup/${id}`);
   }
 }
 export default new EventSignUpDataService();

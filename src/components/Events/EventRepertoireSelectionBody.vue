@@ -121,8 +121,8 @@
     },
     methods: {
       filteredList() {
-        return this.userStore.userRoleInfo.repertoire.pieces.filter((piece) =>
-          piece.name.toLowerCase().includes(this.input.toLowerCase())
+        return this.userStore.userRoleInfo.repertoires[0].pieces.filter(
+          (piece) => piece.name.toLowerCase().includes(this.input.toLowerCase())
         );
       },
       setSelectedPiece(piece) {

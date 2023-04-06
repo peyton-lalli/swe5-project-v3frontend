@@ -170,6 +170,7 @@
             timesInfoString: this.timesInfoString,
             selectedPiece: {},
             selectedInstructor: {},
+            selectedAccompanist: {},
             selectedTimeslot: "",
             signupId: this.priorSignup.id,
           },

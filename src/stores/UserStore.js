@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
-import StudentInfoDataService from "../services/studentinfo.js";
+import StudentsDataService from "../services/students.js";
 import PiecesDataService from "../services/pieces.js";
 import ComposersDataService from "../services/composers.js";
+import StudentInstructorDataService from "../services/studentaccompanist.js";
 import InstructorDataService from "../services/instructors.js";
 import UsersDataService from "../services/users.js";
 import UsersRoleDataService from "../services/userrole.js";
@@ -50,83 +51,75 @@ export const useUserStore = defineStore("user", {
       }
     },
     async setStudentRoleInfo() {
-      // Load StudentInfo into the store
-      await StudentInfoDataService.getUserId(this.userInfo.userId)
+      await StudentsDataService.getAllInfo(this.userInfo.userId)
         .then((response) => {
-          this.userRoleInfo = response.data.StudentInfo[0];
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+          let studentInfo = response.data[0];
 
-      // Load Stuent Repertoire into the store, appending the userRoleInfo
-      await PiecesDataService.getRepertoire(this.userRoleInfo.repertoireId)
-        .then((response) => {
-          this.userRoleInfo = {
-            ...this.userRoleInfo,
-            ...{ repertoire: response.data.Pieces },
-          };
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+          for (let [i, accompanistItem] of studentInfo.accompanists.entries()) {
+            let accompanistObject = accompanistItem.accompanist;
+            delete studentInfo.accompanists[i].accompanist;
 
-      // Load composer data in for each piece in the student's repertoire
-      await ComposersDataService.getAll()
-        .then((response) => {
-          for (let piece in this.userRoleInfo.repertoire) {
-            let composer = response.data.Composers.filter(
-              (c) => c.id === this.userRoleInfo.repertoire[piece].composerId
-            )[0];
-            delete composer.id;
-            this.userRoleInfo.repertoire[piece] = {
-              ...this.userRoleInfo.repertoire[piece],
-              ...{
-                composer: composer,
-              },
+            let accompanistUser = accompanistObject.user;
+            let accompanistName =
+              accompanistUser.fName + " " + accompanistUser.lName;
+
+            accompanistUser = {
+              ...accompanistUser,
+              ...{ name: accompanistName },
+            };
+
+            delete accompanistUser.fName;
+            delete accompanistUser.lName;
+            delete accompanistObject.user;
+
+            accompanistObject = {
+              ...accompanistObject,
+              ...accompanistUser,
+            };
+
+            delete studentInfo.accompanists[i].accompanist;
+
+            studentInfo.accompanists[i] = {
+              ...studentInfo.accompanists[i],
+              ...accompanistObject,
             };
           }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
 
-      // Load Student instructor into the store, appending the userRoleInfo
-      await InstructorDataService.getInstructorByInstructorId(
-        this.userRoleInfo.instructorId
-      )
-        .then((response) => {
-          let ins = [];
-          for (let instructor of response.data.Instructors) {
-            ins.push(instructor);
-          }
-          this.userRoleInfo = {
-            ...this.userRoleInfo,
-            ...{ instructors: ins },
-          };
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+          for (let [i, instructorItem] of studentInfo.instructors.entries()) {
+            let instructorObject = instructorItem.instructor;
+            delete studentInfo.instructors[i].instructor;
 
-      for (let [i, instructor] of this.userRoleInfo.instructors.entries()) {
-        await UsersDataService.getSingle(instructor.userId)
-          .then((response) => {
-            const user = response.data.Users[0];
-            this.userRoleInfo.instructors[i] = {
-              ...this.userRoleInfo.instructors[i],
-              ...{
-                name: user.fName + " " + user.lName,
-                picture: user.picture,
-                userId: user.id,
-              },
+            let instructorUser = instructorObject.user;
+            let instructorName =
+              instructorUser.fName + " " + instructorUser.lName;
+
+            instructorUser = {
+              ...instructorUser,
+              ...{ name: instructorName },
             };
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      }
-      // Load Student instructor's userInfo into the store, appending userRoleInfo.instructor
+
+            delete instructorUser.fName;
+            delete instructorUser.lName;
+            delete instructorObject.user;
+
+            instructorObject = {
+              ...instructorObject,
+              ...instructorUser,
+            };
+
+            delete studentInfo.instructors[i].instructor;
+
+            studentInfo.instructors[i] = {
+              ...studentInfo.instructors[i],
+              ...instructorObject,
+            };
+          }
+          console.log(studentInfo);
+          this.userRoleInfo = studentInfo;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     async setFacultyRoleInfo() {
       // Load Instructor info into the store
@@ -139,7 +132,7 @@ export const useUserStore = defineStore("user", {
         });
 
       // Load Instructor students into the store, appending the userRoleInfo
-      await StudentInfoDataService.getInstructorId(this.userRoleInfo.id)
+      await StudentsDataService.getInstructorId(this.userRoleInfo.id)
         .then((response) => {
           this.userRoleInfo = {
             ...this.userRoleInfo,
@@ -166,7 +159,7 @@ export const useUserStore = defineStore("user", {
 
                 let additionalRoleData = {};
                 if (roles[0].roleId === 1) {
-                  await StudentInfoDataService.getUserId(user.id)
+                  await StudentsDataService.getUserId(user.id)
                     .then((response) => {
                       let userId = user.id;
                       additionalRoleData = response.data.StudentInfo[0];
@@ -221,7 +214,7 @@ export const useUserStore = defineStore("user", {
     },
     // Post update to StudentInfo table
     async updateStudentInfo(data) {
-      await StudentInfoDataService.update(this.userInfo.userId, data).catch(
+      await StudentsDataService.update(this.userInfo.userId, data).catch(
         (e) => {
           console.log(e);
         }

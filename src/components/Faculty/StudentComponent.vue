@@ -36,7 +36,7 @@
 </template>
 
 <script>
-  import StudentInfoDataService from "../../services/studentinfo.js";
+  import StudentsDataService from "../../services/students.js";
   import UserDataService from "../../services/users.js";
   import InstructorsDataService from "../../services/instructors.js";
   import { useUserStore } from "../../stores/UserStore.js";
@@ -69,7 +69,7 @@
       },
       async getStudents() {
         let response1 = "";
-        await StudentInfoDataService.getInstructorId(this.instructorId)
+        await StudentsDataService.getInstructorId(this.instructorId)
           .then((response) => {
             response1 = response;
           })

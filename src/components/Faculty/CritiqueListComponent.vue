@@ -154,7 +154,7 @@
 
 <script>
 import CritiqueFacultyComponent from "./CritiqueFacultyComponent.vue";
-import studentinfo from "../../services/studentinfo.js";
+import StudentsDataService from "../../services/students.js";
 import users from "../../services/users.js";
 import { useEventsStore } from "../../stores/EventsStore.js";
 import { mapStores } from "pinia";
@@ -191,13 +191,13 @@ export default {
           type: "TEMP",
           picture: "",
         };
-        await studentinfo
-          .getUserId(this.currentEvent.signups[i].studentinfoId)
-          .then((response) => {
-            userId = response.data.StudentInfo[i].userId;
-            tempstudent.classification =
-              response.data.StudentInfo[i].classification;
-          });
+        await StudentsDataService.getUserId(
+          this.currentEvent.signups[i].studentinfoId
+        ).then((response) => {
+          userId = response.data.StudentInfo[i].userId;
+          tempstudent.classification =
+            response.data.StudentInfo[i].classification;
+        });
         await users.getSingle(userId).then((response) => {
           tempstudent.picture = response.data.Users[i].picture;
           tempstudent.name =

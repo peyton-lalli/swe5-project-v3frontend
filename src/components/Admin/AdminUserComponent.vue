@@ -9,20 +9,8 @@
           </v-avatar>
         </v-col>
         <v-col cols="7" align-self="center">
-          <v-card-title
-            class="pb-0 font-weight-bold"
-            v-if="userData.roleId === 1">
-            {{ userData.lName }}, {{ userData.fName }} - Student
-          </v-card-title>
-          <v-card-title
-            class="pb-0 font-weight-bold"
-            v-if="userData.roleId === 2">
-            {{ userData.lName }}, {{ userData.fName }} - Faculty
-          </v-card-title>
-          <v-card-title
-            class="pb-0 font-weight-bold"
-            v-if="userData.roleId === 3">
-            {{ userData.lName }}, {{ userData.fName }} - Admin
+          <v-card-title class="pb-0 font-weight-bold">
+            {{ userData.lName }}, {{ userData.fName }} - {{ rolesString }}
           </v-card-title>
           <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
             {{ userData.email }}
@@ -51,7 +39,7 @@
                   "></EditSingleUser>
               </v-dialog>
             </v-col>
-            <v-col v-if="userData.roleId !== 1">
+            <v-col v-if="!isStudent">
               <v-btn
                 elevation="0"
                 size="small"
@@ -73,15 +61,46 @@
     data() {
       return {
         editSingleUser: false,
+        rolesString: "",
+        isStudent: false,
       };
     },
     components: {
       EditSingleUser,
     },
-    methods: {},
-    computed: {},
+    created() {
+      this.makeRoleString();
+    },
     props: {
       userData: {},
+    },
+    methods: {
+      makeRoleString() {
+        for (let role of this.userData.roles) {
+          if (role.roleId === 1) {
+            this.rolesString += "Student";
+            this.isStudent = true;
+          }
+          if (role.roleId === 2) {
+            if (this.rolesString !== "") {
+              this.rolesString += " ,";
+            }
+            this.rolesString += "Faculty";
+          }
+          if (role.roleId === 3) {
+            if (this.rolesString !== "") {
+              this.rolesString += " ,";
+            }
+            this.rolesString += "Admin";
+          }
+          if (role.roleId === 4) {
+            if (this.rolesString !== "") {
+              this.rolesString += " ,";
+            }
+            this.rolesString += "Accompianist";
+          }
+        }
+      },
     },
   };
 </script>

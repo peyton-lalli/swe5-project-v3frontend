@@ -49,7 +49,6 @@
     },
     async mounted() {
       this.users = this.userStore.userRoleInfo.users;
-      console.log(this.users[0]);
       this.users.sort(function (a, b) {
         // Extract the last name from the "last_name" column of each result
         var lastNameA = a.lName.toUpperCase();

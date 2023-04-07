@@ -24,14 +24,12 @@
 </template>
 
 <script>
-  import EditSingleUser from "./EditSingleUser.vue";
   import AdminUserComponent from "./AdminUserComponent.vue";
   import { useUserStore } from "../../stores/UserStore.js";
   import { mapStores } from "pinia";
   export default {
     name: "EditUsers",
     components: {
-      EditSingleUser,
       AdminUserComponent,
     },
     data() {

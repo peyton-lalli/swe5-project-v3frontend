@@ -194,15 +194,6 @@ export const useUserStore = defineStore("user", {
           console.log(e);
         });
     },
-    async updateUserInfo(data, role, id) {
-      if (role === "Student") {
-        await this.updateStudentInfo(data, id);
-      } else if (role === "Faculty") {
-        await updateFacultyInfo(data, id);
-      } else if (role === "Admin") {
-      }
-      this.userRoleInfo = data;
-    },
     // Post update to StudentInfo table
     async updateStudentInfo(data, id) {
       await StudentsService.update(id, data).catch((e) => {

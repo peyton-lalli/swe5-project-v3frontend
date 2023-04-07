@@ -32,11 +32,11 @@
                 Edit
               </v-btn>
               <v-dialog v-model="editSingleUser" max-width="600px">
-                <EditSingleUser
+                <EditSingleUserDialog
                   :userData="userData"
                   @closeEditSingleUserDialogEvent="
                     this.editSingleUser = false
-                  "></EditSingleUser>
+                  "></EditSingleUserDialog>
               </v-dialog>
             </v-col>
             <v-col v-if="!isStudent">
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-  import EditSingleUser from "./EditSingleUser.vue";
+  import EditSingleUserDialog from "./EditSingleUserDialog.vue";
   export default {
     data() {
       return {
@@ -66,7 +66,7 @@
       };
     },
     components: {
-      EditSingleUser,
+      EditSingleUserDialog,
     },
     created() {
       this.makeRoleString();

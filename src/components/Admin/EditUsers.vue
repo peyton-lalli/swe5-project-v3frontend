@@ -17,88 +17,23 @@
     </v-card-title>
     <v-card-text>
       <v-row v-for="user in users">
-        <v-col>
-          <v-card
-            class="repertoireItemGradient fullBorderCurve mainblur ml-3 mr-3 pl-4 pr-4 mb-2">
-            <v-row>
-              <v-col cols="1" align-self="center">
-                <v-avatar class="bg-darkBlue">
-                  <v-img :src="user.picture"></v-img>
-                </v-avatar>
-              </v-col>
-              <v-col cols="7" align-self="center">
-                <v-card-title
-                  class="pb-0 font-weight-bold"
-                  v-if="user.roleId === 1">
-                  {{ user.lName }}, {{ user.fName }} - Student
-                </v-card-title>
-                <v-card-title
-                  class="pb-0 font-weight-bold"
-                  v-if="user.roleId === 2">
-                  {{ user.lName }}, {{ user.fName }} - Faculty
-                </v-card-title>
-                <v-card-title
-                  class="pb-0 font-weight-bold"
-                  v-if="user.roleId === 3">
-                  {{ user.lName }}, {{ user.fName }} - Admin
-                </v-card-title>
-                <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-                  {{ user.email }}
-                </v-card-subtitle>
-              </v-col>
-              <v-col
-                cols="4"
-                align-self="center"
-                class="text-right pr-7 pl-7"
-                v-if="user.role != 'student'">
-                <v-row>
-                  <v-col>
-                    <v-btn
-                      elevation="0"
-                      size="small"
-                      rounded="pill"
-                      class="buttonWhite text-mediumBlue font-weight-bold">
-                      Edit
-                    </v-btn>
-                  </v-col>
-                  <v-col>
-                    <v-btn
-                      elevation="0"
-                      size="small"
-                      rounded="pill"
-                      class="buttonWhite text-mediumBlue font-weight-bold">
-                      Disable
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-col>
-              <v-col
-                cols="4"
-                align-self="center"
-                class="text-right pr-7 pl-7"
-                v-if="user.role == 'student'">
-                <v-btn
-                  elevation="0"
-                  size="small"
-                  rounded="pill"
-                  class="buttonWhite text-mediumBlue font-weight-bold">
-                  Edit
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-card>
-        </v-col>
+        <AdminUserComponent :userData="user" />
       </v-row>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
+  import EditSingleUser from "./EditSingleUser.vue";
+  import AdminUserComponent from "./AdminUserComponent.vue";
   import { useUserStore } from "../../stores/UserStore.js";
   import { mapStores } from "pinia";
   export default {
     name: "EditUsers",
-    components: {},
+    components: {
+      EditSingleUser,
+      AdminUserComponent,
+    },
     data() {
       return {
         users: [],
@@ -114,7 +49,6 @@
     },
     async mounted() {
       this.users = this.userStore.userRoleInfo.users;
-      console.log(this.users[0]);
       this.users.sort(function (a, b) {
         // Extract the last name from the "last_name" column of each result
         var lastNameA = a.lName.toUpperCase();

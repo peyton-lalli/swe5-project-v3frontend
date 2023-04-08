@@ -28,7 +28,7 @@
                       class="rounded-lg"
                       @click="setSelectedPiece(piece)"
                       :class="
-                        this.selectedPiece.pieceId === piece.pieceId
+                        isCurrentlySelected(piece.pieceId)
                           ? 'selectedSong'
                           : 'unSelectedSong'
                       "
@@ -45,7 +45,7 @@
                             <v-card-subtitle
                               class="font-weight-bold"
                               :class="
-                                this.selectedPiece.pieceId === piece.pieceId
+                                isCurrentlySelected(piece.pieceId)
                                   ? 'text-white'
                                   : 'text-darkGray'
                               ">
@@ -54,7 +54,7 @@
                             <v-card-subtitle
                               class="font-weight-bold"
                               :class="
-                                this.selectedPiece.pieceId === piece.pieceId
+                                isCurrentlySelected(piece.pieceId)
                                   ? 'text-lightBlue'
                                   : 'text-darkBlue'
                               ">
@@ -84,7 +84,7 @@
         rounded="lg"
         elevation="0"
         class="text-none buttonGradient text-white font-weight-bold"
-        @click="emitSelectedPiece()">
+        @click="emitSelectedPieces()">
         Save
       </v-btn>
     </v-card-actions>
@@ -101,14 +101,15 @@
     data() {
       return {
         input: ref(""),
-        selectedPiece: this.sentSelectedPiece,
+        selectedPieces: JSON.parse(JSON.stringify(this.sentSelectedPieces)),
+        currentSelectedPieces: [],
       };
     },
     props: {
-      sentSelectedPiece: {
-        type: [Object],
+      sentSelectedPieces: {
+        type: [Array],
         default() {
-          return {};
+          return [];
         },
       },
       isEdit: false,
@@ -119,26 +120,47 @@
     computed: {
       ...mapStores(useUserStore),
     },
+    mounted() {},
     methods: {
       filteredList() {
-        return this.userStore.userRoleInfo.repertoire.pieces.filter((piece) =>
-          piece.name.toLowerCase().includes(this.input.toLowerCase())
+        return this.userStore.userRoleInfo.repertoires[0].pieces.filter(
+          (piece) => piece.name.toLowerCase().includes(this.input.toLowerCase())
         );
       },
       setSelectedPiece(piece) {
-        this.selectedPiece = piece;
-        this.selectedPiece.pieceId = piece.pieceId;
+        if (this.isEdit) {
+          this.selectedPieces[0].piece = piece;
+        } else {
+          this.selectedPieces.push(piece);
+        }
       },
-      emitSelectedPiece() {
-        this.$emit("setSelectedPiece", this.selectedPiece);
+      isCurrentlySelected(pieceId) {
+        let isInList = false;
+
+        if (this.isEdit) {
+          this.selectedPieces[0].piece.pieceId === pieceId
+            ? (isInList = true)
+            : (isInList = false);
+        } else if (this.selectedPieces.length === 0) {
+          isInList = false;
+        } else {
+          this.selectedPieces[0].pieceId === pieceId
+            ? (isInList = true)
+            : (isInList = false);
+        }
+
+        return isInList;
+      },
+      emitSelectedPieces() {
+        this.$emit("setOrAddSelectedPieces", this.selectedPieces);
       },
       closeDialog() {
         this.$emit("closeEventRepertoireSelection");
       },
     },
     watch: {
-      sentSelectedPiece(newPiece) {
-        this.selectedPiece = newPiece;
+      sentSelectedPiece(newPieces) {
+        this.selectedPieces = JSON.parse(JSON.stringify(newPieces));
       },
     },
   };

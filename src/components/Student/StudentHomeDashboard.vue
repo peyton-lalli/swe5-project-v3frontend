@@ -79,7 +79,8 @@
           </v-row>
         </v-card-title>
         <v-card-text>
-          <v-row v-for="piece in this.userStore.userRoleInfo.repertoire.pieces">
+          <v-row
+            v-for="piece in this.userStore.userRoleInfo.repertoires[0].pieces">
             <RepertoireComponent :sentPiece="piece" />
           </v-row>
         </v-card-text>
@@ -129,6 +130,7 @@
     },
     mounted() {
       this.eventSignups = this.eventsStore.generateEventSignupsForUser();
+      console.log(this.eventSignups);
     },
     methods: {
       closeCreateDialog(val) {

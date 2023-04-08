@@ -1,5 +1,5 @@
 import http from "./http-common";
-class StudentsService {
+class StudentsDataService {
   create(data) {
     return http.post("/performance-t3/students", data);
   }
@@ -34,4 +34,4 @@ class StudentsService {
     return http.delete(`/performance-t3/students/${id}`);
   }
 }
-export default new StudentsService();
+export default new StudentsDataService();

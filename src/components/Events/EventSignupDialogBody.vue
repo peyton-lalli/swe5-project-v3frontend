@@ -4,12 +4,12 @@
       <v-card-title class="font-weight-bold text-darkBlue ml-4 mt-4">
         <v-row>
           <v-col class="text-h5 font-weight-bold pb-0 mb-2">
-            {{ signupData.title }} Signup</v-col
+            {{ eventData.title }} Signup</v-col
           >
         </v-row>
       </v-card-title>
       <v-card-subtitle class="font-weight-bold text-mediumBlue pt-0 ml-4">
-        {{ formatDate(signupData.date) }}
+        {{ formatDate(eventData.date) }}
       </v-card-subtitle>
       <v-card-subtitle class="font-weight-bold text-mediumBlue ml-4">
         {{ timesInfoString }}
@@ -40,7 +40,8 @@
                   v-model="selectedAccompanist"
                   :items="this.userStore.userRoleInfo.accompanists"
                   item-title="name"
-                  item-value="id">
+                  item-value="id"
+                  return-object>
                 </v-select>
               </v-col>
             </v-row>
@@ -100,7 +101,8 @@
                         </v-card-title>
                         <v-card-text class="pb-2">
                           <v-card
-                            v-if="Object.keys(selectedPiece).length != 0"
+                            v-for="piece in selectedPieces"
+                            v-if="selectedPieces.length != 0"
                             class="bg-white rounded-lg lighterBlur my-2">
                             <v-card-text>
                               <v-row>
@@ -113,11 +115,15 @@
                                 <v-col cols="11" class="">
                                   <v-card-subtitle
                                     class="font-weight-bold text-darkGray">
-                                    {{ selectedPiece.name }}
+                                    {{ isEdit ? piece.piece.name : piece.name }}
                                   </v-card-subtitle>
                                   <v-card-subtitle
                                     class="font-weight-bold text-darkBlue">
-                                    {{ selectedPiece.composer.name }}
+                                    {{
+                                      isEdit
+                                        ? piece.piece.composer.name
+                                        : piece.composer.name
+                                    }}
                                   </v-card-subtitle>
                                 </v-col>
                               </v-row>
@@ -185,9 +191,9 @@
     </v-card>
     <v-dialog v-model="eventRepertoireSelection" max-width="600px">
       <EventRepertoireSelectionBody
-        :sent-selected-piece="selectedPiece"
+        :sent-selected-pieces="selectedPieces"
         :is-edit="isEdit"
-        @setSelectedPiece="setSelectedPiece"
+        @setOrAddSelectedPieces="setOrAddSelectedPieces"
         @closeEventRepertoireSelection="
           eventRepertoireSelection = false
         "></EventRepertoireSelectionBody>
@@ -198,30 +204,37 @@
 <script>
   import { useEventsStore } from "../../stores/EventsStore.js";
   import { useUserStore } from "../../stores/UserStore.js";
-  import EventRepertoireSelectionBody from "./EventRepertoireSelectionBody.vue";
   import { mapStores } from "pinia";
   import { DateTimeMixin } from "../../mixins/DateTimeMixin.js";
+  import EventRepertoireSelectionBody from "./EventRepertoireSelectionBody.vue";
+
   export default {
     name: "EventSignupDialogBody",
+    components: {
+      EventRepertoireSelectionBody,
+    },
     data() {
       return {
+        signupData: JSON.parse(JSON.stringify(this.sentSignupData)),
+        eventData: JSON.parse(JSON.stringify(this.sentSignupEventData)),
         isEdit: this.sentBool,
-        timeslots: this.signupData.timeslots,
-        timesInfoString: this.signupData.timesInfoString,
+        timeslots: JSON.parse(JSON.stringify(this.sentSignupEventData))
+          .timeslots,
+        timesInfoString: JSON.parse(JSON.stringify(this.sentSignupEventData))
+          .timesInfoString,
         selectedTimeslot: {},
-        selectedPiece: this.signupData.selectedPiece,
-        selectedEventSong: this.signupData.selectedPiece,
+        selectedPieces: JSON.parse(JSON.stringify(this.sentSignupData)).songs,
+        selectedEventSongs: JSON.parse(JSON.stringify(this.sentSignupData))
+          .songs,
         selectedInstructor: {},
         selectedAccompanist: {},
         eventRepertoireSelection: false,
       };
     },
     mixins: [DateTimeMixin],
-    components: {
-      EventRepertoireSelectionBody,
-    },
     props: {
-      signupData: {},
+      sentSignupData: {},
+      sentSignupEventData: {},
       sentBool: false,
     },
     computed: {
@@ -231,21 +244,33 @@
       sentBool(newBool) {
         this.isEdit = newBool;
       },
+      sentSignupData(data) {
+        this.signupData = { ...data };
+
+        this.setDefaultSelectedInstructorAndAccompanist();
+
+        for (let time of this.timeslots) {
+          for (let ts of time) {
+            if (ts.time === this.signupData.timeslot) {
+              this.selectedTimeslot = ts;
+              break;
+            }
+          }
+        }
+      },
+      sentSignupEventData(data) {
+        this.eventData = JSON.parse(JSON.stringify(data));
+        this.timeslots = this.eventData.timeslots;
+        this.timesInfoString = this.eventData.timesInfoString;
+      },
     },
     mounted() {
       // Set default selected piece
-      Object.keys(this.signupData.selectedInstructor).length === 0
-        ? (this.selectedInstructor = this.userStore.userRoleInfo.instructors[0])
-        : (this.selectedInstructor = this.signupData.selectedInstructor);
-
-      Object.keys(this.signupData.selectedAccompanist).length === 0
-        ? (this.selectedAccompanist =
-            this.userStore.userRoleInfo.accompanists[0])
-        : (this.selectedAccompanist = this.signupData.selectedAccompanist);
+      this.setDefaultSelectedInstructorAndAccompanist();
 
       for (let time of this.timeslots) {
         for (let ts of time) {
-          if (ts.time === this.signupData.selectedTimeslot) {
+          if (ts.time === this.signupData.timeslot) {
             this.selectedTimeslot = ts;
             break;
           }
@@ -253,22 +278,24 @@
       }
     },
     methods: {
-      setSelectedPiece(piece) {
-        if (this.isEdit) {
-          this.selectedPiece = piece;
-          let pieceId = piece.pieceId;
-          let selectedEventId = this.selectedEventSong.id;
-          this.selectedEventSong = {
-            ...piece,
-            ...{ pieceId: pieceId },
-          };
-
-          delete this.selectedEventSong.id;
-          this.selectedEventSong.id = selectedEventId;
-        } else {
-          this.selectedPiece = piece;
-        }
+      setOrAddSelectedPieces(pieces) {
+        this.selectedPieces = pieces;
         this.eventRepertoireSelection = false;
+      },
+      setDefaultSelectedInstructorAndAccompanist() {
+        this.signupData.instructorId
+          ? (this.selectedInstructor =
+              this.userStore.userRoleInfo.instructors.filter(
+                (i) => i.instructorId === this.signupData.instructorId
+              )[0])
+          : (this.selectedInstructor = null);
+
+        this.signupData.accompanistId
+          ? (this.selectedAccompanist =
+              this.userStore.userRoleInfo.accompanists.filter(
+                (i) => i.accompanistId === this.signupData.accompanistId
+              )[0])
+          : (this.selectedAccompanist = null);
       },
       setSelectedTimeslot(timeslot) {
         this.selectedTimeslot = timeslot;
@@ -279,30 +306,34 @@
       async createOrEditSignup() {
         if (Object.keys(this.selectedTimeslot).length === 0) {
           alert("No Timeslot Selected");
-        } else if (Object.keys(this.selectedPiece).length === 0) {
+        } else if (this.selectedPieces.length === 0) {
           alert("No Musical Selection Made");
         } else {
           if (this.isEdit) {
             let data = {
-              id: this.signupData.id,
+              signupId: this.signupData.signupId,
+              accompanistId: this.selectedAccompanist.accompanistId,
+              instructorId: this.selectedInstructor.instructorId,
               timeslot: this.selectedTimeslot.time,
-              eventId: this.signupData.eventId,
+              eventId: this.eventData.eventId,
               studentId: this.userStore.userRoleInfo.studentId,
             };
 
             await this.eventsStore.updateSignupForEvent(
               data,
-              this.selectedEventSong
+              this.selectedPieces
             );
           } else {
             let data = {
+              accompanistId: this.selectedAccompanist.accompanistId,
+              instructorId: this.selectedInstructor.instructorId,
               timeslot: this.selectedTimeslot.time,
-              eventId: this.signupData.eventId,
+              eventId: this.eventData.eventId,
               studentId: this.userStore.userRoleInfo.studentId,
             };
             await this.eventsStore.createSignupForEvent(
               data,
-              this.selectedPiece
+              this.selectedPieces
             );
           }
 

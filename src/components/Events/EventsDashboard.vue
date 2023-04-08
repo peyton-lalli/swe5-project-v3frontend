@@ -7,7 +7,7 @@
       <v-card-text v-for="event in this.eventsStore.events">
         <v-row>
           <EventSignupItem
-            :eventData="event"
+            :sent-event-data="event"
             @regenerateSignups="regenerateSignups()" />
         </v-row>
       </v-card-text>

@@ -130,6 +130,7 @@
     },
     mounted() {
       this.eventSignups = this.eventsStore.generateEventSignupsForUser();
+      console.log(this.eventSignups);
     },
     methods: {
       closeCreateDialog(val) {

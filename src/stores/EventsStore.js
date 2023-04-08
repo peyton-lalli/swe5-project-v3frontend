@@ -6,6 +6,7 @@ import EventSongsDataService from "../services/eventsongs.js";
 import PiecesDataService from "../services/pieces.js";
 import ComposersDataService from "../services/composers.js";
 import { useUserStore } from "../stores/UserStore.js";
+import { DateTimeMixin } from "../mixins/DateTimeMixin.js";
 
 export const useEventsStore = defineStore("events", {
   state: () => ({ events: [] }),
@@ -15,135 +16,38 @@ export const useEventsStore = defineStore("events", {
       return (eventId) => state.events.find((event) => event.id === eventId);
     },
   },
+  mixins: [DateTimeMixin],
   actions: {
     // Load all events and relevant data in from database
     async setEvents() {
       await EventDataService.getAllEventsWithInfo()
         .then((response) => {
-          console.log(response.data);
+          this.events = response.data;
+          this.createTimesAndDates();
         })
         .catch((e) => {
           console.log(e);
         });
-
-      this.events = [];
-
-      // Load all the events in, creating a custom object array with the needed data.
-      await EventDataService.getAll()
-        .then(async (response) => {
-          for (let event of response.data.Event) {
-            this.events.push({
-              id: event.id,
-              type: event.type,
-              title: event.title,
-              date: new Date(event.date),
-              times: await this.createTimes(event),
-            });
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-      await this.generateSignUpsForAllEvents();
-    },
-    // Load all of the signups for a specific event, appending the event's data
-    // Probably needs to be changed to just be called inside the constructor for the event on line 34 - similar to how createTimes() works.
-    async generateSignUpsForAllEvents() {
-      await EventSignUpDataService.getAll()
-        .then((response) => {
-          for (let [i, event] of this.events.entries()) {
-            this.events[i] = {
-              ...this.events[i],
-              ...{
-                signups: response.data.EventSignUp.filter(
-                  (signUp) => signUp.eventId === event.id
-                ),
-              },
-            };
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-
-      // Loads the songs for each signup of each event
-      for (let [i, event] of this.events.entries()) {
-        for (let [j, signup] of event.signups.entries()) {
-          await EventSongsDataService.getEventSignupId(signup.id)
-            .then(async (response) => {
-              let songs = response.data.EventSongs;
-
-              for (let [k, song] of songs.entries()) {
-                songs[k] = {
-                  ...songs[k],
-                  ...(await this.generateSongDataForEventSong(song.pieceId)),
-                };
-              }
-
-              this.events[i].signups[j] = {
-                ...this.events[i].signups[j],
-                ...{ songs: songs },
-              };
-            })
-            .catch((e) => {
-              console.log(e);
-            });
-        }
-      }
-    },
-
-    // Given an EventSong's pieceId, gets the Piece and Composer data for it
-    async generateSongDataForEventSong(id) {
-      let data = {};
-      await PiecesDataService.getId(id)
-        .then((response) => {
-          response.data.Pieces[0].pieceId = response.data.Pieces[0].id;
-          delete response.data.Pieces[0].id;
-          data = {
-            ...this.data,
-            // This might be an issue, as it would have two 'id' fields - may need to change to mimmick composer below
-            // @ethanimooney: fix?
-            ...response.data.Pieces[0],
-          };
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-
-      // Load composer data in for each piece in the student's repertoire
-      await ComposersDataService.getAll()
-        .then((response) => {
-          data = {
-            ...data,
-            ...{
-              composer: response.data.Composers.filter(
-                (c) => c.id === data.composerId
-              )[0],
-            },
-          };
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-
-      return data;
     },
     // Load all of the times for a specific event, appending the event's data
-    async createTimes(event) {
+    async createTimesAndDates() {
       let timesFinal = [];
-      await EventTimeDataService.getEventId(event.id)
-        .then((response) => {
-          for (let time of response.data.EventTime) {
-            timesFinal.push({
-              startTime: new Date(event.date + " " + time.starttime),
-              endTime: new Date(event.date + " " + time.endtime),
-              interval: time.interval,
-            });
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      for (let [i, event] of this.events.entries()) {
+        for (let [j, time] of event.times.entries()) {
+          this.events[i].times[j] = {
+            startTime: new Date(event.date + " " + time.starttime),
+            endTime: new Date(event.date + " " + time.endtime),
+            interval: time.interval,
+          };
+        }
+        this.events[i].timeslots = DateTimeMixin.methods.getTimeSlots(
+          this.events[i].times
+        );
+      }
+
+      for (let [i, event] of this.events.entries()) {
+        this.events[i].date = new Date(event.date);
+      }
 
       return timesFinal;
     },
@@ -158,8 +62,6 @@ export const useEventsStore = defineStore("events", {
       let eventSignups = new Array();
 
       for (let event of this.events) {
-        // We need to add support for faculty and admin once we update the database design
-        // TODO @ethanimooney: add this
         if (userStore.userInfo.roles.default.roleId === 1) {
           eventSignups = eventSignups.concat(
             event.signups.filter(
@@ -171,11 +73,11 @@ export const useEventsStore = defineStore("events", {
 
       return eventSignups;
     },
-    // Return true if the user is signed up for the event coorespinding to the eventId passed in
+    // Return true if the user is signed up for the event cooresponding to the eventId passed in
     hasUserSignedUpForEvent(eventId) {
       let userStore = useUserStore();
       let pastSignup = this.events
-        .filter((e) => e.id === eventId)[0]
+        .filter((e) => e.eventId === eventId)[0]
         .signups.filter(
           (s) => (s.studentId = userStore.userRoleInfo.studentId)
         );
@@ -196,30 +98,45 @@ export const useEventsStore = defineStore("events", {
       }
     },
     // Generate a signup for an event based on the passed in signup
-    async createSignupForEvent(data, piece) {
-      let songData = {};
+    async createSignupForEvent(data, selectedPieces) {
+      let songData = [];
       let signupId = 0;
 
       // Post the change to the database
       await EventSignUpDataService.create(data)
         .then(async (response) => {
           signupId = response.data.id;
-          await EventSongsDataService.create({
-            pieceId: piece.pieceId,
-            eventsignupId: response.data.id,
-          })
-            .then(async (sResponse) => {
-              // Build the song data to be loaded in the local copy
-              let sId = sResponse.data.id;
-              songData = {
-                ...sResponse.data,
-                ...piece,
-              };
-              songData.id = sId;
+          for (let piece of selectedPieces) {
+            await EventSongsDataService.create({
+              pieceId: piece.pieceId,
+              eventsignupId: response.data.id,
             })
-            .catch((e) => {
-              console.log(e);
-            });
+              .then(async (sResponse) => {
+                // Build the song data to be loaded in the local copy
+                let sId = sResponse.data.id;
+                let ca = sResponse.data.createdAt;
+                let ua = sResponse.data.updatedAt;
+                let songDataTemp = {
+                  ...sResponse.data,
+                  ...{ piece: piece },
+                  ...{
+                    eventsongId: sId,
+                    eventSongCreatedAt: ca,
+                    eventSongUpdatedAt: ua,
+                  },
+                };
+                delete songDataTemp.pieceId;
+                delete songDataTemp.id;
+                delete songDataTemp.eventsignupId;
+                delete songDataTemp.createdAt;
+                delete songDataTemp.updatedAt;
+
+                songData.push(songDataTemp);
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -227,33 +144,38 @@ export const useEventsStore = defineStore("events", {
 
       // Update the EventsStore.events with the new data
       this.events[
-        this.events.findIndex((e) => e.id === data.eventId)
+        this.events.findIndex((e) => e.eventId === data.eventId)
       ].signups.push({
         ...data,
-        ...{ songs: new Array(songData), ...{ id: signupId } },
+        ...{ songs: songData, ...{ signupId: signupId } },
       });
     },
     // Generate a signup for an event based on the passed in signup
-    async updateSignupForEvent(data, piece) {
-      let songData = {};
+    async updateSignupForEvent(data, eventSongs) {
+      let songData = [];
 
       // Post the change to the database
-      await EventSignUpDataService.update(data.id, data)
-        .then(async (response) => {
-          await EventSongsDataService.update(piece.pieceId, {
-            pieceId: piece.pieceId,
-            eventsignupId: data.id,
-          })
-            .then(async (sResponse) => {
-              // Build the song data to be loaded in the local copy
-              songData = {
-                ...sResponse.data,
-                ...piece,
-              };
+      await EventSignUpDataService.update(data.signupId, data)
+        .then(async () => {
+          for (let eventSong of eventSongs) {
+            await EventSongsDataService.update(eventSong.eventsongId, {
+              pieceId: eventSong.piece.pieceId,
+              eventsignupId: data.id,
             })
-            .catch((e) => {
-              console.log(e);
-            });
+              .then(async (sResponse) => {
+                // Build the song data to be loaded in the local copy
+                let songDataTemp = {
+                  ...sResponse.data,
+                  ...eventSong,
+                };
+                delete songDataTemp.message;
+
+                songData.push(songDataTemp);
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -261,13 +183,13 @@ export const useEventsStore = defineStore("events", {
 
       // Update the EventsStore.events with the new data
 
-      let index = this.events.findIndex((e) => e.id === data.eventId);
+      let index = this.events.findIndex((e) => e.eventId === data.eventId);
       let signupIndex = this.events[index].signups.findIndex(
-        (s) => s.id === data.id
+        (s) => s.signupId === data.signupId
       );
       this.events[index].signups[signupIndex] = {
         ...data,
-        ...{ songs: new Array(songData) },
+        ...{ songs: songData },
       };
     },
 

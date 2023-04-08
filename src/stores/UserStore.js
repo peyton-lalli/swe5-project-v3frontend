@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import StudentsDataService from "../services/students.js";
+import StudentsService from "../services/students.js";
 import PiecesDataService from "../services/pieces.js";
 import ComposersDataService from "../services/composers.js";
 import StudentInstructorDataService from "../services/studentaccompanist.js";
@@ -169,13 +169,9 @@ export const useUserStore = defineStore("user", {
 
                 let additionalRoleData = {};
                 if (roles[0].roleId === 1) {
-                  await StudentsDataService.getUserId(user.id)
+                  await StudentsService.getAllInfo(user.id)
                     .then((response) => {
-                      let userId = user.id;
-                      additionalRoleData = response.data.StudentInfo[0];
-                      let sId = additionalRoleData.id;
-                      additionalRoleData.id = userId;
-                      additionalRoleData.studentinfoId = sId;
+                      additionalRoleData = response.data[0];
                     })
                     .catch((e) => {
                       console.log(e);
@@ -193,13 +189,11 @@ export const useUserStore = defineStore("user", {
                       console.log(e);
                     });
                 }
-
                 this.userRoleInfo.users[i] = {
                   ...additionalRoleData,
                   ...user,
-                  ...roles[0],
+                  ...{ roles: roles },
                 };
-                console.log(this.userRoleInfo.users[i]);
               })
               .catch((e) => {
                 console.log(e);
@@ -210,33 +204,37 @@ export const useUserStore = defineStore("user", {
           console.log(e);
         });
     },
-    // Post update to the DB, then update store
-    // This needs to be used carefully, it's not really safe to use yet
-    // @ethanimooney: Fix?
-    async updateUserInfo(data, role) {
-      if (role === "student") {
-        await this.updateStudentInfo(data);
-      } else if (role === "faculty") {
-        await updateFacultyInfo(data);
-      } else if (role === "admin") {
-      }
-      this.userRoleInfo = data;
-    },
     // Post update to StudentInfo table
-    async updateStudentInfo(data) {
-      await StudentsDataService.update(this.userInfo.userId, data).catch(
-        (e) => {
-          console.log(e);
-        }
-      );
+    async updateStudentInfo(data, id) {
+      await StudentsService.update(id, data).catch((e) => {
+        console.log(e);
+      });
     },
     // Post update to Instructor table
-    async updateFacultyInfo(data) {
-      await InstructorDataService.update(this.userInfo.userId, data).catch(
-        (e) => {
-          console.log(e);
-        }
-      );
+    async updateFacultyInfo(data, id) {
+      await InstructorDataService.update(id, data).catch((e) => {
+        console.log(e);
+      });
+    },
+    async editRole(data, id) {
+      await UsersRoleDataService.update(id, data).catch((e) => {
+        console.log(e);
+      });
+    },
+    async addRole(data) {
+      await UsersRoleDataService.create(data).catch((e) => {
+        console.log(e);
+      });
+    },
+    async removeRole(id) {
+      await UsersRoleDataService.delete(id).catch((e) => {
+        console.log(e);
+      });
+    },
+    async createRole(data) {
+      await UsersRoleDataService.create(data).catch((e) => {
+        console.log(e);
+      });
     },
   },
 });

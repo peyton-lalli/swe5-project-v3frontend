@@ -1,8 +1,5 @@
 import { defineStore } from "pinia";
-import StudentsService from "../services/students.js";
-import PiecesDataService from "../services/pieces.js";
-import ComposersDataService from "../services/composers.js";
-import StudentInstructorDataService from "../services/studentaccompanist.js";
+import StudentsDataService from "../services/students.js";
 import InstructorDataService from "../services/instructors.js";
 import UsersDataService from "../services/users.js";
 import UsersRoleDataService from "../services/userrole.js";
@@ -169,7 +166,7 @@ export const useUserStore = defineStore("user", {
 
                 let additionalRoleData = {};
                 if (roles[0].roleId === 1) {
-                  await StudentsService.getAllInfo(user.id)
+                  await StudentsDataService.getAllInfo(user.id)
                     .then((response) => {
                       additionalRoleData = response.data[0];
                     })
@@ -206,7 +203,7 @@ export const useUserStore = defineStore("user", {
     },
     // Post update to StudentInfo table
     async updateStudentInfo(data, id) {
-      await StudentsService.update(id, data).catch((e) => {
+      await StudentsDataService.update(id, data).catch((e) => {
         console.log(e);
       });
     },

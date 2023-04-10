@@ -52,6 +52,17 @@ export const useUserStore = defineStore("user", {
         .then((response) => {
           let studentInfo = response.data[0];
 
+          for (let [i, instrument] of studentInfo.instruments.entries()) {
+            let instrumentObject = instrument.instrument;
+            let sInstrumentObject = instrument;
+            delete sInstrumentObject.instrument;
+
+            studentInfo.instruments[i] = {
+              ...sInstrumentObject,
+              ...instrumentObject,
+            };
+          }
+
           for (let [i, repertoire] of studentInfo.repertoires.entries()) {
             let repertoireObject = repertoire.repertoire;
             delete studentInfo.repertoires[0].repertoire;

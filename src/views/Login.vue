@@ -1,30 +1,30 @@
 <template>
-  <v-container fill-height fluid align="center">
-    <v-row>
-      <v-col>
-        <v-col></v-col>
-        <v-col></v-col>
-        <v-col></v-col>
-        <v-col></v-col>
-        <v-col></v-col>
-        <v-col></v-col>
-        <v-col></v-col>
-        <v-col></v-col>
+  <v-container fill-height fluid class="loginGrid">
+    <v-card class="loginArea mainBlur" rounded="lg">
+      <v-card-title class="pt-8 pb-8">
         <v-row>
-          <v-col>
-            <v-img alt="OC Logo" width="400" :src="logoUrl" />
-          </v-col>
+          <v-spacer></v-spacer>
+          <v-img alt="OC Logo" width="200" :src="logoUrl" />
+          <v-spacer></v-spacer>
         </v-row>
+      </v-card-title>
+
+      <v-card-title class="font-weight-bold text-mediumBlue text-h5">
         <v-row>
-          <v-col class="font-weight-bold text-mediumBlue text-h5 pl-12"
-            >MUSIC DEPARTMENT</v-col
-          >
+          <v-spacer></v-spacer>
+          MUSIC DEPARTMENT
+          <v-spacer></v-spacer>
         </v-row>
+      </v-card-title>
+
+      <v-card-actions class="pt-8 pb-8">
         <v-row>
-          <v-col><div id="parent_id" style="padding-left: 45px"></div></v-col>
+          <v-spacer></v-spacer>
+          <div id="parent_id" class="text-darkBlue"></div>
+          <v-spacer></v-spacer>
         </v-row>
-      </v-col>
-    </v-row>
+      </v-card-actions>
+    </v-card>
   </v-container>
 </template>
 
@@ -71,7 +71,6 @@
           document.getElementById("parent_id"),
           {
             type: "standard",
-            theme: "filled_black",
             size: "large",
             shape: "pill",
             logo_alignment: "left",
@@ -104,3 +103,17 @@
     },
   };
 </script>
+
+<style scoped>
+  .loginGrid {
+    display: grid;
+    grid-template-rows: 1fr;
+    align-items: center;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas: ". loginArea .";
+  }
+
+  .loginArea {
+    grid-area: loginArea;
+  }
+</style>

@@ -78,8 +78,6 @@
         let eventData = {
           type: this.eventName,
           date: this.date,
-          createdAt: new Date(),
-          updatedAt: new Date(),
         };
         let eventTimes = new Array();
         for (let time of this.timeSlots) {

@@ -7,6 +7,24 @@
             <v-card-title class="font-weight-bold text-black">
               <v-row>
                 <v-col class="pb-0">{{ eventData.type }} </v-col>
+                <v-col class="text-right">
+                  <v-btn
+                    @click="editEventDialog = true"
+                    elevation="0"
+                    size="small"
+                    rounded="pill"
+                    class="buttonGradient text-white font-weight-bold mr-2"
+                    v-if="this.userStore.userInfo.roles.default.roleId === 3">
+                    Edit
+                  </v-btn>
+                  <v-dialog v-model="editEventDialog" max-width="600px">
+                    <AdminEditEvent
+                      :eventData="this.eventData"
+                      @closeEditEventDialogEvent="
+                        this.editEventDialog = false
+                      "></AdminEditEvent>
+                  </v-dialog>
+                </v-col>
               </v-row>
             </v-card-title>
             <v-card-subtitle class="font-weight-bold text-darkBlue">
@@ -59,6 +77,7 @@
 <script>
   import CritiqueListComponent from "./CritiqueListComponent.vue";
   import ViewSignUps from "./ViewSignUps.vue";
+  import AdminEditEvent from "../Admin/AdminEditEvent.vue";
   import { useUserStore } from "../../stores/UserStore.js";
   import { useEventsStore } from "../../stores/EventsStore.js";
   import { mapStores } from "pinia";
@@ -68,11 +87,13 @@
     components: {
       CritiqueListComponent,
       ViewSignUps,
+      AdminEditEvent,
     },
     data() {
       return {
         viewSignUpsDialog: false,
         critiqueDialog: false,
+        editEventDialog: false,
       };
     },
     mixins: [DateTimeMixin],
@@ -80,9 +101,6 @@
       eventData: {},
     },
     methods: {
-      printEvents(event) {
-        console.log(event);
-      },
       closeCritiqueDialog(val) {
         this.critiqueDialog = val;
       },

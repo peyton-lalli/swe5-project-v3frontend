@@ -22,6 +22,7 @@ export const useEventsStore = defineStore("events", {
       await EventDataService.getAllEventsWithInfo()
         .then((response) => {
           this.events = response.data;
+
           this.createTimesAndDates();
           console.log(this.events[0]);
         })
@@ -39,6 +40,7 @@ export const useEventsStore = defineStore("events", {
             startTime: new Date(event.date + " " + time.starttime),
             endTime: new Date(event.date + " " + time.endtime),
             interval: time.interval,
+            eventtimeId: time.eventtimeId,
           };
         }
         this.events[i].timeslots = DateTimeMixin.methods.getTimeSlots(
@@ -238,6 +240,26 @@ export const useEventsStore = defineStore("events", {
         });
 
       return list;
+    },
+    async updateEvent(eventData, eventId) {
+      await EventDataService.update(eventId, eventData).catch((e) => {
+        console.log(e);
+      });
+    },
+    async updateTime(timeData, timeId) {
+      await EventTimeDataService.update(timeId, timeData).catch((e) => {
+        console.log(e);
+      });
+    },
+    async removeTime(timeId) {
+      await EventTimeDataService.delete(timeId).catch((e) => {
+        console.log(e);
+      });
+    },
+    async addTime(timeData) {
+      await EventTimeDataService.create(timeData).catch((e) => {
+        console.log(e);
+      });
     },
   },
 });

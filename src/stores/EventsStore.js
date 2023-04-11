@@ -3,8 +3,7 @@ import EventTimeDataService from "../services/eventtime.js";
 import EventDataService from "../services/event.js";
 import EventSignUpDataService from "../services/eventsignup.js";
 import EventSongsDataService from "../services/eventsongs.js";
-import PiecesDataService from "../services/pieces.js";
-import ComposersDataService from "../services/composers.js";
+import AvailabilityDataService from "../services/availability.js";
 import { useUserStore } from "../stores/UserStore.js";
 import { DateTimeMixin } from "../mixins/DateTimeMixin.js";
 
@@ -24,6 +23,7 @@ export const useEventsStore = defineStore("events", {
         .then((response) => {
           this.events = response.data;
           this.createTimesAndDates();
+          console.log(this.events[0]);
         })
         .catch((e) => {
           console.log(e);
@@ -33,6 +33,7 @@ export const useEventsStore = defineStore("events", {
     async createTimesAndDates() {
       let timesFinal = [];
       for (let [i, event] of this.events.entries()) {
+        console.log(event.date);
         for (let [j, time] of event.times.entries()) {
           this.events[i].times[j] = {
             startTime: new Date(event.date + " " + time.starttime),
@@ -215,6 +216,33 @@ export const useEventsStore = defineStore("events", {
 
       // Update the EventsStore.events with the new data
       this.events.push({ ...eventData, ...{ times: finalTimeData } });
+    },
+    async getAvailaibilityForEventByInstructorId(instructorId, eventId) {
+      let list = [];
+      await AvailabilityDataService.getInstructorAndEvent(instructorId, eventId)
+        .then((response) => {
+          console.log(response.data);
+          console.log(response.data.Availability);
+          list = response.data.Availability;
+
+          for (let [i, item] of list.entries()) {
+            let dateObj = item.event.eventDate;
+            console.log(dateObj);
+            list[i] = {
+              ...item,
+              ...{ eventDate: dateObj },
+            };
+
+            delete item.event;
+          }
+
+          console.log(list);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      return list;
     },
   },
 });

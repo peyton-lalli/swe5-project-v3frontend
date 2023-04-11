@@ -29,8 +29,8 @@
                       @click="setSelectedPiece(piece)"
                       :class="
                         isCurrentlySelected(piece.pieceId)
-                          ? 'selectedSong'
-                          : 'unSelectedSong'
+                          ? 'selectedListItem'
+                          : 'unSelectedListItem'
                       "
                       :key="piece">
                       <v-card-text>

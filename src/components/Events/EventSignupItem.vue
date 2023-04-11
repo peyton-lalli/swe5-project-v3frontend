@@ -4,7 +4,7 @@
       <v-row class="pa-4" no-gutters align="center">
         <v-col cols="auto">
           <v-card-title class="font-weight-bold text-white pb-0 pt-0 pl-0">
-            {{ eventData.type }}
+            {{ eventData.title }}
           </v-card-title>
           <v-card-subtitle class="font-weight-semi-bold text-darkBlue pl-0">
             {{ formatDate(eventData.date) }}

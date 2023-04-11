@@ -123,7 +123,7 @@
 </template>
 
 <script>
-  import ocLogo from "/OC_LOGO_BLUE.svg";
+  import ocLogo from "../assets/OC_LOGO_BLUE_GRADIENT.svg";
   import ProfileSettings from "./ProfileSettings.vue";
   import { mapStores } from "pinia";
   import { useEventsStore } from "../stores/EventsStore.js";

@@ -312,7 +312,6 @@
               instructor.instructorId,
               this.eventData.eventId
             );
-          console.log(this.selectedInstructorAvailability);
         }
 
         this.generateFilteredTimeslotList();
@@ -335,7 +334,6 @@
       generateFilteredTimeslotList() {
         let interval = this.eventData.times[0].interval;
         let times = [];
-        console.log(this.selectedInstructorAvailability);
         for (let time of this.selectedInstructorAvailability) {
           let obj = {
             startTime: new Date(time.eventDate + " " + time.startTime),
@@ -345,14 +343,9 @@
           times.push(obj);
         }
 
-        console.log(times);
-
         this.instructorAvailabilityTimeslots = this.getTimeSlotsCombined(times);
-        console.log(this.instructorAvailabilityTimeslots);
       },
       isTimeslotAvailableForInstructor(timeslot) {
-        console.log(timeslot);
-        console.log(this.instructorAvailabilityTimeslots);
         if (this.instructorAvailabilityTimeslots.length > 0) {
           let isAvailable = false;
           this.instructorAvailabilityTimeslots.find(
@@ -360,7 +353,6 @@
           )
             ? (isAvailable = true)
             : (isAvailable = false);
-          console.log(isAvailable);
           return isAvailable;
         }
         return true;

@@ -221,13 +221,10 @@ export const useEventsStore = defineStore("events", {
       let list = [];
       await AvailabilityDataService.getInstructorAndEvent(instructorId, eventId)
         .then((response) => {
-          console.log(response.data);
-          console.log(response.data.Availability);
           list = response.data.Availability;
 
           for (let [i, item] of list.entries()) {
             let dateObj = item.event.eventDate;
-            console.log(dateObj);
             list[i] = {
               ...item,
               ...{ eventDate: dateObj },
@@ -235,8 +232,6 @@ export const useEventsStore = defineStore("events", {
 
             delete item.event;
           }
-
-          console.log(list);
         })
         .catch((e) => {
           console.log(e);

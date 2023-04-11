@@ -1,35 +1,27 @@
 <template>
-  <v-container fill-height fluid class="loginGrid">
-    <v-card class="loginArea mainBlur" rounded="lg">
-      <v-card-title class="pt-8 pb-8">
-        <v-row>
-          <v-spacer></v-spacer>
-          <v-img alt="OC Logo" width="200" :src="logoUrl" />
-          <v-spacer></v-spacer>
-        </v-row>
-      </v-card-title>
+  <v-container fill-height fluid class="loginGrid" align="center">
+    <v-card class="loginArea loginBlur pa-4" rounded="lg">
+      <v-card rounded="md" flat>
+        <v-card-title class="pt-8 pb-8 px-8" align="center">
+          <v-img alt="OC Logo" width="300" :src="logoUrl" />
+        </v-card-title>
 
-      <v-card-title class="font-weight-bold text-mediumBlue text-h5">
-        <v-row>
-          <v-spacer></v-spacer>
+        <v-card-title
+          class="font-weight-bold text-mediumBlue px-8"
+          align="center">
           MUSIC DEPARTMENT
-          <v-spacer></v-spacer>
-        </v-row>
-      </v-card-title>
+        </v-card-title>
 
-      <v-card-actions class="pt-8 pb-8">
-        <v-row>
-          <v-spacer></v-spacer>
-          <div id="parent_id" class="text-darkBlue"></div>
-          <v-spacer></v-spacer>
-        </v-row>
-      </v-card-actions>
+        <v-card-actions class="pb-4 px-8" align="center">
+          <v-container id="parent_id" class="text-darkBlue"></v-container>
+        </v-card-actions>
+      </v-card>
     </v-card>
   </v-container>
 </template>
 
 <script>
-  import ocLogo from "/OC_LOGO_BLUE.svg";
+  import ocLogo from "../assets/OC_LOGO_BLUE_GRADIENT.svg";
   import AuthServices from "../services/authServices.js";
   import { useUserStore } from "../stores/UserStore.js";
   import { useEventsStore } from "../stores/EventsStore.js";
@@ -107,9 +99,9 @@
 <style scoped>
   .loginGrid {
     display: grid;
-    grid-template-rows: 1fr;
+    grid-template-rows: 2fr;
     align-items: center;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: minmax(auto, 2fr) minmax(auto, 1fr) minmax(auto, 2fr);
     grid-template-areas: ". loginArea .";
   }
 

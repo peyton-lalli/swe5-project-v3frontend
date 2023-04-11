@@ -95,6 +95,15 @@
   /* box-shadow: none !important; */
 }
 
+.loginBlur {
+  background: linear-gradient(
+    101.14deg,
+    rgba(46, 103, 153, 1) 6.13%,
+    rgba(184, 211, 234, 1) 69.22%
+  ) !important;
+  box-shadow: 8px 10px 34px rgba(63, 134, 197, 0.4) !important;
+}
+
 .buttonGradient {
   background: linear-gradient(90deg, #3f86c5 29.2%, #b8d3ea 150%) !important;
 }

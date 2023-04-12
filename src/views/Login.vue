@@ -1,35 +1,27 @@
 <template>
-  <v-container fill-height fluid align="center">
-    <v-row>
-      <v-col>
-        <v-col></v-col>
-        <v-col></v-col>
-        <v-col></v-col>
-        <v-col></v-col>
-        <v-col></v-col>
-        <v-col></v-col>
-        <v-col></v-col>
-        <v-col></v-col>
-        <v-row>
-          <v-col>
-            <v-img alt="OC Logo" width="400" :src="logoUrl" />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col class="font-weight-bold text-mediumBlue text-h5 pl-12"
-            >MUSIC DEPARTMENT</v-col
-          >
-        </v-row>
-        <v-row>
-          <v-col><div id="parent_id" style="padding-left: 45px"></div></v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+  <v-container fill-height fluid class="loginGrid" align="center">
+    <v-card class="loginArea loginBlur pa-4" rounded="lg">
+      <v-card rounded="md" flat>
+        <v-card-title class="pt-8 pb-8 px-8" align="center">
+          <v-img alt="OC Logo" width="300" :src="logoUrl" />
+        </v-card-title>
+
+        <v-card-title
+          class="font-weight-bold text-mediumBlue px-8"
+          align="center">
+          MUSIC DEPARTMENT
+        </v-card-title>
+
+        <v-card-actions class="pb-4 px-8" align="center">
+          <v-container id="parent_id" class="text-darkBlue"></v-container>
+        </v-card-actions>
+      </v-card>
+    </v-card>
   </v-container>
 </template>
 
 <script>
-  import ocLogo from "/OC_LOGO_BLUE.svg";
+  import ocLogo from "../assets/OC_LOGO_BLUE_GRADIENT.svg";
   import AuthServices from "../services/authServices.js";
   import { useUserStore } from "../stores/UserStore.js";
   import { useEventsStore } from "../stores/EventsStore.js";
@@ -71,7 +63,6 @@
           document.getElementById("parent_id"),
           {
             type: "standard",
-            theme: "filled_black",
             size: "large",
             shape: "pill",
             logo_alignment: "left",
@@ -104,3 +95,17 @@
     },
   };
 </script>
+
+<style scoped>
+  .loginGrid {
+    display: grid;
+    grid-template-rows: 2fr;
+    align-items: center;
+    grid-template-columns: minmax(auto, 2fr) minmax(auto, 1fr) minmax(auto, 2fr);
+    grid-template-areas: ". loginArea .";
+  }
+
+  .loginArea {
+    grid-area: loginArea;
+  }
+</style>

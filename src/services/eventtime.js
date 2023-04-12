@@ -22,7 +22,7 @@ class EventTimeDataService {
     return http.get(`/performance-t3/eventtime/eventid/${id}`);
   }
   delete(id) {
-    return http.delete(`/performance-t3/event/${id}`);
+    return http.delete(`/performance-t3/eventtime/${id}`);
   }
 }
 export default new EventTimeDataService();

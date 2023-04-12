@@ -9,8 +9,11 @@ class StudentInstructorDataService {
   getAll() {
     return http.get("/performance-t3/studentinstructor");
   }
+  getAllStudents(id) {
+    return http.get(`/performance-t3/studentinstructor/getStudents/${id}`);
+  }
   getStudent(id) {
-    return http.get(`/performance-t3/studentinstructor/studentinfoid/${id}`);
+    return http.get(`/performance-t3/studentinstructor/studentid/${id}`);
   }
   getInstructor(id) {
     return http.get(`/performance-t3/studentinstructor/instructorid/${id}`);

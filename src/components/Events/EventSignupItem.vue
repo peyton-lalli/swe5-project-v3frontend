@@ -23,7 +23,7 @@
                 size="small"
                 rounded="pill"
                 class="bg-white text-darkBlue font-weight-bold">
-                {{ eventData.signups.length }} /
+                {{ eventData.signups ? eventData.signups.length : 0 }} /
                 {{ getTotalTimeslots() }} Timeslots Filled
               </v-btn>
             </v-col>
@@ -52,7 +52,8 @@
                 <EventSignupDialogBody
                   @closeEventDialogEvent="closeEventDialog"
                   @regenerateSignups="regenerateSignups()"
-                  :signupData="signupData"
+                  :sent-signup-data="signupData"
+                  :sent-signup-event-data="signupEventData"
                   :sentBool="isEdit">
                 </EventSignupDialogBody>
               </v-dialog>
@@ -78,16 +79,16 @@
     },
     data() {
       return {
+        eventData: JSON.parse(JSON.stringify(this.sentEventData)),
         signUpDialog: false,
         signupData: {},
+        signupEventData: {},
         hasPriorSignup: false,
         priorSignup: {},
         // Needs to be implemented
         availabilityDialog: false,
         timesInfoString: "",
-        // Creation of timeslots needs to probably just be moved to the eventsStore
-        // TODO @ethanimooney: Do this
-        timeslots: [],
+        timeslots: JSON.parse(JSON.stringify(this.sentEventData)).timeslots,
         isEdit: this.hasPriorSignup ? true : false,
       };
     },
@@ -97,62 +98,45 @@
     },
     mounted() {
       this.timesInfoString = this.createTimesInfoString(this.eventData.times);
-      this.checkForPriorSignup();
+      this.eventData.signups ? this.checkForPriorSignup() : null;
       this.isEdit = this.hasPriorSignup ? true : false;
-      this.timeslots = this.getTimeSlots(this.eventData.times);
     },
     props: {
-      eventData: {},
+      sentEventData: {},
+    },
+    watch: {
+      sentEventData(data) {
+        this.eventData = JSON.parse(JSON.stringify(data));
+        this.timesInfoString = this.createTimesInfoString(this.eventData.times);
+        this.eventData.signups ? this.checkForPriorSignup() : null;
+        this.isEdit = this.hasPriorSignup ? true : false;
+      },
     },
     methods: {
+      regenerateEventData() {
+        this.eventData = this.eventsStore.events.filter(
+          (e) => e.eventId === this.eventData.eventId
+        )[0];
+        this.eventData.signups ? this.checkForPriorSignup() : null;
+      },
       checkForPriorSignup() {
-        this.priorSignup = this.eventsStore.hasUserSignedUpForEvent(
-          this.eventData.id
-        );
+        this.priorSignup = this.eventData.signups.filter(
+          (es) => es.studentId === this.userStore.userRoleInfo.studentId
+        )[0];
 
-        Object.keys(this.priorSignup).length != 0
+        this.priorSignup
           ? (this.hasPriorSignup = true)
           : (this.hasPriorSignup = false);
       },
       regenerateSignups() {
         this.$emit("regenerateSignups");
-        this.checkForPriorSignup();
+        this.regenerateEventData();
         this.isEdit = this.hasPriorSignup ? true : false;
       },
       async closeEventDialog(val) {
         this.signUpDialog = val;
       },
-      getTimeSlots(times) {
-        let counter = 1;
-        let totalSlots = [];
 
-        for (let time of times) {
-          let slots = [];
-          let intervalMillis = time.interval * 60 * 1000;
-
-          let startTime = new Date(time.startTime);
-          let endTime = new Date(time.endTime);
-
-          while (startTime < endTime) {
-            let mins = (startTime.getMinutes() + "0").slice(0, 2);
-            slots.push({
-              id: counter,
-              time:
-                (startTime.getHours() < 10 ? "0" : "") +
-                startTime.getHours() +
-                ":" +
-                mins +
-                ":00",
-            });
-            startTime.setTime(startTime.getTime() + intervalMillis);
-            counter++;
-          }
-
-          totalSlots.push(slots);
-        }
-
-        return totalSlots;
-      },
       getTotalTimeslots() {
         let total = 0;
         for (let time of this.timeslots) {
@@ -162,27 +146,27 @@
         return total;
       },
       openEventSignupDialog() {
-        this.signupData = {
-          ...this.eventData,
-          ...{
-            eventId: this.eventData.id,
-            timeslots: this.timeslots,
-            timesInfoString: this.timesInfoString,
-            selectedPiece: {},
-            selectedInstructor: {},
-            selectedAccompanist: {},
-            selectedTimeslot: "",
-            signupId: this.priorSignup.id,
-          },
-        };
-
-        delete this.signupData.id;
-
-        if (this.hasPriorSignup) {
-          this.signupData.id = this.priorSignup.id;
-          this.signupData.selectedPiece = this.priorSignup.songs[0];
-          this.signupData.selectedTimeslot = this.priorSignup.timeslot;
+        if (!this.hasPriorSignup) {
+          this.signupData = {
+            signupId: 0,
+            eventId: 0,
+            accompanistId: null,
+            instructorId: null,
+            ensembleId: 0,
+            studentId: 0,
+            timeslot: "",
+            eventSignupCreatedAt: "",
+            eventSignupUpdatedAt: "",
+            songs: [],
+            jurors: [],
+          };
+        } else {
+          this.signupData = { ...this.priorSignup };
         }
+
+        this.signupEventData = { ...this.eventData };
+        delete this.signupEventData.signups;
+        this.signupEventData.timesInfoString = this.timesInfoString;
 
         this.signUpDialog = true;
       },

@@ -12,7 +12,6 @@ export const DateTimeMixin = {
       return new Date(date).toLocaleDateString("us-EN", options);
     },
     createTimesInfoString(times) {
-      console.log(times);
       let timesString = "";
       for (let i = 0; i < times.length; i++) {
         timesString +=
@@ -25,6 +24,37 @@ export const DateTimeMixin = {
       }
 
       return timesString;
+    },
+    getTimeSlots(times) {
+      let counter = 1;
+      let totalSlots = [];
+
+      for (let time of times) {
+        let slots = [];
+        let intervalMillis = time.interval * 60 * 1000;
+
+        let startTime = new Date(time.startTime);
+        let endTime = new Date(time.endTime);
+
+        while (startTime < endTime) {
+          let mins = (startTime.getMinutes() + "0").slice(0, 2);
+          slots.push({
+            id: counter,
+            time:
+              (startTime.getHours() < 10 ? "0" : "") +
+              startTime.getHours() +
+              ":" +
+              mins +
+              ":00",
+          });
+          startTime.setTime(startTime.getTime() + intervalMillis);
+          counter++;
+        }
+
+        totalSlots.push(slots);
+      }
+
+      return totalSlots;
     },
   },
 };

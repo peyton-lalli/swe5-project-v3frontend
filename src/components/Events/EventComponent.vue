@@ -96,13 +96,13 @@
             </v-avatar>
           </v-col>
           <v-col cols="10" align-self="center">
-            <v-row v-for="song in eventSignUpData.songs">
+            <v-row v-for="eventSong in eventSignUpData.songs">
               <v-col>
                 <v-card-title class="pb-0 font-weight-bold">
-                  {{ song.name }}
+                  {{ eventSong.piece.name }}
                 </v-card-title>
                 <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-                  {{ song.composer.name }}
+                  {{ eventSong.piece.composer.name }}
                 </v-card-subtitle>
               </v-col>
             </v-row>
@@ -146,9 +146,9 @@
         this.editDialog = val;
       },
       setEventData() {
-        this.eventData = this.eventsStore.findEventForId(
-          this.eventSignUpData.eventId
-        );
+        this.eventData = this.eventsStore.events.filter(
+          (e) => e.eventId === this.eventSignUpData.eventId
+        )[0];
       },
     },
   };

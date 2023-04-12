@@ -9,6 +9,9 @@ class StudentAccompanistDataService {
   getAll() {
     return http.get("/performance-t3/studentaccompanist");
   }
+  getAllStudents(id) {
+    return http.get(`/performance-t3/studentaccompanist/getStudents/${id}`);
+  }
   getStudent(id) {
     return http.get(`/performance-t3/studentaccompanist/studentid/${id}`);
   }

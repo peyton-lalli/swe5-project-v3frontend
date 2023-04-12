@@ -45,12 +45,12 @@
               <v-card-title class="pb-0 font-weight-bold">
                 {{
                   this.userStore.userRoleInfo.users.filter(
-                    (u) => u.studentinfoId === signup.studentinfoId
+                    (u) => u.studentId === signup.studentId
                   )[0].fName
                 }}
                 {{
                   this.userStore.userRoleInfo.users.filter(
-                    (u) => u.studentinfoId === signup.studentinfoId
+                    (u) => u.studentId === signup.studentId
                   )[0].lName
                 }}
               </v-card-title>
@@ -58,7 +58,7 @@
                 Level:
                 {{
                   this.userStore.userRoleInfo.users.filter(
-                    (u) => u.studentinfoId === signup.studentinfoId
+                    (u) => u.studentId === signup.studentId
                   )[0].level
                 }}
               </v-card-subtitle>
@@ -71,7 +71,7 @@
                 class="buttonWhite text-mediumBlue font-weight-bold">
                 {{
                   this.userStore.userRoleInfo.users.filter(
-                    (u) => u.studentinfoId === signup.studentinfoId
+                    (u) => u.studentId === signup.studentId
                   )[0].major
                 }}
               </v-btn>
@@ -118,6 +118,9 @@
       return {};
     },
     methods: {
+      printSignup(signup) {
+        console.log(signup);
+      },
       closeViewSignUpsDialog() {
         this.$emit("closeViewSignUpsDialogEvent", false);
       },

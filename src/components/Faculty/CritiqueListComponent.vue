@@ -27,7 +27,8 @@
           class="font-weight-bold text-darkBlue"
           v-for="time in this.currentEvent.times"
         >
-          {{ getTime(time.startTime) }} - {{ getTime(time.endTime) }}
+          {{ getTime(time.startTime) }} -
+          {{ getTime(time.endTime) }}
         </v-card-subtitle>
         <v-card-subtitle class="font-weight-bold text-darkBlue">
           {{ place }}
@@ -189,16 +190,16 @@ export default {
           classification: "",
           time: this.currentEvent.signups[i].timeslot,
           signUp: this.currentEvent.signups[i],
-          type: "TEMP",
+          type: "Voice",
           picture: "",
-          id: this.currentEvent.signups[i].studentinfoId,
+          id: this.currentEvent.signups[i].studentId,
         };
         await StudentsDataService.getUserId(
-          this.currentEvent.signups[i].studentinfoId
+          this.currentEvent.signups[i].studentId
         ).then((response) => {
-          userId = response.data.StudentInfo[i].userId;
-          tempstudent.classification =
-            response.data.StudentInfo[i].classification;
+          console.log(response.data);
+          userId = response.data.Students[i].userId;
+          tempstudent.classification = response.data.Students[i].classification;
         });
         await users.getSingle(userId).then((response) => {
           tempstudent.picture = response.data.Users[i].picture;
@@ -233,20 +234,19 @@ export default {
           this.slotsCount[place]++;
         }
       }
-      console.log("Place " + place + ": " + this.slotsCount[place]);
       return slots;
     },
     /* This takes a date and time string and changes to a Date */
     getDates(dateTime) {
       var dateTimeParse = [];
-      var firstpart = dateTime.split("T");
+      var firstpart = dateTime.toString().split("T");
       var secondpart = firstpart[1].split(".");
       dateTimeParse = firstpart[0] + " " + secondpart[0];
       return new Date(dateTimeParse);
     },
     getTime(dateTime) {
       var dateTimeParse = [];
-      dateTimeParse = dateTime.split("T");
+      dateTimeParse = dateTime.toString().split("T");
       dateTimeParse = dateTimeParse[1].split(".");
       return dateTimeParse[0];
     },

@@ -22,14 +22,16 @@
       {{ this.currentEvent.date }}
     </v-card-subtitle>
     <v-card-subtitle class="font-weight-bold text-darkBlue">
-      {{ type }}
+      {{ this.currentStudent.type }}
     </v-card-subtitle>
     <v-card-text>
       <v-row>
         <v-col>
           <v-row justify="center" class="pl-1 pt-0 pb-0">
             <v-col cols="1" align-self="center">
-              <v-avatar class="bg-darkBlue"> </v-avatar>
+              <v-avatar class="bg-darkBlue"
+                ><v-img :src="this.currentStudent.picture"></v-img>
+              </v-avatar>
             </v-col>
             <v-col cols="11" align-self="center">
               <v-card-title class="pb-0 font-weight-semi-bold text-h6">
@@ -42,27 +44,31 @@
           </v-row>
           <v-row justify="center" class="pl-1 pt-0 pb-0 mt-0">
             <v-col cols="1" align-self="center">
-              <v-avatar class="bg-darkBlue"> </v-avatar>
+              <v-avatar class="bg-darkBlue"
+                ><v-img :src="this.instructor.picture"></v-img>
+              </v-avatar>
             </v-col>
             <v-col cols="11" align-self="center">
               <v-card-title class="pb-0 font-weight-semi-bold text-h6">
-                {{ instructors[0].position }}
+                {{ this.instructor.position }}
               </v-card-title>
               <v-card-subtitle class="text-darkBlue font-weight-bold pb-2">
-                {{ instructors[0].name }}
+                {{ this.instructor.name }}
               </v-card-subtitle>
             </v-col>
           </v-row>
           <v-row justify="center" class="pl-1 pt-0 pb-0 mt-0">
             <v-col cols="1" align-self="center">
-              <v-avatar class="bg-darkBlue"> </v-avatar>
+              <v-avatar class="bg-darkBlue"
+                ><v-img :src="this.accompanist.picture"></v-img>
+              </v-avatar>
             </v-col>
             <v-col cols="11" align-self="center">
               <v-card-title class="pb-0 font-weight-semi-bold text-h6">
-                {{ instructors[1].position }}
+                {{ this.accompanist.position }}
               </v-card-title>
               <v-card-subtitle class="text-darkBlue font-weight-bold pb-2">
-                {{ instructors[1].name }}
+                {{ this.accompanist.name }}
               </v-card-subtitle>
             </v-col>
           </v-row>
@@ -84,43 +90,12 @@
                     </v-col>
                     <v-col cols="11" class="pt-0 pb-0">
                       <v-card-title class="pb-0 font-weight-bold text-h9">
-                        {{ songs.at(0).name }}
+                        {{ this.startingSong.name }}
                       </v-card-title>
                       <v-card-subtitle
                         class="text-darkBlue font-weight-medium pb-2"
                       >
-                        {{ songs.at(0).person }}
-                      </v-card-subtitle>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </v-card-text>
-          </v-row>
-          <v-row>
-            <v-card-title class="pl-5 font-weight-bold text-darkGray">
-              Additional Musical Selections
-            </v-card-title>
-            <v-card-text>
-              <v-card elevation="0" class="eventsGradient fullBorderCurve">
-                <v-card-text class="pt-0">
-                  <v-row justify="center" class="pl-0 mt-0">
-                    <v-col cols="1" align-self="center">
-                      <v-avatar class="bg-darkBlue">
-                        <font-awesome-icon
-                          icon="fa-solid fa-user"
-                          class="text-white"
-                        />
-                      </v-avatar>
-                    </v-col>
-                    <v-col cols="11" class="pt-0 pb-0">
-                      <v-card-title class="pb-0 font-weight-bold text-h9">
-                        {{ songs.at(0).name }}
-                      </v-card-title>
-                      <v-card-subtitle
-                        class="text-darkBlue font-weight-medium pb-2"
-                      >
-                        {{ songs.at(0).person }}
+                        {{ this.startingSong.person }}
                       </v-card-subtitle>
                     </v-col>
                   </v-row>
@@ -133,50 +108,21 @@
           <v-card-title class="font-weight-bold text-darkGray pl-0">
             Jurors
           </v-card-title>
-          <v-card class="eventsGradient" elevation="0">
+          <v-card
+            class="eventsGradient"
+            elevation="0"
+            v-for="juror in this.jurors"
+          >
             <v-card-text class="pl-0">
               <v-row justify="center" class="pl-5 mt-0">
                 <v-col cols="1" align-self="center">
                   <v-avatar class="bg-darkBlue">
-                    <font-awesome-icon
-                      icon="fa-solid fa-user"
-                      class="text-white"
-                    />
+                    <v-img :src="juror.picture"></v-img>
                   </v-avatar>
                 </v-col>
                 <v-col cols="11">
                   <v-card-title class="text-white font-weight-bold pb-2">
-                    {{ jurors.at(0) }}
-                  </v-card-title>
-                </v-col>
-              </v-row>
-              <v-row justify="center" class="pl-5 mt-0">
-                <v-col cols="1" align-self="center">
-                  <v-avatar class="bg-darkBlue">
-                    <font-awesome-icon
-                      icon="fa-solid fa-user"
-                      class="text-white"
-                    />
-                  </v-avatar>
-                </v-col>
-                <v-col cols="11">
-                  <v-card-title class="text-white font-weight-bold pb-2">
-                    {{ jurors.at(1) }}
-                  </v-card-title>
-                </v-col>
-              </v-row>
-              <v-row justify="center" class="pl-5 mt-0">
-                <v-col cols="1" align-self="center">
-                  <v-avatar class="bg-darkBlue">
-                    <font-awesome-icon
-                      icon="fa-solid fa-user"
-                      class="text-white"
-                    />
-                  </v-avatar>
-                </v-col>
-                <v-col cols="11">
-                  <v-card-title class="text-white font-weight-bold pb-2">
-                    {{ jurors.at(2) }}
+                    {{ juror.name }}
                   </v-card-title>
                 </v-col>
               </v-row>
@@ -225,6 +171,7 @@
                   <v-card
                     elevation="0"
                     class="eventsGradient fullBorderCurve ma-1"
+                    v-for="songs in this.songs"
                   >
                     <v-card-text class="pt-0">
                       <v-row justify="center" class="pl-0 mt-0">
@@ -238,39 +185,12 @@
                         </v-col>
                         <v-col cols="11" class="pt-0 pb-0">
                           <v-card-title class="pb-0 font-weight-bold text-h9">
-                            {{ songs.at(0).name }}
+                            {{ songs.name }}
                           </v-card-title>
                           <v-card-subtitle
                             class="text-darkBlue font-weight-medium pb-2"
                           >
-                            {{ songs.at(0).person }}
-                          </v-card-subtitle>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                  <v-card
-                    elevation="0"
-                    class="eventsGradient fullBorderCurve ma-1"
-                  >
-                    <v-card-text class="pt-0">
-                      <v-row justify="center" class="pl-0 mt-0">
-                        <v-col cols="1" align-self="center">
-                          <v-avatar class="bg-darkBlue">
-                            <font-awesome-icon
-                              icon="fa-solid fa-user"
-                              class="text-white"
-                            />
-                          </v-avatar>
-                        </v-col>
-                        <v-col cols="11" class="pt-0 pb-0">
-                          <v-card-title class="pb-0 font-weight-bold text-h9">
-                            {{ songs.at(0).name }}
-                          </v-card-title>
-                          <v-card-subtitle
-                            class="text-darkBlue font-weight-medium pb-2"
-                          >
-                            {{ songs.at(0).person }}
+                            {{ songs.person }}
                           </v-card-subtitle>
                         </v-col>
                       </v-row>
@@ -338,13 +258,17 @@
 </template>
 
 <script>
+import ComposersDataService from "../../services/composers.js";
+import EventSignUpDataService from "../../services/eventsignup.js";
 import EventSignUpJurorDataService from "../../services/eventsignupjuror.js";
+import EventSongsDataService from "../../services/eventsongs.js";
 import InstructorsDataService from "../../services/instructors.js";
 import UsersDataService from "../../services/users.js";
 import StudentRepertoireDataService from "../../services/studentrepertoire.js";
-import RepertoireDataService from "../../services/repertoire.js";
 import PiecesDataService from "../../services/pieces.js";
 import AccompanistsDataService from "../../services/accompanists.js";
+import InstrumentDataService from "../../services/instruments.js";
+import StudentInstrumentDataService from "../../services/studentinstruments.js";
 
 export default {
   name: "CritiqueFacultyComponent",
@@ -357,18 +281,17 @@ export default {
     return {
       isExpand: false,
       changeButtonLabel: "Make Expanded Critique",
-      type: "TEMP",
-      // instructor and accompanist are now part of the eventsignup and will be in the store
-      instructors: [
-        {
-          position: "Private Instructor",
-          name: "Jane Doe",
-        },
-        {
-          position: "Accompanist",
-          name: "Jess Doe",
-        },
-      ],
+      startingSong: {},
+      instructor: {
+        position: "Private Instructor",
+        name: "",
+        picture: "",
+      },
+      accompanist: {
+        position: "Accompanist",
+        name: "",
+        picture: "",
+      },
       jurors: [],
       songs: [],
       ratings: ["Poor", "Fair", "Good", "Excellent"],
@@ -392,16 +315,79 @@ export default {
     await this.getInstructors();
     await this.getJurors();
     await this.getSongs();
+    await this.getStartingSong();
   },
   methods: {
     async getInstructors() {
-      //Need to get the names of the instructor and the accompanist
+      var signupId = -1;
+      var instructorId = -1;
+      var accompanistId = -1;
+      var userId = -1;
+
+      for (var i = 0; i < this.currentEvent.signups.length; i++) {
+        if (this.currentEvent.signups[i].studentId == this.currentStudent.id) {
+          signupId = this.currentEvent.signups[i].signupId;
+        }
+      }
+
+      await EventSignUpDataService.getEventSignUpById(signupId)
+        .then((response) => {
+          instructorId = response.data.EventSignUp[0].instructorId;
+          accompanistId = response.data.EventSignUp[0].accompanistId;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      await InstructorsDataService.getInstructorByInstructorId(instructorId)
+        .then((response) => {
+          userId = response.data.Instructors[0].userId;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      await UsersDataService.getSingle(userId)
+        .then((response) => {
+          this.instructor.name =
+            response.data.Users[0].fName + " " + response.data.Users[0].lName;
+          this.instructor.picture = response.data.Users[0].picture;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      await AccompanistsDataService.getAccompanistById(accompanistId)
+        .then((response) => {
+          userId = response.data.Accompanists[0].userId;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      await UsersDataService.getSingle(userId)
+        .then((response) => {
+          this.accompanist.name =
+            response.data.Users[0].fName + " " + response.data.Users[0].lName;
+          this.accompanist.picture = response.data.Users[0].picture;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     async getJurors() {
       var jurorIds = [];
       var userIds = [];
+      var signupId = -1;
+
+      for (var i = 0; i < this.currentEvent.signups.length; i++) {
+        if (this.currentEvent.signups[i].studentId == this.currentStudent.id) {
+          signupId = this.currentEvent.signups[i].signupId;
+        }
+      }
+
       await EventSignUpJurorDataService.getEventSignUpJurorByEventSignUp(
-        this.currentStudent.signUp.id
+        signupId
       )
         .then((response) => {
           jurorIds = response.data.EventSignUpJuror;
@@ -411,9 +397,11 @@ export default {
         });
 
       for (var i = 0; i < jurorIds.length; i++) {
-        await InstructorsDataService.getInstructor(jurorIds[i].jurorId)
+        await InstructorsDataService.getInstructorByInstructorId(
+          jurorIds[i].instructorId
+        )
           .then((response) => {
-            userIds = response.data.Instructors;
+            userIds.push(response.data.Instructors[0].userId);
           })
           .catch((e) => {
             console.log(e);
@@ -421,10 +409,16 @@ export default {
       }
 
       for (var i = 0; i < userIds.length; i++) {
-        await UsersDataService.getSingle(userIds[i].userId)
+        await UsersDataService.getSingle(userIds[i])
           .then((response) => {
-            this.jurors.push =
-              response.data.Users[i].fName + " " + response.data.Users[i].lName;
+            var tempJuror = {
+              name:
+                response.data.Users[i].fName +
+                " " +
+                response.data.Users[i].lName,
+              picture: response.data.Users[i].picture,
+            };
+            this.jurors.push(tempJuror);
           })
           .catch((e) => {
             console.log(e);
@@ -433,8 +427,9 @@ export default {
     },
     async getSongs() {
       var repertoireIds = [];
-      var correctRepertoire = 0;
+      var correctRepertoire = -1;
       var tempSongs = [];
+      var instrumentId = -1;
       await StudentRepertoireDataService.getStudent(this.currentStudent.id)
         .then((response) => {
           repertoireIds = response.data.StudentRepertoire;
@@ -444,12 +439,20 @@ export default {
         });
 
       for (var i = 0; i < repertoireIds.length; i++) {
-        await RepertoireDataService.getInstrument(repertoireIds[i].repertoireId)
+        await StudentInstrumentDataService.getStudentInstrumentById(
+          repertoireIds[i].studentinstrumentId
+        )
           .then((response) => {
-            //this will need to be changed once the instrument data service is created
-            if (
-              response.data.Repertoire.instrument == this.currentStudent.type
-            ) {
+            instrumentId = response.data.StudentInstruments[0].instrumentId;
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+
+        await InstrumentDataService.getInstrumentById(instrumentId)
+          .then((response) => {
+            var tempInstrument = response.data.Instruments[0].type;
+            if (tempInstrument == this.currentStudent.type) {
               correctRepertoire = repertoireIds[i].repertoireId;
             }
           })
@@ -467,11 +470,62 @@ export default {
         });
 
       for (var i = 0; i < tempSongs.length; i++) {
-        this.songs.push = {
+        var pushSong = {
           name: tempSongs[i].name,
-          person: tempSongs[i].composer,
+          person: "",
         };
+
+        await ComposersDataService.getId(tempSongs[i].composerId)
+          .then((response) => {
+            pushSong.person = response.data.Composers[0].name;
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+        this.songs.push(pushSong);
       }
+    },
+    async getStartingSong() {
+      var pieceId = -1;
+      var signupId = -1;
+      var composerId = -1;
+      var tempSong = {
+        name: "",
+        person: "",
+      };
+
+      for (var i = 0; i < this.currentEvent.signups.length; i++) {
+        if (this.currentEvent.signups[i].studentId == this.currentStudent.id) {
+          signupId = this.currentEvent.signups[i].signupId;
+        }
+      }
+
+      await EventSongsDataService.getEventSignupId(signupId)
+        .then((response) => {
+          pieceId = response.data.EventSongs[0].pieceId;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      await PiecesDataService.getId(pieceId)
+        .then((response) => {
+          tempSong.name = response.data.Pieces[0].name;
+          composerId = response.data.Pieces[0].composerId;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      await ComposersDataService.getId(composerId)
+        .then((response) => {
+          tempSong.person = response.data.Composers[0].name;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      this.startingSong = tempSong;
     },
     closeCritiqueEditDialog() {
       this.$emit("closeCritiqueEditDialogEvent", false);

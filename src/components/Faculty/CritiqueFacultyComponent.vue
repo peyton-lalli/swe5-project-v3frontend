@@ -259,16 +259,13 @@
 
 <script>
 import ComposersDataService from "../../services/composers.js";
-import EventSignUpDataService from "../../services/eventsignup.js";
 import EventSignUpJurorDataService from "../../services/eventsignupjuror.js";
 import EventSongsDataService from "../../services/eventsongs.js";
 import InstructorsDataService from "../../services/instructors.js";
 import UsersDataService from "../../services/users.js";
-import StudentRepertoireDataService from "../../services/studentrepertoire.js";
 import PiecesDataService from "../../services/pieces.js";
 import AccompanistsDataService from "../../services/accompanists.js";
-import InstrumentDataService from "../../services/instruments.js";
-import StudentInstrumentDataService from "../../services/studentinstruments.js";
+import StudentsDataService from "../../services/students.js";
 
 export default {
   name: "CritiqueFacultyComponent",
@@ -319,39 +316,24 @@ export default {
   },
   methods: {
     async getInstructors() {
-      var signupId = -1;
       var instructorId = -1;
       var accompanistId = -1;
-      var userId = -1;
 
       for (var i = 0; i < this.currentEvent.signups.length; i++) {
         if (this.currentEvent.signups[i].studentId == this.currentStudent.id) {
-          signupId = this.currentEvent.signups[i].signupId;
+          instructorId = this.currentEvent.signups[i].instructorId;
+          accompanistId = this.currentEvent.signups[i].accompanistId;
         }
       }
 
-      await EventSignUpDataService.getEventSignUpById(signupId)
-        .then((response) => {
-          instructorId = response.data.EventSignUp[0].instructorId;
-          accompanistId = response.data.EventSignUp[0].accompanistId;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-
       await InstructorsDataService.getInstructorByInstructorId(instructorId)
         .then((response) => {
-          userId = response.data.Instructors[0].userId;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-
-      await UsersDataService.getSingle(userId)
-        .then((response) => {
+          //userId = response.data.Instructors[0].userId;
           this.instructor.name =
-            response.data.Users[0].fName + " " + response.data.Users[0].lName;
-          this.instructor.picture = response.data.Users[0].picture;
+            response.data.Instructors[0].user.fName +
+            " " +
+            response.data.Instructors[0].user.lName;
+          this.instructor.picture = response.data.Instructors[0].user.picture;
         })
         .catch((e) => {
           console.log(e);
@@ -359,17 +341,11 @@ export default {
 
       await AccompanistsDataService.getAccompanistById(accompanistId)
         .then((response) => {
-          userId = response.data.Accompanists[0].userId;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-
-      await UsersDataService.getSingle(userId)
-        .then((response) => {
           this.accompanist.name =
-            response.data.Users[0].fName + " " + response.data.Users[0].lName;
-          this.accompanist.picture = response.data.Users[0].picture;
+            response.data.Accompanists[0].user.fName +
+            " " +
+            response.data.Accompanists[0].user.lName;
+          this.accompanist.picture = response.data.Accompanists[0].user.picture;
         })
         .catch((e) => {
           console.log(e);
@@ -426,62 +402,32 @@ export default {
       }
     },
     async getSongs() {
-      var repertoireIds = [];
-      var correctRepertoire = -1;
-      var tempSongs = [];
-      var instrumentId = -1;
-      await StudentRepertoireDataService.getStudent(this.currentStudent.id)
+      var repertoires = [];
+      var correctRepertoire = [];
+
+      await StudentsDataService.getAllRepertoires(this.currentStudent.id)
         .then((response) => {
-          repertoireIds = response.data.StudentRepertoire;
+          repertoires = response.data.Students[0].repertoires;
         })
         .catch((e) => {
           console.log(e);
         });
 
-      for (var i = 0; i < repertoireIds.length; i++) {
-        await StudentInstrumentDataService.getStudentInstrumentById(
-          repertoireIds[i].studentinstrumentId
-        )
-          .then((response) => {
-            instrumentId = response.data.StudentInstruments[0].instrumentId;
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-
-        await InstrumentDataService.getInstrumentById(instrumentId)
-          .then((response) => {
-            var tempInstrument = response.data.Instruments[0].type;
-            if (tempInstrument == this.currentStudent.type) {
-              correctRepertoire = repertoireIds[i].repertoireId;
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-          });
+      for (var i = 0; i < repertoires.length; i++) {
+        if (
+          repertoires[i].studentinstrument.instrument.type ==
+          this.currentStudent.type
+        ) {
+          correctRepertoire = repertoires[i].repertoire;
+        }
       }
 
-      await PiecesDataService.getRepertoire(correctRepertoire)
-        .then((response) => {
-          tempSongs = response.data.Pieces;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-
-      for (var i = 0; i < tempSongs.length; i++) {
+      for (var i = 0; i < correctRepertoire.pieces.length; i++) {
         var pushSong = {
-          name: tempSongs[i].name,
-          person: "",
+          name: correctRepertoire.pieces[i].name,
+          person: correctRepertoire.pieces[i].composer.name,
         };
 
-        await ComposersDataService.getId(tempSongs[i].composerId)
-          .then((response) => {
-            pushSong.person = response.data.Composers[0].name;
-          })
-          .catch((e) => {
-            console.log(e);
-          });
         this.songs.push(pushSong);
       }
     },

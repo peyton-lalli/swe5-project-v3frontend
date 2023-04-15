@@ -156,7 +156,7 @@
 <script>
 import CritiqueFacultyComponent from "./CritiqueFacultyComponent.vue";
 import StudentsDataService from "../../services/students.js";
-import users from "../../services/users.js";
+import { DateTimeMixin } from "../../mixins/DateTimeMixin.js";
 import { useEventsStore } from "../../stores/EventsStore.js";
 import { mapStores } from "pinia";
 export default {
@@ -181,10 +181,10 @@ export default {
   computed: {
     ...mapStores(useEventsStore),
   },
+  mixins: [DateTimeMixin],
   methods: {
     async getStudents() {
       for (let i = 0; i < this.currentEvent.signups.length; i++) {
-        var userId = 0;
         var tempstudent = {
           name: "",
           classification: "",
@@ -194,19 +194,17 @@ export default {
           picture: "",
           id: this.currentEvent.signups[i].studentId,
         };
-        await StudentsDataService.getUserId(
+        await StudentsDataService.getStudentById(
           this.currentEvent.signups[i].studentId
         ).then((response) => {
-          console.log(response.data);
-          userId = response.data.Students[i].userId;
           tempstudent.classification = response.data.Students[i].classification;
-        });
-        await users.getSingle(userId).then((response) => {
-          tempstudent.picture = response.data.Users[i].picture;
+          tempstudent.picture = response.data.Students[i].user.picture;
           tempstudent.name =
-            response.data.Users[i].fName + " " + response.data.Users[i].lName;
-          this.students.push(tempstudent);
+            response.data.Students[i].user.fName +
+            " " +
+            response.data.Students[i].user.lName;
         });
+        this.students.push(tempstudent);
       }
     },
     closeCritiqueDialog() {
@@ -235,20 +233,6 @@ export default {
         }
       }
       return slots;
-    },
-    /* This takes a date and time string and changes to a Date */
-    getDates(dateTime) {
-      var dateTimeParse = [];
-      var firstpart = dateTime.toString().split("T");
-      var secondpart = firstpart[1].split(".");
-      dateTimeParse = firstpart[0] + " " + secondpart[0];
-      return new Date(dateTimeParse);
-    },
-    getTime(dateTime) {
-      var dateTimeParse = [];
-      dateTimeParse = dateTime.toString().split("T");
-      dateTimeParse = dateTimeParse[1].split(".");
-      return dateTimeParse[0];
     },
   },
 };

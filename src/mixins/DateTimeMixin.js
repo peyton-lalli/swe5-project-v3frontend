@@ -56,5 +56,19 @@ export const DateTimeMixin = {
 
       return totalSlots;
     },
+    /* This takes a date and time string and changes to a Date */
+    getDates(dateTime) {
+      var dateTimeParse = [];
+      var firstpart = dateTime.toString().split("T");
+      var secondpart = firstpart[1].split(".");
+      dateTimeParse = firstpart[0] + " " + secondpart[0];
+      return new Date(dateTimeParse);
+    },
+    getTime(dateTime) {
+      var dateTimeParse = [];
+      dateTimeParse = dateTime.toString().split("T");
+      dateTimeParse = dateTimeParse[1].split(".");
+      return dateTimeParse[0];
+    },
   },
 };

@@ -9,6 +9,9 @@ class EventSignUpDataService {
   getAll() {
     return http.get("/performance-t3/eventsignup");
   }
+  getEventSignUpById(id) {
+    return http.get(`/performance-t3/eventsignup/id/${id}`);
+  }
   getTimeSlot(id) {
     return http.get(`/performance-t3/eventsignup/timeslot/${id}`);
   }

@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import StudentsDataService from "../services/students.js";
+import StudentInstructorDataService from "../services/studentinstructor.js";
 import InstructorDataService from "../services/instructors.js";
 import UsersDataService from "../services/users.js";
 import UsersRoleDataService from "../services/userrole.js";

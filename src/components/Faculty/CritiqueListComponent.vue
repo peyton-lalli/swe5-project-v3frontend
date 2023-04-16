@@ -10,7 +10,8 @@
             <v-icon>
               <font-awesome-icon
                 icon="a-solid fa-circle-xmark"
-                class="text-lightBlue">
+                class="text-lightBlue"
+              >
               </font-awesome-icon>
             </v-icon>
           </v-btn>
@@ -24,8 +25,10 @@
         </v-card-subtitle>
         <v-card-subtitle
           class="font-weight-bold text-darkBlue"
-          v-for="time in this.currentEvent.times">
-          {{ getTime(time.startTime) }} - {{ getTime(time.endTime) }}
+          v-for="time in this.currentEvent.times"
+        >
+          {{ getTime(time.startTime) }} -
+          {{ getTime(time.endTime) }}
         </v-card-subtitle>
         <v-card-subtitle class="font-weight-bold text-darkBlue">
           {{ place }}
@@ -43,7 +46,8 @@
               this.currentEvent.times[0].interval,
               0
             )"
-            :key="index">
+            :key="index"
+          >
             <v-btn
               elevation="0"
               rounded="lg"
@@ -61,7 +65,8 @@
               this.currentEvent.times[1].interval,
               1
             )"
-            :key="index">
+            :key="index"
+          >
             <v-btn
               elevation="0"
               rounded="lg"
@@ -82,7 +87,8 @@
       <v-card-text>
         <v-card
           class="repertoireItemGradient fullBorderCurve mainblur ml-3 mr-3 pl-4 pr-4 mb-2"
-          v-for="student in this.students">
+          v-for="student in this.students"
+        >
           <v-row>
             <v-col cols="1" align-self="center">
               <v-avatar class="bg-darkBlue"
@@ -103,7 +109,8 @@
                 size="small"
                 rounded="pill"
                 width="85"
-                class="buttonWhite text-mediumBlue font-weight-bold">
+                class="buttonWhite text-mediumBlue font-weight-bold"
+              >
                 {{ student.type }}
               </v-btn>
             </v-col>
@@ -112,7 +119,8 @@
                 elevation="0"
                 size="small"
                 rounded="pill"
-                class="buttonGradient text-white font-weight-bold">
+                class="buttonGradient text-white font-weight-bold"
+              >
                 {{ student.time }}
               </v-btn>
             </v-col>
@@ -126,14 +134,16 @@
                     elevation="0"
                     size="small"
                     rounded="pill"
-                    class="buttonWhite text-mediumBlue font-weight-bold">
+                    class="buttonWhite text-mediumBlue font-weight-bold"
+                  >
                     Add Your Critique
                   </v-btn>
                 </template>
                 <CritiqueFacultyComponent
-                  @closeCritiqueEditDialogEvent="
-                    closeCritiqueEditDialog
-                  "></CritiqueFacultyComponent>
+                  :currentStudent="student"
+                  :currentEvent="this.currentEvent"
+                  @closeCritiqueEditDialogEvent="closeCritiqueEditDialog"
+                ></CritiqueFacultyComponent>
               </v-dialog>
             </v-col>
           </v-row>
@@ -144,103 +154,88 @@
 </template>
 
 <script>
-  import CritiqueFacultyComponent from "./CritiqueFacultyComponent.vue";
-  import StudentsDataService from "../../services/students.js";
-  import users from "../../services/users.js";
-  import { useEventsStore } from "../../stores/EventsStore.js";
-  import { mapStores } from "pinia";
-  export default {
-    name: "CritiqueListComponent",
-    components: {
-      CritiqueFacultyComponent,
+import CritiqueFacultyComponent from "./CritiqueFacultyComponent.vue";
+import StudentsDataService from "../../services/students.js";
+import { DateTimeMixin } from "../../mixins/DateTimeMixin.js";
+import { useEventsStore } from "../../stores/EventsStore.js";
+import { mapStores } from "pinia";
+export default {
+  name: "CritiqueListComponent",
+  components: {
+    CritiqueFacultyComponent,
+  },
+  data() {
+    return {
+      critiqueEditDialog: false,
+      place: "Adams Recital Hall",
+      slotsCount: [],
+      students: [],
+    };
+  },
+  props: {
+    currentEvent: {},
+  },
+  async mounted() {
+    await this.getStudents();
+  },
+  computed: {
+    ...mapStores(useEventsStore),
+  },
+  mixins: [DateTimeMixin],
+  methods: {
+    async getStudents() {
+      for (let i = 0; i < this.currentEvent.signups.length; i++) {
+        var tempstudent = {
+          name: "",
+          classification: "",
+          time: this.currentEvent.signups[i].timeslot,
+          signUp: this.currentEvent.signups[i],
+          type: "Voice",
+          picture: "",
+          id: this.currentEvent.signups[i].studentId,
+        };
+        await StudentsDataService.getStudentById(
+          this.currentEvent.signups[i].studentId
+        ).then((response) => {
+          tempstudent.classification = response.data.Students[i].classification;
+          tempstudent.picture = response.data.Students[i].user.picture;
+          tempstudent.name =
+            response.data.Students[i].user.fName +
+            " " +
+            response.data.Students[i].user.lName;
+        });
+        this.students.push(tempstudent);
+      }
     },
-    data() {
-      return {
-        critiqueEditDialog: false,
-        place: "Adams Recital Hall",
-        slotsCount: [],
-        students: [],
-      };
+    closeCritiqueDialog() {
+      this.$emit("closeCritiqueDialogEvent", false);
     },
-    props: {
-      currentEvent: {},
+    closeCritiqueEditDialog(val) {
+      this.critiqueEditDialog = val;
     },
-    async mounted() {
-      await this.getStudents();
-    },
-    computed: {
-      ...mapStores(useEventsStore),
-    },
-    methods: {
-      async getStudents() {
-        for (let i = 0; i < this.currentEvent.signups.length; i++) {
-          var userId = 0;
-          var tempstudent = {
-            name: "",
-            classification: "",
-            time: this.currentEvent.signups[i].timeslot,
-            type: "TEMP",
-            picture: "",
-          };
-          await StudentsDataService.getUserId(
-            this.currentEvent.signups[i].studentinfoId
-          ).then((response) => {
-            userId = response.data.StudentInfo[i].userId;
-            tempstudent.classification =
-              response.data.StudentInfo[i].classification;
-          });
-          await users.getSingle(userId).then((response) => {
-            tempstudent.picture = response.data.Users[i].picture;
-            tempstudent.name =
-              response.data.Users[i].fName + " " + response.data.Users[i].lName;
-            this.students.push(tempstudent);
-          });
-        }
-      },
-      closeCritiqueDialog() {
-        this.$emit("closeCritiqueDialogEvent", false);
-      },
-      closeCritiqueEditDialog(val) {
-        this.critiqueEditDialog = val;
-      },
-      /* This returns time slots in x intervals between two times */
-      getTimeSlots(startDate, endDate, interval, place) {
-        var slots = [];
-        var isMade = true;
-        if (this.slotsCount.length < place + 1) {
-          this.slotsCount.push(0);
-          isMade = false;
-        }
+    /* This returns time slots in x intervals between two times */
+    getTimeSlots(startDate, endDate, interval, place) {
+      var slots = [];
+      var isMade = true;
+      if (this.slotsCount.length < place + 1) {
+        this.slotsCount.push(0);
+        isMade = false;
+      }
 
-        var intervalMillis = interval * 60 * 1000;
+      var intervalMillis = interval * 60 * 1000;
 
-        while (startDate < endDate) {
-          var mins = (startDate.getMinutes() + "0").slice(0, 2);
-          slots.push(startDate.getHours() + ":" + mins);
-          startDate.setTime(startDate.getTime() + intervalMillis);
-          if (!isMade) {
-            this.slotsCount[place]++;
-          }
+      while (startDate < endDate) {
+        var mins = (startDate.getMinutes() + "0").slice(0, 2);
+        slots.push(startDate.getHours() + ":" + mins);
+        startDate.setTime(startDate.getTime() + intervalMillis);
+        if (!isMade) {
+          this.slotsCount[place]++;
         }
-        console.log("Place " + place + ": " + this.slotsCount[place]);
-        return slots;
-      },
-      /* This takes a date and time string and changes to a Date */
-      getDates(dateTime) {
-        var dateTimeParse = [];
-        var firstpart = dateTime.split("T");
-        var secondpart = firstpart[1].split(".");
-        dateTimeParse = firstpart[0] + " " + secondpart[0];
-        return new Date(dateTimeParse);
-      },
-      getTime(dateTime) {
-        var dateTimeParse = [];
-        dateTimeParse = dateTime.split("T");
-        dateTimeParse = dateTimeParse[1].split(".");
-        return dateTimeParse[0];
-      },
+      }
+      return slots;
     },
-  };
+  },
+};
 </script>
 
 <style></style>

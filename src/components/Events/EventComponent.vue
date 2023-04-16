@@ -1,11 +1,11 @@
 <template>
   <v-container fluid class="eventComponent">
     <v-card elevation="0" class="eventsGradient mainblur rounded-lg">
-      <v-card elevation="0" class="ma-3 rounded-lg lighterBlur">
+      <v-card elevation="0" class="ma-3 rounded-md lighterBlur">
         <v-card-title class="font-weight-bold text-h6 text-darkGray pb-0">
           <v-row>
             <v-col>
-              {{ eventData.type }}
+              {{ eventData.title }}
             </v-col>
             <v-col class="text-right">
               <!-- <v-btn

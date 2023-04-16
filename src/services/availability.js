@@ -9,6 +9,11 @@ class AvailabilityDataService {
   getAll() {
     return http.get("/performance-t3/availability");
   }
+  getUserAndEvent(userId, eventId) {
+    return http.get(
+      `/performance-t3/availability/getByUserAndEvent/${userId}/${eventId}`
+    );
+  }
   getStartDate(id) {
     return http.get(`/performance-t3/availability/startdate/${id}`);
   }

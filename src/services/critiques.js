@@ -9,8 +9,8 @@ class CritiquesDataService {
   getAll() {
     return http.get("/performance-t3/critiques");
   }
-  getInstructor(id) {
-    return http.get(`/performance-t3/critiques/instructor/${id}`);
+  getCritiqueByEventSignUpId(id) {
+    return http.get(`/performance-t3/critiques/eventid/${id}`);
   }
   delete(id) {
     return http.delete(`/performance-t3/critiques/${id}`);

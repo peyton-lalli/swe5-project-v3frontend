@@ -14,15 +14,15 @@
                     size="small"
                     rounded="pill"
                     class="buttonGradient text-white font-weight-bold mr-2"
-                    v-if="this.userStore.userInfo.roles.default.roleId === 3">
+                    v-if="this.userStore.userInfo.roles.default.roleId === 3"
+                  >
                     Edit
                   </v-btn>
                   <v-dialog v-model="editEventDialog" max-width="600px">
                     <AdminEditEvent
                       :eventData="this.eventData"
-                      @closeEditEventDialogEvent="
-                        this.editEventDialog = false
-                      "></AdminEditEvent>
+                      @closeEditEventDialogEvent="this.editEventDialog = false"
+                    ></AdminEditEvent>
                   </v-dialog>
                 </v-col>
               </v-row>
@@ -41,15 +41,15 @@
               rounded="pill"
               class="buttonWhite text-mediumBlue font-weight-bold ml-1"
               @click="viewSignUpsDialog = true"
-              v-if="this.userStore.userInfo.roles.default.roleId === 3">
+              v-if="this.userStore.userInfo.roles.default.roleId === 3"
+            >
               View Signups
             </v-btn>
             <v-dialog v-model="viewSignUpsDialog" max-width="1000px">
               <ViewSignUps
-                :eventData="eventData"
-                @closeViewSignUpsDialogEvent="
-                  closeViewSignUpsDialog
-                "></ViewSignUps>
+                :eventData="this.eventData"
+                @closeViewSignUpsDialogEvent="closeViewSignUpsDialog"
+              ></ViewSignUps>
             </v-dialog>
             <v-btn
               @click="critiqueDialog = true"
@@ -57,15 +57,15 @@
               size="small"
               rounded="pill"
               class="buttonWhite text-mediumBlue font-weight-bold"
-              v-if="this.userStore.userInfo.roles.default.roleId === 2">
+              v-if="this.userStore.userInfo.roles.default.roleId === 2"
+            >
               Critiques
             </v-btn>
             <v-dialog v-model="critiqueDialog" max-width="1000px">
               <CritiqueListComponent
-                :currentEvent="eventData"
-                @closeCritiqueDialogEvent="
-                  closeCritiqueDialog
-                "></CritiqueListComponent>
+                :currentEvent="this.eventData"
+                @closeCritiqueDialogEvent="closeCritiqueDialog"
+              ></CritiqueListComponent>
             </v-dialog>
           </v-card-actions>
         </v-card>
@@ -75,60 +75,60 @@
 </template>
 
 <script>
-  import CritiqueListComponent from "./CritiqueListComponent.vue";
-  import ViewSignUps from "./ViewSignUps.vue";
-  import AdminEditEvent from "../Admin/AdminEditEvent.vue";
-  import { useUserStore } from "../../stores/UserStore.js";
-  import { useEventsStore } from "../../stores/EventsStore.js";
-  import { mapStores } from "pinia";
-  import { DateTimeMixin } from "../../mixins/DateTimeMixin.js";
-  export default {
-    name: "AttentionComponent",
-    components: {
-      CritiqueListComponent,
-      ViewSignUps,
-      AdminEditEvent,
+import CritiqueListComponent from "./CritiqueListComponent.vue";
+import ViewSignUps from "./ViewSignUps.vue";
+import AdminEditEvent from "../Admin/AdminEditEvent.vue";
+import { useUserStore } from "../../stores/UserStore.js";
+import { useEventsStore } from "../../stores/EventsStore.js";
+import { mapStores } from "pinia";
+import { DateTimeMixin } from "../../mixins/DateTimeMixin.js";
+export default {
+  name: "AttentionComponent",
+  components: {
+    CritiqueListComponent,
+    ViewSignUps,
+    AdminEditEvent,
+  },
+  data() {
+    return {
+      viewSignUpsDialog: false,
+      critiqueDialog: false,
+      editEventDialog: false,
+    };
+  },
+  mixins: [DateTimeMixin],
+  props: {
+    eventData: {},
+  },
+  methods: {
+    closeCritiqueDialog(val) {
+      this.critiqueDialog = val;
     },
-    data() {
-      return {
-        viewSignUpsDialog: false,
-        critiqueDialog: false,
-        editEventDialog: false,
-      };
+    closeViewSignUpsDialog(val) {
+      this.viewSignUpsDialog = val;
     },
-    mixins: [DateTimeMixin],
-    props: {
-      eventData: {},
-    },
-    methods: {
-      closeCritiqueDialog(val) {
-        this.critiqueDialog = val;
-      },
-      closeViewSignUpsDialog(val) {
-        this.viewSignUpsDialog = val;
-      },
-    },
-    computed: {
-      ...mapStores(useEventsStore, useUserStore),
-    },
-  };
+  },
+  computed: {
+    ...mapStores(useEventsStore, useUserStore),
+  },
+};
 </script>
 
 <style scoped>
-  /* Overwrites the opacity filter put on card subtitles */
-  .v-card-subtitle {
-    opacity: 100%;
-  }
-  .outlined.v-btn {
-    background: linear-gradient(white, white) padding-box,
-      linear-gradient(to right, #aabed2, #ddeaf6) border-box;
-    border-radius: 50em;
-    border: 4px solid transparent;
-  }
-  .outlined.v-card {
-    background: linear-gradient(white, white) padding-box,
-      linear-gradient(to right, #aabed2, #ddeaf6) border-box;
-    border-radius: 10px;
-    border: 7px solid transparent;
-  }
+/* Overwrites the opacity filter put on card subtitles */
+.v-card-subtitle {
+  opacity: 100%;
+}
+.outlined.v-btn {
+  background: linear-gradient(white, white) padding-box,
+    linear-gradient(to right, #aabed2, #ddeaf6) border-box;
+  border-radius: 50em;
+  border: 4px solid transparent;
+}
+.outlined.v-card {
+  background: linear-gradient(white, white) padding-box,
+    linear-gradient(to right, #aabed2, #ddeaf6) border-box;
+  border-radius: 10px;
+  border: 7px solid transparent;
+}
 </style>

@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import StudentsDataService from "../services/students.js";
+import StudentInstructorDataService from "../services/studentinstructor.js";
 import InstructorDataService from "../services/instructors.js";
 import UsersDataService from "../services/users.js";
 import UsersRoleDataService from "../services/userrole.js";
@@ -150,13 +151,13 @@ export const useUserStore = defineStore("user", {
         });
 
       // Load Instructor students into the store, appending the userRoleInfo
-      await StudentsDataService.getInstructorId(this.userRoleInfo.id)
+      await StudentInstructorDataService.getAllStudents(this.userRoleInfo.id)
         .then((response) => {
           this.userRoleInfo = {
             ...this.userRoleInfo,
             // Needs to be updated to get all the student info like a student user would have
             //@ethanimooney: add this
-            ...{ students: response.data.StudentInfo },
+            ...{ students: response.data.StudentInstructor },
           };
         })
         .catch((e) => {

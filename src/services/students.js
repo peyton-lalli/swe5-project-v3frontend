@@ -9,8 +9,14 @@ class StudentsDataService {
   getAll() {
     return http.get("/performance-t3/students");
   }
+  getAllRepertoires(id) {
+    return http.get(`/performance-t3/students/allRepertoires/${id}`);
+  }
   getAllInfo(id) {
     return http.get(`/performance-t3/students/allInfo/${id}`);
+  }
+  getStudentById(id) {
+    return http.get(`/performance-t3/students/id/${id}`);
   }
   getUserId(id) {
     return http.get(`/performance-t3/students/userid/${id}`);

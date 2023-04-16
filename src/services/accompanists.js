@@ -9,6 +9,9 @@ class Accompanists {
   getAll() {
     return http.get("/performance-t3/accompanists");
   }
+  getAccompanistById(id) {
+    return http.get(`/performance-t3/accompanists/id/${id}`);
+  }
   delete(id) {
     return http.delete(`/performance-t3/accompanists/${id}`);
   }

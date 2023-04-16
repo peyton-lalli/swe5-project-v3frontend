@@ -219,9 +219,9 @@ export const useEventsStore = defineStore("events", {
       // Update the EventsStore.events with the new data
       this.events.push({ ...eventData, ...{ times: finalTimeData } });
     },
-    async getAvailaibilityForEventByInstructorId(instructorId, eventId) {
+    async getAvailaibilityForEventByUserId(userId, eventId) {
       let list = [];
-      await AvailabilityDataService.getInstructorAndEvent(instructorId, eventId)
+      await AvailabilityDataService.getUserAndEvent(userId, eventId)
         .then((response) => {
           list = response.data.Availability;
 

@@ -308,8 +308,8 @@
       async selectedInstructor(instructor) {
         if (instructor) {
           this.selectedInstructorAvailability =
-            await this.eventsStore.getAvailaibilityForEventByInstructorId(
-              instructor.instructorId,
+            await this.eventsStore.getAvailaibilityForEventByUserId(
+              instructor.userId,
               this.eventData.eventId
             );
         }

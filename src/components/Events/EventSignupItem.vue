@@ -38,7 +38,7 @@
                 @click="
                   this.userStore.userInfo.roles.default.roleId === 1
                     ? openEventSignupDialog()
-                    : (availabilityDialog = true)
+                    : openEventAvailabilityDialog()
                 ">
                 {{
                   this.userStore.userInfo.roles.default.roleId === 1
@@ -50,12 +50,24 @@
               </v-btn>
               <v-dialog v-model="signUpDialog" persistent max-width="1000px">
                 <EventSignupDialogBody
-                  @closeEventDialogEvent="closeEventDialog"
+                  @closeEventDialogEvent="closeEventSignupDialog"
                   @regenerateSignups="regenerateSignups()"
                   :sent-signup-data="signupData"
                   :sent-signup-event-data="signupEventData"
                   :sentBool="isEdit">
                 </EventSignupDialogBody>
+              </v-dialog>
+              <v-dialog
+                v-model="availabilityDialog"
+                persistent
+                max-width="600px">
+                <EventAvailabilityDialogBody
+                  @closeEventDialogEvent="closeEventAvailabilityDialog"
+                  @regenerateSignups="regenerateSignups()"
+                  :sent-event-data="availabilityEventData"
+                  :sent-availability-data="availabilityData"
+                  :sentBool="isEdit">
+                </EventAvailabilityDialogBody>
               </v-dialog>
             </v-col>
           </v-row>
@@ -67,15 +79,16 @@
 
 <script>
   import EventSignupDialogBody from "./EventSignupDialogBody.vue";
+  import EventAvailabilityDialogBody from "./EventAvailabilityDialogBody.vue";
   import { useEventsStore } from "../../stores/EventsStore.js";
   import { useUserStore } from "../../stores/UserStore.js";
   import { mapStores } from "pinia";
-  import EventSignUpDataService from "../../services/eventsignup.js";
   import { DateTimeMixin } from "../../mixins/DateTimeMixin.js";
   export default {
     name: "EventSignupItem",
     components: {
       EventSignupDialogBody,
+      EventAvailabilityDialogBody,
     },
     data() {
       return {
@@ -85,8 +98,9 @@
         signupEventData: {},
         hasPriorSignup: false,
         priorSignup: {},
-        // Needs to be implemented
         availabilityDialog: false,
+        availabilityEventData: {},
+        availabilityData: [],
         timesInfoString: "",
         timeslots: JSON.parse(JSON.stringify(this.sentEventData)).timeslots,
         isEdit: this.hasPriorSignup ? true : false,
@@ -133,10 +147,13 @@
         this.regenerateEventData();
         this.isEdit = this.hasPriorSignup ? true : false;
       },
-      async closeEventDialog(val) {
+      closeEventSignupDialog(val) {
         this.signUpDialog = val;
       },
 
+      closeEventAvailabilityDialog(val) {
+        this.availabilityDialog = val;
+      },
       getTotalTimeslots() {
         let total = 0;
         for (let time of this.timeslots) {
@@ -169,6 +186,23 @@
         this.signupEventData.timesInfoString = this.timesInfoString;
 
         this.signUpDialog = true;
+      },
+      async openEventAvailabilityDialog() {
+        this.availabilityEventData = {
+          ...this.eventData,
+          ...{ timesInfoString: this.timesInfoString },
+        };
+        delete this.availabilityEventData.signups;
+        this.availabilityData =
+          this.userStore.getCurrentInstructorAvailabilityForEventId(
+            this.eventData.eventId
+          );
+
+        if (this.availabilityData.length > 0) {
+          this.isEdit = true;
+        }
+
+        this.availabilityDialog = true;
       },
     },
   };

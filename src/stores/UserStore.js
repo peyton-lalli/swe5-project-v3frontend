@@ -3,6 +3,7 @@ import StudentsDataService from "../services/students.js";
 import InstructorDataService from "../services/instructors.js";
 import UsersDataService from "../services/users.js";
 import UsersRoleDataService from "../services/userrole.js";
+import AvailabilityDataService from "../services/availability.js";
 
 export const useUserStore = defineStore("user", {
   state: () => ({ userInfo: "", userRoleInfo: "" }),
@@ -141,23 +142,34 @@ export const useUserStore = defineStore("user", {
     },
     async setFacultyRoleInfo() {
       // Load Instructor info into the store
-      await InstructorDataService.getSingle(this.userInfo.userId)
+      await InstructorDataService.getAllInfo(this.userInfo.userId)
         .then((response) => {
-          this.userRoleInfo = response.data.Instructors[0];
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+          let instructorInfo = response.data[0];
+          console.log(instructorInfo);
 
-      // Load Instructor students into the store, appending the userRoleInfo
-      await StudentsDataService.getInstructorId(this.userRoleInfo.id)
-        .then((response) => {
-          this.userRoleInfo = {
-            ...this.userRoleInfo,
-            // Needs to be updated to get all the student info like a student user would have
-            //@ethanimooney: add this
-            ...{ students: response.data.StudentInfo },
+          let availabilities = instructorInfo.user.availabilities;
+          delete instructorInfo.user;
+
+          let students = [];
+
+          for (let sI of instructorInfo.studentinstructors) {
+            sI.student = {
+              ...sI.student,
+              ...{ studentInstructorId: sI.studentInstructorId },
+            };
+            students.push(sI.student);
+          }
+
+          delete instructorInfo.studentinstructors;
+
+          instructorInfo = {
+            ...instructorInfo,
+            ...{ availabilities: availabilities },
+            ...{ students: students },
           };
+
+          this.userRoleInfo = instructorInfo;
+          console.log(this.userRoleInfo);
         })
         .catch((e) => {
           console.log(e);
@@ -211,6 +223,49 @@ export const useUserStore = defineStore("user", {
         .catch((e) => {
           console.log(e);
         });
+    },
+    getCurrentInstructorAvailabilityForEventId(eventId) {
+      return this.userRoleInfo.availabilities.filter(
+        (a) => a.eventId === eventId
+      );
+    },
+    async createAvailabilitiesForEvent(availabilities) {
+      for (let [i, a] of availabilities.entries()) {
+        availabilities[i].userId = this.userInfo.userId;
+      }
+
+      for (let a of availabilities) {
+        await AvailabilityDataService.create(a)
+          .then((response) => {
+            let availabilityId = response.data.id;
+            a.availabilityId = availabilityId;
+            this.userRoleInfo.availabilities.push(a);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+    },
+    async updateAvailabilitiesForEvent(
+      newAvailabilities,
+      removedAvailabilities
+    ) {
+      await this.createAvailabilitiesForEvent(newAvailabilities);
+
+      for (let a of removedAvailabilities) {
+        await AvailabilityDataService.delete(a.availabilityId)
+          .then(() => {
+            this.userRoleInfo.availabilities.splice(
+              this.userRoleInfo.availabilities.findIndex(
+                (av) => av.availabilityId === a.availabilityId
+              ),
+              1
+            );
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
     },
     // Post update to StudentInfo table
     async updateStudentInfo(data, id) {

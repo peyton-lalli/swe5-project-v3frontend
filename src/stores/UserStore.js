@@ -357,5 +357,16 @@ export const useUserStore = defineStore("user", {
         });
       return instrumentObject;
     },
+    async createComposer(composerData) {
+      let composerObject = {};
+      await ComposerDataService.create(composerData)
+        .then((response) => {
+          composerObject = response.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      return composerObject;
+    },
   },
 });

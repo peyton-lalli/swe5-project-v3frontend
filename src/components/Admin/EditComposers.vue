@@ -16,20 +16,42 @@
       </v-row>
     </v-card-title>
     <v-card-text>
-      <v-row class="mb-3">
-        <v-col cols="8" class="pl-6">
-          <v-text-field></v-text-field>
-        </v-col>
-        <v-col cols="4" class="pl-15">
-          <v-btn
-            elevation="0"
-            class="buttonGradient text-white font-weight-bold">
-            Add New
-          </v-btn>
+      <v-row>
+        <v-col>
+          <v-card-subtitle class="font-weight-bold ml-3">
+            Name
+          </v-card-subtitle>
+          <v-text-field v-model="this.name" class="mr-3 ml-3"></v-text-field>
         </v-col>
       </v-row>
+      <v-row class="mb-3">
+        <v-col class="pl-6">
+          <v-card-subtitle class="font-weight-bold pr-13">
+            Birth Date
+          </v-card-subtitle>
+          <v-text-field type="date" v-model="this.birthDate"></v-text-field>
+        </v-col>
+        <v-col class="pl-6">
+          <v-card-subtitle class="font-weight-bold">
+            Death Date
+          </v-card-subtitle>
+          <v-text-field
+            type="date"
+            v-model="this.deathDate"
+            class="mr-3"></v-text-field>
+        </v-col>
+      </v-row>
+      <v-card-text class="text-center">
+        <v-btn
+          elevation="0"
+          class="buttonGradient text-white font-weight-bold"
+          @click="addComposer()">
+          Add New
+        </v-btn>
+      </v-card-text>
       <v-card
-        class="repertoireItemGradient fullBorderCurve mainblur ml-3 mr-3 pl-4 pr-4 mb-2 pt-3 pb-3">
+        class="repertoireItemGradient fullBorderCurve mainblur ml-3 mr-3 pl-4 pr-4 mb-2 pt-3 pb-3"
+        v-for="composers of this.composers">
         <v-row>
           <v-col cols="1" align-self="center">
             <v-avatar class="bg-darkBlue">
@@ -37,7 +59,12 @@
             </v-avatar>
           </v-col>
           <v-col cols="8" align-self="center">
-            <v-card-title class="font-weight-bold"> Name </v-card-title>
+            <v-card-title class="pb-0 font-weight-bold">
+              {{ composers.name }}
+            </v-card-title>
+            <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
+              {{ composers.birthyear }} - {{ composers.deathyear }}
+            </v-card-subtitle>
           </v-col>
           <v-col cols="3" align-self="center" class="text-right">
             <v-btn
@@ -55,15 +82,50 @@
 </template>
 
 <script>
+  import ComposersDataService from "../../services/composers.js";
+  import { useUserStore } from "../../stores/UserStore.js";
+  import { mapStores } from "pinia";
   export default {
     name: "EditComposers",
     components: {},
     data() {
-      return {};
+      return {
+        name: "",
+        birthDate: "",
+        deathDate: "",
+        composers: [],
+      };
+    },
+    async mounted() {
+      await this.getComposersList();
+    },
+    computed: {
+      ...mapStores(useUserStore),
     },
     methods: {
+      async addComposer() {
+        let composerData = {
+          name: this.name,
+          birthyear: this.birthDate,
+          deathyear: this.deathDate,
+        };
+        let composerObject = await this.userStore.createComposer(composerData);
+        this.composers.push(composerObject);
+        this.name = "";
+        this.birthDate = "";
+        this.deathDate = "";
+      },
       closeEditComposersDialog() {
         this.$emit("closeEditComposersDialogEvent");
+      },
+      async getComposersList() {
+        await ComposersDataService.getAll()
+          .then((response) => {
+            this.composers = response.data.Composers;
+          })
+          .catch((e) => {
+            console.log(e);
+          });
       },
     },
   };

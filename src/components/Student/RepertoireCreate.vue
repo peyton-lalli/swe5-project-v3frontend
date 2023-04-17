@@ -17,63 +17,83 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-card-subtitle class="font-weight-bold"> Instrument </v-card-subtitle>
+    <v-card-subtitle class="font-weight-bold ml-2">
+      Instrument
+    </v-card-subtitle>
     <v-card-text>
       <v-select
-        bg-color="lightBlue"
-        placeholder="Instrument"
-        :items="['Voice', 'Piano', 'Trumpet']"
-        variant="solo"></v-select>
+        :items="instruments"
+        item-title="name"
+        item-value="id"
+        class="lighterBlur font-weight-semi-bold text-darkBlue"
+        v-model="selectedInstrument"
+        return-object>
+      </v-select>
     </v-card-text>
-    <v-card-subtitle class="font-weight-bold"> Piece Title </v-card-subtitle>
+    <v-card-subtitle class="font-weight-bold ml-2">
+      Piece Title
+    </v-card-subtitle>
     <v-card-text>
       <v-text-field
-        bg-color="lightBlue"
-        placeholder="Piece Title"
-        variant="solo"
-        class="text-mediumBlue">
+        class="lighterBlur font-weight-semi-bold text-darkBlue"
+        v-model="this.titlePiece">
       </v-text-field>
     </v-card-text>
-    <v-card-subtitle class="font-weight-bold"> Composer </v-card-subtitle>
+    <v-card-subtitle class="font-weight-bold ml-2"> Composer </v-card-subtitle>
     <v-card-text>
       <v-select
-        bg-color="lightBlue"
-        class="text-blue"
-        placeholder="Start typing for suggestions"
-        :items="['Beethoven', 'Bach', 'Tchaikovsky']"
-        variant="solo"></v-select>
+        :items="composers"
+        item-title="name"
+        item-value="id"
+        class="lighterBlur font-weight-semi-bold text-darkBlue"
+        v-model="selectedComposer"
+        return-object>
+      </v-select>
+    </v-card-text>
+    <v-card-subtitle class="font-weight-bold ml-2"> Lyrics </v-card-subtitle>
+    <v-card-text>
+      <v-textarea
+        class="lighterBlur font-weight-semi-bold text-darkBlue"
+        v-model="this.lyrics">
+      </v-textarea>
     </v-card-text>
     <v-card-text>
       <v-row>
-        <v-col
-          ><v-checkbox class="font-weight-bold" label="Foreign"></v-checkbox
-        ></v-col>
-        <!-- Opens missing information pop-up-->
-        <v-col class="text-right">
-          <v-btn
-            @click="createDialog = true"
-            elevation="0"
-            class="text-lightBlue mt-16">
-            Missing some information? Request it here.
-          </v-btn>
-          <v-dialog v-model="createDialog" persistent max-width="600px">
-            <MissingInformation
-              @closeCourseDialogEvent="closeCreateDialog"></MissingInformation>
-          </v-dialog>
+        <v-col>
+          <v-checkbox
+            class="font-weight-bold checkbox-noGradient"
+            label="Foreign"
+            v-model="showTranslation"></v-checkbox>
+        </v-col>
+        <v-col v-if="showTranslation">
+          <v-card-subtitle class="font-weight-bold mb-3" v-if="showTranslation">
+            Language
+          </v-card-subtitle>
+          <v-text-field
+            class="lighterBlur font-weight-semi-bold text-darkBlue ml-3"
+            v-model="this.language">
+          </v-text-field>
         </v-col>
       </v-row>
     </v-card-text>
-    <v-card-subtitle> Translation </v-card-subtitle>
-    <v-card-text>
-      <v-text-field
-        bg-color="lightBlue"
-        placeholder="Translation"
-        variant="solo"
-        color="mediumBlue">
-      </v-text-field>
+    <v-card-subtitle class="font-weight-bold ml-2" v-if="showTranslation">
+      Translation
+    </v-card-subtitle>
+    <v-card-text v-if="showTranslation">
+      <v-textarea
+        class="lighterBlur font-weight-semi-bold text-darkBlue"
+        v-model="this.translation">
+      </v-textarea>
     </v-card-text>
+    <v-btn @click="createDialog = true" elevation="0" class="text-darkBlue">
+      Missing some information? Request it here.
+    </v-btn>
+    <v-dialog v-model="createDialog" persistent max-width="600px">
+      <MissingInformation
+        @closeCourseDialogEvent="closeCreateDialog"></MissingInformation>
+    </v-dialog>
     <v-card-actions class="mx-auto font-weight-bold">
-      <v-btn @click="closeDialog()" color="darkBlue">Add</v-btn>
+      <v-btn @click="closeAndAddDialog()" color="darkBlue">Add</v-btn>
       <v-btn @click="closeDialog()" color="red">Cancel</v-btn>
     </v-card-actions>
   </v-card>
@@ -81,6 +101,10 @@
 
 <script>
   import MissingInformation from "../MissingInformation.vue";
+  import ComposersDataService from "../../services/composers.js";
+  import InstrumentsDataService from "../../services/instruments.js";
+  import { useUserStore } from "../../stores/UserStore.js";
+  import { mapStores } from "pinia";
   export default {
     name: "RepertoireCreate",
     components: {
@@ -94,17 +118,91 @@
             person: "Blitzstein, Marc",
           },
         ],
+        composers: [{}],
+        instruments: [{}],
+        selectedComposer: "",
+        selectedInstrument: "",
+        lyrics: "",
+        translation: "",
+        titlePiece: "",
+        language: "",
         createDialog: false,
+        showTranslation: false,
       };
     },
     methods: {
       closeDialog() {
         this.$emit("closeCourseDialogEvent", false);
       },
+      closeAndAddDialog() {
+        let studentInstrumentId =
+          this.userStore.userRoleInfo.instruments.filter(
+            (i) => i.instrumentId === this.selectedInstrument.id
+          )[0].studentinstrumentId;
 
+        let repertoireId = this.userStore.userRoleInfo.repertoires.filter(
+          (r) => r.studentinstrumentId === studentInstrumentId
+        )[0].repertoireId;
+        if (!this.showTranslation) {
+          this.language = "English";
+        }
+        let data = {
+          repertoireId: repertoireId,
+          name: this.titlePiece,
+          composerId: this.selectedComposer.id,
+          lyrics: this.lyrics,
+          translation: this.translation,
+          language: this.language,
+        };
+        this.userStore.createPiece(data);
+        this.$emit("closeCourseDialogEvent", false);
+      },
       closeCreateDialog(val) {
         this.createDialog = val;
       },
+      async getInstruments() {
+        let data = [];
+        await InstrumentsDataService.getAll()
+          .then((response) => {
+            data = response.data.Instruments;
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+        return data;
+      },
+      async getComposers() {
+        let data = [];
+        await ComposersDataService.getAll()
+          .then((response) => {
+            data = response.data.Composers;
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+
+        return data;
+      },
+    },
+    computed: {
+      ...mapStores(useUserStore),
+    },
+    async mounted() {
+      this.composers = await this.getComposers();
+      this.instruments = await this.getInstruments();
     },
   };
 </script>
+
+<style scoped>
+  /* Overwrites the opacity filter put on card subtitles */
+  .v-card-subtitle {
+    opacity: 100%;
+  }
+  .v-text-field {
+    border-radius: 100px;
+  }
+  .checkbox-noGradient {
+    background-color: white !important;
+  }
+</style>

@@ -4,6 +4,8 @@ import StudentInstructorDataService from "../services/studentinstructor.js";
 import InstructorDataService from "../services/instructors.js";
 import UsersDataService from "../services/users.js";
 import UsersRoleDataService from "../services/userrole.js";
+import PieceDataService from "../services/pieces.js";
+import ComposerDataService from "../services/composers.js";
 import AvailabilityDataService from "../services/availability.js";
 
 export const useUserStore = defineStore("user", {
@@ -299,6 +301,49 @@ export const useUserStore = defineStore("user", {
       await UsersRoleDataService.create(data).catch((e) => {
         console.log(e);
       });
+    },
+    async getComposerInfo(id) {
+      let composer = {};
+      await ComposerDataService.getId(id)
+        .then((response) => {
+          composer = response.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      return composer;
+    },
+    async createPiece(data) {
+      let pieceInfo = [];
+      await PieceDataService.create(data)
+        .then((response) => {
+          pieceInfo = response.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      delete pieceInfo.composerId;
+      let tempId = pieceInfo.id;
+      delete pieceInfo.id;
+      delete pieceInfo.repertoireId;
+      pieceInfo.pieceId = tempId;
+      let composerInfo = await this.getComposerInfo(data.composerId);
+      let composerItem = {
+        composerId: data.composerId,
+        name: composerInfo.Composers[0].name,
+        birthyear: composerInfo.Composers[0].birthyear,
+        deathyear: composerInfo.Composers[0].deathyear,
+        createdAt: composerInfo.Composers[0].createdAt,
+        updatedAt: composerInfo.Composers[0].updatedAt,
+      };
+      pieceInfo.composer = {
+        ...composerItem,
+      };
+      this.userRoleInfo.repertoires
+        .filter(
+          (repertoire) => repertoire.repertoireId === data.repertoireId
+        )[0]
+        .pieces.push(pieceInfo);
     },
   },
 });

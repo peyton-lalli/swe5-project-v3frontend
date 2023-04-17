@@ -17,7 +17,23 @@
               {{ sentPiece.composer.name }}
             </v-card-subtitle>
           </v-col>
-          <v-spacer></v-spacer>
+          <v-col cols="2" class="text-right">
+            <v-btn
+              @click="this.editRepertoire = true"
+              elevation="0"
+              size="small"
+              rounded="pill"
+              class="buttonWhite text-mediumBlue font-weight-bold mt-2">
+              Edit
+            </v-btn>
+            <v-dialog v-model="editRepertoire" max-width="600px">
+              <RepertoireEdit
+                :pieces="sentPiece"
+                @closeEditRepertoireDialogEvent="
+                  this.editRepertoire = false
+                "></RepertoireEdit>
+            </v-dialog>
+          </v-col>
         </v-row>
       </v-card-text>
     </v-card>
@@ -25,14 +41,19 @@
 </template>
 
 <script>
+  import RepertoireEdit from "./RepertoireEdit.vue";
   export default {
     name: "Repertoire Component",
-    components: {},
+    components: {
+      RepertoireEdit,
+    },
     props: {
       sentPiece: {},
     },
     data() {
-      return {};
+      return {
+        editRepertoire: false,
+      };
     },
   };
 </script>

@@ -326,7 +326,6 @@ export const useUserStore = defineStore("user", {
       delete pieceInfo.composerId;
       let tempId = pieceInfo.id;
       delete pieceInfo.id;
-      delete pieceInfo.repertoireId;
       pieceInfo.pieceId = tempId;
       let composerInfo = await this.getComposerInfo(data.composerId);
       let composerItem = {
@@ -340,11 +339,41 @@ export const useUserStore = defineStore("user", {
       pieceInfo.composer = {
         ...composerItem,
       };
+      console.log(pieceInfo);
       this.userRoleInfo.repertoires
         .filter(
           (repertoire) => repertoire.repertoireId === data.repertoireId
         )[0]
         .pieces.push(pieceInfo);
+    },
+    async editPiece(data, id) {
+      let pieceInfo = data;
+      await PieceDataService.update(id, data).catch((e) => {
+        console.log(e);
+      });
+      let composerInfo = await this.getComposerInfo(data.composerId);
+      delete pieceInfo.composerId;
+      pieceInfo.pieceId = id;
+      delete pieceInfo.id;
+      let composerItem = {
+        composerId: composerInfo.Composers[0].id,
+        name: composerInfo.Composers[0].name,
+        birthyear: composerInfo.Composers[0].birthyear,
+        deathyear: composerInfo.Composers[0].deathyear,
+        createdAt: composerInfo.Composers[0].createdAt,
+        updatedAt: composerInfo.Composers[0].updatedAt,
+      };
+      pieceInfo.composer = {
+        ...composerItem,
+      };
+      let indexPiece = this.userRoleInfo.repertoires
+        .filter(
+          (repertoire) => repertoire.repertoireId === data.repertoireId
+        )[0]
+        .pieces.findIndex((piece) => piece.pieceId === id);
+      this.userRoleInfo.repertoires.filter(
+        (repertoire) => repertoire.repertoireId === data.repertoireId
+      )[0].pieces[indexPiece] = pieceInfo;
     },
     async createIntrument(instrumentData) {
       let instrumentObject = {};

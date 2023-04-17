@@ -7,6 +7,7 @@ import UsersRoleDataService from "../services/userrole.js";
 import PieceDataService from "../services/pieces.js";
 import ComposerDataService from "../services/composers.js";
 import AvailabilityDataService from "../services/availability.js";
+import InstrumentDataService from "../services/instruments.js";
 
 export const useUserStore = defineStore("user", {
   state: () => ({ userInfo: "", userRoleInfo: "" }),
@@ -344,6 +345,17 @@ export const useUserStore = defineStore("user", {
           (repertoire) => repertoire.repertoireId === data.repertoireId
         )[0]
         .pieces.push(pieceInfo);
+    },
+    async createIntrument(instrumentData) {
+      let instrumentObject = {};
+      await InstrumentDataService.create(instrumentData)
+        .then((response) => {
+          instrumentObject = response.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      return instrumentObject;
     },
   },
 });

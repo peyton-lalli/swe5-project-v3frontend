@@ -27,7 +27,7 @@
                   v-model="selectedInstructor"
                   :items="this.userStore.userRoleInfo.instructors"
                   item-title="name"
-                  item-value="id"
+                  item-value="instructorId"
                   return-object>
                 </v-select>
               </v-col>
@@ -40,7 +40,7 @@
                   v-model="selectedAccompanist"
                   :items="this.userStore.userRoleInfo.accompanists"
                   item-title="name"
-                  item-value="id"
+                  item-value="accompanistId"
                   return-object>
                 </v-select>
               </v-col>
@@ -144,35 +144,74 @@
               Timeslot Selection
             </v-card-subtitle>
             <v-row class="pt-3">
-              <v-card-text v-for="slotsList in timeslots">
-                <v-btn
-                  v-for="timeSlot in slotsList"
-                  @click="setSelectedTimeslot(timeSlot)"
-                  :class="
-                    selectedTimeslot.id === timeSlot.id
-                      ? 'bg-darkGray'
-                      : 'buttonGradient'
-                  "
-                  elevation="0"
-                  rounded="lg"
-                  size="x-small"
-                  class="text-white font-weight-bold mr-2"
-                  >{{
-                    parseInt(timeSlot.time.substring(0, 2)) > 12
-                      ? parseInt(timeSlot.time.substring(0, 2)) -
-                        12 +
-                        timeSlot.time.substring(2, timeSlot.time.length - 3)
-                      : parseInt(timeSlot.time.substring(0, 2)) < 10
-                      ? timeSlot.time.substring(1, timeSlot.time.length - 3)
-                      : timeSlot.time.substring(0, timeSlot.time.length - 3)
-                  }}</v-btn
-                >
-              </v-card-text>
+              <v-col>
+                <v-sheet
+                  class="overflow-y-auto"
+                  max-height="35vh"
+                  min-height="35vh">
+                  <v-row v-for="slotsList in timeslots" class="pb-4">
+                    <v-col>
+                      <v-row
+                        v-for="timeSlot in slotsList"
+                        class="mx-0 px-0 pb-2 my-0">
+                        <v-col class="pa-0 mx-0">
+                          <v-card
+                            flat
+                            class="rounded-lg my-0 py-0"
+                            v-if="isTimeslotAvailableForInstructor(timeSlot)"
+                            :class="
+                              selectedTimeslot.id === timeSlot.id
+                                ? 'selectedListItem'
+                                : 'unSelectedListItem'
+                            "
+                            @click="setSelectedTimeslot(timeSlot)"
+                            :key="timeSlot">
+                            <v-row class="py-2">
+                              <v-col class="">
+                                <v-card-subtitle
+                                  class="font-weight-bold"
+                                  :class="
+                                    selectedTimeslot.id === timeSlot.id
+                                      ? 'text-white'
+                                      : 'text-darkGray'
+                                  ">
+                                  {{
+                                    parseInt(timeSlot.time.substring(0, 2)) > 12
+                                      ? parseInt(
+                                          timeSlot.time.substring(0, 2)
+                                        ) -
+                                        12 +
+                                        timeSlot.time.substring(
+                                          2,
+                                          timeSlot.time.length - 3
+                                        )
+                                      : parseInt(
+                                          timeSlot.time.substring(0, 2)
+                                        ) < 10
+                                      ? timeSlot.time.substring(
+                                          1,
+                                          timeSlot.time.length - 3
+                                        )
+                                      : timeSlot.time.substring(
+                                          0,
+                                          timeSlot.time.length - 3
+                                        )
+                                  }}
+                                </v-card-subtitle>
+                              </v-col>
+                            </v-row>
+                          </v-card>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                </v-sheet>
+              </v-col>
             </v-row>
           </v-col>
         </v-row>
       </v-card-text>
-      <v-card-actions class="mr-2 mb-2 pt-0 pr-4">
+      <v-card-actions class="mr-2 mb-2 pt-4 pr-2">
         <v-btn
           rounded="lg"
           elevation="0"
@@ -227,7 +266,10 @@
         selectedEventSongs: JSON.parse(JSON.stringify(this.sentSignupData))
           .songs,
         selectedInstructor: {},
+        selectedInstructorAvailability: [],
+        instructorAvailabilityTimeslots: [],
         selectedAccompanist: {},
+        selectedAccompanistAvailability: [],
         eventRepertoireSelection: false,
       };
     },
@@ -263,6 +305,17 @@
         this.timeslots = this.eventData.timeslots;
         this.timesInfoString = this.eventData.timesInfoString;
       },
+      async selectedInstructor(instructor) {
+        if (instructor) {
+          this.selectedInstructorAvailability =
+            await this.eventsStore.getAvailaibilityForEventByUserId(
+              instructor.userId,
+              this.eventData.eventId
+            );
+        }
+
+        this.generateFilteredTimeslotList();
+      },
     },
     mounted() {
       // Set default selected piece
@@ -278,6 +331,32 @@
       }
     },
     methods: {
+      generateFilteredTimeslotList() {
+        let interval = this.eventData.times[0].interval;
+        let times = [];
+        for (let time of this.selectedInstructorAvailability) {
+          let obj = {
+            startTime: new Date(time.eventDate + " " + time.startTime),
+            endTime: new Date(time.eventDate + " " + time.endTime),
+            interval: interval,
+          };
+          times.push(obj);
+        }
+
+        this.instructorAvailabilityTimeslots = this.getTimeSlotsCombined(times);
+      },
+      isTimeslotAvailableForInstructor(timeslot) {
+        if (this.instructorAvailabilityTimeslots.length > 0) {
+          let isAvailable = false;
+          this.instructorAvailabilityTimeslots.find(
+            (ts) => ts.time === timeslot.time
+          )
+            ? (isAvailable = true)
+            : (isAvailable = false);
+          return isAvailable;
+        }
+        return true;
+      },
       setOrAddSelectedPieces(pieces) {
         this.selectedPieces = pieces;
         this.eventRepertoireSelection = false;

@@ -30,11 +30,14 @@ export const DateTimeMixin = {
       let totalSlots = [];
 
       for (let time of times) {
+        console.log(time);
         let slots = [];
         let intervalMillis = time.interval * 60 * 1000;
 
         let startTime = new Date(time.startTime);
         let endTime = new Date(time.endTime);
+
+        console.log(startTime);
 
         while (startTime < endTime) {
           let mins = (startTime.getMinutes() + "0").slice(0, 2);
@@ -52,6 +55,35 @@ export const DateTimeMixin = {
         }
 
         totalSlots.push(slots);
+      }
+
+      return totalSlots;
+    },
+
+    getTimeSlotsCombined(times) {
+      let counter = 1;
+      let totalSlots = [];
+
+      for (let time of times) {
+        let intervalMillis = time.interval * 60 * 1000;
+
+        let startTime = new Date(time.startTime);
+        let endTime = new Date(time.endTime);
+
+        while (startTime < endTime) {
+          let mins = (startTime.getMinutes() + "0").slice(0, 2);
+          totalSlots.push({
+            id: counter,
+            time:
+              (startTime.getHours() < 10 ? "0" : "") +
+              startTime.getHours() +
+              ":" +
+              mins +
+              ":00",
+          });
+          startTime.setTime(startTime.getTime() + intervalMillis);
+          counter++;
+        }
       }
 
       return totalSlots;

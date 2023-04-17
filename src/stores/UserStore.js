@@ -375,6 +375,19 @@ export const useUserStore = defineStore("user", {
         (repertoire) => repertoire.repertoireId === data.repertoireId
       )[0].pieces[indexPiece] = pieceInfo;
     },
+    async deletePiece(id, repertoireId) {
+      await PieceDataService.delete(id).catch((e) => {
+        console.log(e);
+      });
+      this.userRoleInfo.repertoires
+        .filter((repertoire) => repertoire.repertoireId === repertoireId)[0]
+        .pieces.splice(
+          this.userRoleInfo.repertoires
+            .filter((repertoire) => repertoire.repertoireId === repertoireId)[0]
+            .pieces.findIndex((piece) => piece.pieceId === id),
+          1
+        );
+    },
     async createIntrument(instrumentData) {
       let instrumentObject = {};
       await InstrumentDataService.create(instrumentData)

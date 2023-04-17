@@ -94,7 +94,7 @@
     </v-dialog>
     <v-card-actions class="mx-auto font-weight-bold">
       <v-btn @click="closeAndAddDialog()" color="darkBlue">Save</v-btn>
-      <v-btn @click="closeAndAddDialog()" color="red">Delete</v-btn>
+      <v-btn @click="deletePiece()" color="red">Delete</v-btn>
       <v-btn @click="closeDialog()" color="red">Cancel</v-btn>
     </v-card-actions>
   </v-card>
@@ -159,6 +159,13 @@
           language: this.language,
         };
         this.userStore.editPiece(data, this.pieces.pieceId);
+        this.$emit("closeEditRepertoireDialogEvent", false);
+      },
+      deletePiece() {
+        this.userStore.deletePiece(
+          this.pieces.pieceId,
+          this.pieces.repertoireId
+        );
         this.$emit("closeEditRepertoireDialogEvent", false);
       },
       closeCreateDialog(val) {

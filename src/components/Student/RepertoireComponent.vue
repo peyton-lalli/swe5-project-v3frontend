@@ -6,7 +6,7 @@
           <v-col cols="1" align-self="center">
             <v-avatar class="bg-darkBlue">
               <!-- Need to get composer API working to get this image -->
-              <v-img></v-img>
+              <v-img :src="sentPiece.composer.picture"></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="9" class="pt-0 pb-0">

@@ -30,14 +30,11 @@ export const DateTimeMixin = {
       let totalSlots = [];
 
       for (let time of times) {
-        console.log(time);
         let slots = [];
         let intervalMillis = time.interval * 60 * 1000;
 
         let startTime = new Date(time.startTime);
         let endTime = new Date(time.endTime);
-
-        console.log(startTime);
 
         while (startTime < endTime) {
           let mins = (startTime.getMinutes() + "0").slice(0, 2);

@@ -38,7 +38,7 @@
                           <v-col cols="1">
                             <v-avatar class="bg-white">
                               <!-- Need to get composer API working to get image -->
-                              <v-img></v-img>
+                              <v-img :src="piece.composer.picture"></v-img>
                             </v-avatar>
                           </v-col>
                           <v-col cols="11" class="">

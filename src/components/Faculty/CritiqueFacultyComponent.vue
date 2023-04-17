@@ -72,37 +72,6 @@
               </v-card-subtitle>
             </v-col>
           </v-row>
-          <v-row>
-            <v-card-title class="pl-5 font-weight-bold text-darkGray">
-              Musical Selection
-            </v-card-title>
-            <v-card-text>
-              <v-card elevation="0" class="eventsGradient fullBorderCurve">
-                <v-card-text class="pt-0">
-                  <v-row justify="center" class="pl-0 mt-0">
-                    <v-col cols="1" align-self="center">
-                      <v-avatar class="bg-darkBlue">
-                        <font-awesome-icon
-                          icon="fa-solid fa-user"
-                          class="text-white"
-                        />
-                      </v-avatar>
-                    </v-col>
-                    <v-col cols="11" class="pt-0 pb-0">
-                      <v-card-title class="pb-0 font-weight-bold text-h9">
-                        {{ this.startingSong.name }}
-                      </v-card-title>
-                      <v-card-subtitle
-                        class="text-darkBlue font-weight-medium pb-2"
-                      >
-                        {{ this.startingSong.person }}
-                      </v-card-subtitle>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </v-card-text>
-          </v-row>
         </v-col>
         <v-col>
           <v-card-title class="font-weight-bold text-darkGray pl-0">
@@ -131,6 +100,37 @@
         </v-col>
       </v-row>
       <v-row>
+        <v-card-title class="pl-5 font-weight-bold text-darkGray">
+          Musical Selection
+        </v-card-title>
+        <v-card-text>
+          <v-card elevation="0" class="eventsGradient fullBorderCurve">
+            <v-card-text class="pt-0">
+              <v-row justify="center" class="pl-0 mt-0">
+                <v-col cols="1" align-self="center">
+                  <v-avatar class="bg-darkBlue">
+                    <font-awesome-icon
+                      icon="fa-solid fa-user"
+                      class="text-white"
+                    />
+                  </v-avatar>
+                </v-col>
+                <v-col class="pt-0 pb-0">
+                  <v-card-title class="pb-0 font-weight-bold text-h9">
+                    {{ this.startingSong.name }}
+                  </v-card-title>
+                  <v-card-subtitle
+                    class="text-darkBlue font-weight-medium pb-2"
+                  >
+                    {{ this.startingSong.person }}
+                  </v-card-subtitle>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-card-text>
+      </v-row>
+      <v-row>
         <v-col>
           <v-card-title class="font-weight-bold text-darkGray pl-1">
             Add Critique
@@ -139,8 +139,8 @@
               size="small"
               rounded="pill"
               class="buttonGradient ml-4 text-white font-weight-bold"
-              v-on:click="isExpand = !isExpand"
-              v-if="!isExpand"
+              v-on:click="isExpanded = !isExpanded"
+              v-if="!isExpanded"
             >
               Make Expanded View
             </v-btn>
@@ -149,8 +149,8 @@
               size="small"
               rounded="pill"
               class="buttonGradient ml-4 text-white font-weight-bold"
-              v-on:click="isExpand = !isExpand"
-              v-if="isExpand"
+              v-on:click="isExpanded = !isExpanded"
+              v-if="isExpanded"
             >
               Make Simplified View
             </v-btn>
@@ -159,10 +159,16 @@
             <v-card-text>
               <v-row>
                 <v-col>
-                  <v-card-title class="font-weight-bold text-darkGray pl-1">
+                  <v-card-title
+                    class="font-weight-bold text-darkGray pl-1 pb-3"
+                  >
                     Preformace and Suggestions
                   </v-card-title>
-                  <v-textarea variant="solo" />
+                  <v-textarea
+                    class="pa-3"
+                    v-model="critiqueText"
+                    variant="solo"
+                  ></v-textarea>
                 </v-col>
                 <v-col>
                   <v-card-title class="font-weight-bold text-darkGray pl-1">
@@ -198,38 +204,58 @@
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row v-if="isExpand" v-for="section in sections">
+              <v-row v-if="isExpanded" v-for="section in sections">
                 <v-col>
-                  <v-card-title class="font-weight-bold text-darkGray pl-1">
+                  <v-card-title>
                     <v-row>
-                      <v-col> {{ section.first }} </v-col>
-                      <v-col class="text-right">
+                      <v-col
+                        class="text-h6 font-weight-bold text-darkGray pl-1"
+                      >
+                        {{ section.first.name }}
+                      </v-col>
+                      Rating:
+                      <v-col>
                         <v-select
-                          label="Rating"
+                          class="pl-1 pr-1"
+                          v-model="section.first.rating"
                           :items="ratings"
                           variant="solo"
-                          size="small"
-                        />
+                        ></v-select>
                       </v-col>
                     </v-row>
                   </v-card-title>
-                  <v-textarea variant="solo" rows="2" />
+                  <v-textarea
+                    class="pa-1"
+                    v-model="section.first.text"
+                    variant="solo"
+                    rows="2"
+                  />
                 </v-col>
                 <v-col>
-                  <v-card-title class="font-weight-bold text-darkGray pl-1">
+                  <v-card-title>
                     <v-row>
-                      <v-col> {{ section.second }} </v-col>
-                      <v-col class="text-right">
+                      <v-col
+                        class="text-h6 font-weight-bold text-darkGray pl-1"
+                      >
+                        {{ section.second.name }}
+                      </v-col>
+                      Rating:
+                      <v-col>
                         <v-select
-                          label="Rating"
+                          class="pl-1 pr-1"
+                          v-model="section.second.rating"
                           :items="ratings"
                           variant="solo"
-                          size="small"
-                        />
+                        ></v-select>
                       </v-col>
                     </v-row>
                   </v-card-title>
-                  <v-textarea variant="solo" rows="2" />
+                  <v-textarea
+                    class="pa-1"
+                    v-model="section.second.text"
+                    variant="solo"
+                    rows="2"
+                  />
                 </v-col>
               </v-row>
             </v-card-text>
@@ -241,7 +267,7 @@
       <v-btn
         rounded="pill"
         class="buttonGradient text-white mr-3"
-        @click="closeCritiqueEditDialog()"
+        @click="saveCritique()"
       >
         Save
       </v-btn>
@@ -259,6 +285,7 @@
 
 <script>
 import ComposersDataService from "../../services/composers.js";
+import CritiquesDataService from "../../services/critiques.js";
 import EventSignUpJurorDataService from "../../services/eventsignupjuror.js";
 import EventSongsDataService from "../../services/eventsongs.js";
 import InstructorsDataService from "../../services/instructors.js";
@@ -276,7 +303,8 @@ export default {
   },
   data() {
     return {
-      isExpand: false,
+      isExpanded: false,
+      critiqueText: "",
       changeButtonLabel: "Make Expanded Critique",
       startingSong: {},
       instructor: {
@@ -294,16 +322,16 @@ export default {
       ratings: ["Poor", "Fair", "Good", "Excellent"],
       sections: [
         {
-          first: "Deportment",
-          second: "Diction",
+          first: { name: "Deportment", text: "", rating: "" },
+          second: { name: "Diction", text: "", rating: "" },
         },
         {
-          first: "Tone",
-          second: "Interpretation, Musicianship",
+          first: { name: "Tone", text: "", rating: "" },
+          second: { name: "Interpretation", text: "", rating: "" },
         },
         {
-          first: "Accuracy/Intonation",
-          second: "Balence Blend",
+          first: { name: "Accuracy", text: "", rating: "" },
+          second: { name: "Balance", text: "", rating: "" },
         },
       ],
     };
@@ -473,11 +501,57 @@ export default {
 
       this.startingSong = tempSong;
     },
+    async saveCritique() {
+      var eventId = -1;
+      var critique = {};
+
+      for (var i = 0; i < this.currentEvent.signups.length; i++) {
+        if (this.currentEvent.signups[i].studentId == this.currentStudent.id) {
+          eventId = this.currentEvent.signups[i].signupId;
+        }
+      }
+
+      if (!this.isExpanded) {
+        critique = {
+          isExpanded: this.isExpanded,
+          eventsignupId: eventId,
+          critiqueText: this.critiqueText,
+        };
+      } else {
+        critique = {
+          isExpanded: this.isExpanded,
+          eventsignupId: eventId,
+          critiqueText: this.critiqueText,
+          deportment: this.sections[0].first.text,
+          deportmentRating: this.sections[0].first.rating,
+          diction: this.sections[0].second.text,
+          dictionRating: this.sections[0].second.rating,
+          tone: this.sections[1].first.text,
+          toneRating: this.sections[1].first.rating,
+          interpretation: this.sections[1].second.text,
+          interpretationRating: this.sections[1].second.rating,
+          accuracy: this.sections[2].first.text,
+          accuracyRating: this.sections[2].first.rating,
+          balance: this.sections[2].second.text,
+          balanceRating: this.sections[2].second.rating,
+        };
+      }
+
+      console.log(critique);
+
+      await CritiquesDataService.create(critique)
+        .then((response) => {
+          this.$emit("closeCritiqueEditDialogEvent", false);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     closeCritiqueEditDialog() {
       this.$emit("closeCritiqueEditDialogEvent", false);
     },
     changeButton() {
-      if (isExpand) {
+      if (isExpanded) {
         this.changeButtonLabel = "Make Simplified Critique";
       } else {
         this.changeButtonLabel = "Make Expanded Critique";

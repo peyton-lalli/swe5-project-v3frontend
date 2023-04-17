@@ -38,9 +38,7 @@
 </template>
 
 <script>
-import StudentInstructorDataService from "../../services/studentinstructor.js";
 import StudentDataService from "../../services/students.js";
-import UserDataService from "../../services/users.js";
 import InstructorsDataService from "../../services/instructors.js";
 import { useUserStore } from "../../stores/UserStore.js";
 import { useStudentStore } from "../../stores/StudentStore.js";
@@ -52,45 +50,37 @@ export default {
   data() {
     return {
       students: [],
-      instructorId: 0,
     };
   },
   computed: {
     ...mapStores(useStudentStore, useUserStore),
   },
   mounted() {
-    this.retrieveInfo();
+    this.getStudents();
   },
   methods: {
-    async retrieveInfo() {
-      await InstructorsDataService.getSingle(
-        this.userStore.userInfo.userId
-      ).then((response) => {
-        this.instructorId = JSON.stringify(response.data.Instructors[0].id);
-      });
-      this.getStudents();
-    },
     async getStudents() {
-      let response1 = "";
-      let response2 = "";
-      await StudentInstructorDataService.getAllStudents(this.instructorId)
-        .then((response) => {
-          response1 = response;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-      for (let i = 0; i < response1.data.StudentInstructor.length; i++) {
+      for (let i = 0; i < this.userStore.userRoleInfo.students.length; i++) {
         await StudentDataService.getStudentById(
-          response1.data.StudentInstructor[i].studentId
+          this.userStore.userRoleInfo.students[i].studentId
         )
           .then((response) => {
-            response2 = response;
+            let student = {
+              fName: response.data.Students[0].user.fName,
+              lName: response.data.Students[0].user.lName,
+              classification: response.data.Students[0].classification,
+              level: response.data.Students[0].level,
+              major: response.data.Students[0].major,
+              picture: response.data.Students[0].user.picture,
+              semesters: response.data.Students[0].semesters,
+            };
+            this.students.push(student);
+            //I am not sure if I actually need the below line, but I am keeping it for now
+            this.studentStore.setStudent(student);
           })
           .catch((e) => {
             console.log(e);
           });
-        await this.getInfo(response2);
       }
       this.students.sort((a, b) => {
         const nameA = a.lName.toUpperCase(); // ignore upper and lowercase
@@ -105,26 +95,6 @@ export default {
         // names must be equal
         return 0;
       });
-    },
-    async getInfo(response2) {
-      await UserDataService.getSingle(response2.data.Students[0].userId)
-        .then((response) => {
-          let student = {
-            fName: response.data.Users[0].fName,
-            lName: response.data.Users[0].lName,
-            classification: response2.data.Students[0].classification,
-            level: response2.data.Students[0].level,
-            major: response2.data.Students[0].major,
-            instructorId: response2.data.Students[0].instructorId,
-            picture: response.data.Users[0].picture,
-            semesters: response2.data.Students[0].semesters,
-          };
-          this.students.push(student);
-          this.studentStore.setStudent(student);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
     },
     getCapitalize(str) {
       return str.charAt(0).toUpperCase() + str.slice(1);

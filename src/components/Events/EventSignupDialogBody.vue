@@ -19,6 +19,22 @@
           <v-col>
             <v-row>
               <v-col>
+                <!-- Not supported in database yet, so hardcoded for now, but doesn't effect anything -->
+                <v-card-subtitle class="font-weight-bold text-darkGray pb-2">
+                  Voice Part
+                </v-card-subtitle>
+                <v-select
+                  class="lighterBlue font-weight-semi-bold text-darkBlue mx-4"
+                  v-model="selectedInstrument"
+                  :items="this.userStore.userRoleInfo.instruments"
+                  item-value="instrumentId"
+                  item-title="name"
+                  return-object></v-select>
+              </v-col>
+              <v-spacer></v-spacer>
+            </v-row>
+            <v-row>
+              <v-col>
                 <v-card-subtitle class="font-weight-bold text-darkGray pb-2">
                   Private Instructor
                 </v-card-subtitle>
@@ -45,18 +61,7 @@
                 </v-select>
               </v-col>
             </v-row>
-            <v-row>
-              <v-col>
-                <!-- Not supported in database yet, so hardcoded for now, but doesn't effect anything -->
-                <v-card-subtitle class="font-weight-bold text-darkGray">
-                  Voice Part
-                </v-card-subtitle>
-                <v-card-subtitle
-                  class="font-weight-bold text-darkBlue mt-5 mb-1">
-                  Soprano
-                </v-card-subtitle>
-              </v-col>
-            </v-row>
+
             <v-row>
               <v-col class="">
                 <v-card-subtitle class="font-weight-bold text-darkGray">
@@ -270,7 +275,9 @@
         instructorAvailabilityTimeslots: [],
         selectedAccompanist: {},
         selectedAccompanistAvailability: [],
+        selectedInstrument: null,
         eventRepertoireSelection: false,
+        instrumentRepertoireList: [],
       };
     },
     mixins: [DateTimeMixin],
@@ -315,6 +322,16 @@
         }
 
         this.generateFilteredTimeslotList();
+      },
+      selectedInstrument(data) {
+        this.instrumentRepertoireList =
+          this.userStore.userRoleInfo.repertoires.filter(
+            (r) => r.studentinstrumentId === data.studentinstrumentId
+          )[0];
+        this.selectedInstructor =
+          this.userStore.userRoleInfo.instructors.filter(
+            (i) => i.studentinstrumentId === data.studentinstrumentId
+          )[0];
       },
     },
     mounted() {

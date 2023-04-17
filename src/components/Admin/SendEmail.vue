@@ -16,8 +16,11 @@
       </v-row>
     </v-card-title>
     <v-card-text>
-      <v-row>
-        <v-col cols="8">
+      <v-row class="pb-4">
+        <v-col cols="9">
+          <v-card-subtitle class="font-weight-bold">
+            Select a group
+          </v-card-subtitle>
           <v-select
             :items="[
               'Vocal Students',
@@ -25,21 +28,23 @@
               'Faculty',
               'Administrators',
             ]"
-            label="Select Groups"
-            variant="solo"
-            color="white"
+            class="lighterBlur font-weight-semi-bold text-darkBlue"
             multiple></v-select>
         </v-col>
-        <v-col cols="4" class="pl-11 pt-4">
+        <v-col cols="3" class="pl-7 pt-8">
           <v-btn
             elevation="0"
-            size="large"
             class="buttonGradient text-white font-weight-bold">
             Add New
           </v-btn>
         </v-col>
       </v-row>
-      <v-textarea variant="solo" rows="5" label="Write Message" />
+      <v-card-subtitle class="font-weight-bold">
+        Write your message
+      </v-card-subtitle>
+      <v-textarea
+        class="lighterBlur font-weight-semi-bold text-darkBlue"
+        rows="5" />
     </v-card-text>
     <v-card-text class="text-center">
       <v-btn

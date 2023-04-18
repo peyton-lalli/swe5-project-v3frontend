@@ -1,8 +1,8 @@
 <template>
   <v-container fluid class="eventComponent">
-    <v-card elevation="0" class="eventsGradient mainblur rounded-lg">
-      <v-card elevation="0" class="ma-3 rounded-md lighterBlur">
-        <v-card-title class="font-weight-bold text-h6 text-darkGray pb-0">
+    <v-card elevation="0" class="eventsGradient rounded-lg">
+      <v-card class="ma-3 rounded-lg lighterBlur">
+        <v-card-title class="font-weight-bold text-h5 text-darkGray pb-0">
           <v-row>
             <v-col>
               {{ eventData.title }}
@@ -51,26 +51,37 @@
 
         <v-row justify="center" class="pl-5">
           <v-col cols="2" align-self="center">
-            <v-avatar class="bg-darkBlue">
+            <v-avatar size="46" class="bg-darkBlue">
               <v-img
                 :src="
-                  this.userStore.userRoleInfo.instructors[0].picture
+                  this.userStore.userRoleInfo.instructors.filter(
+                    (i) => i.instructorId === eventSignUpData.instructorId
+                  )[0].picture
                 "></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="10" align-self="center">
-            <v-card-title class="pb-0 font-weight-bold">
+            <v-card-title class="pb-0 font-weight-semi-bold">
               Private Instructor
             </v-card-title>
             <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-              {{ this.userStore.userRoleInfo.instructors[0].name }}
+              {{
+                this.userStore.userRoleInfo.instructors.filter(
+                  (i) => i.instructorId === eventSignUpData.instructorId
+                )[0].name
+              }}
             </v-card-subtitle>
           </v-col>
         </v-row>
         <v-row justify="center" class="pl-5 mt-0 mb-1">
           <v-col cols="2" align-self="center">
-            <v-avatar class="bg-darkBlue">
-              <v-img></v-img>
+            <v-avatar size="46" class="bg-darkBlue">
+              <v-img
+                :src="
+                  this.userStore.userRoleInfo.accompanists.filter(
+                    (a) => a.accompanistId === eventSignUpData.accompanistId
+                  )[0].picture
+                "></v-img>
             </v-avatar>
           </v-col>
           <v-col cols="10" align-self="center">
@@ -79,7 +90,11 @@
               Accompanist
             </v-card-title>
             <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-              Peyton Lalli
+              {{
+                this.userStore.userRoleInfo.accompanists.filter(
+                  (a) => a.accompanistId === eventSignUpData.accompanistId
+                )[0].name
+              }}
             </v-card-subtitle>
           </v-col>
         </v-row>
@@ -88,17 +103,20 @@
         Musical Selection
       </v-card-subtitle>
       <v-card-text class="pt-0">
-        <v-row justify="center" class="pl-5 mt-0">
-          <v-col cols="2" align-self="center">
-            <v-avatar class="bg-darkBlue">
+        <v-row
+          justify="center"
+          class="pl-5 mt-0 py-0"
+          v-for="eventSong in eventSignUpData.songs">
+          <v-col cols="2" align-self="center" class="py-0">
+            <v-avatar size="46" class="bg-darkBlue">
               <!-- Need to get composer API working to get image -->
-              <v-img></v-img>
+              <v-img :src="eventSong.piece.composer.picture"></v-img>
             </v-avatar>
           </v-col>
-          <v-col cols="10" align-self="center">
-            <v-row v-for="eventSong in eventSignUpData.songs">
+          <v-col cols="10" align-self="center" class="py-0">
+            <v-row>
               <v-col>
-                <v-card-title class="pb-0 font-weight-bold">
+                <v-card-title class="pb-0 text-h6 font-weight-semi-bold">
                   {{ eventSong.piece.name }}
                 </v-card-title>
                 <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
@@ -140,6 +158,7 @@
     },
     mounted() {
       this.setEventData();
+      console.log(this.eventSignUpData);
     },
     methods: {
       closeEventDialog(val) {

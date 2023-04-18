@@ -94,7 +94,7 @@
     </v-dialog>
     <v-card-actions class="mx-auto font-weight-bold">
       <v-btn @click="closeAndAddDialog()" color="darkBlue">Save</v-btn>
-      <v-btn @click="deletePiece()" color="red">Delete</v-btn>
+      <v-btn @click="deletePiece()" color="lightRed">Delete</v-btn>
       <v-btn @click="closeDialog()" color="red">Cancel</v-btn>
     </v-card-actions>
   </v-card>

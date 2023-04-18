@@ -351,17 +351,18 @@ export const useUserStore = defineStore("user", {
       await PieceDataService.update(id, data).catch((e) => {
         console.log(e);
       });
-      let composerInfo = await this.getComposerInfo(data.composerId);
+      let composerInfo = await this.getComposerInfo(data.composerId)
+        .Composer[0];
       delete pieceInfo.composerId;
       pieceInfo.pieceId = id;
       delete pieceInfo.id;
       let composerItem = {
-        composerId: composerInfo.Composers[0].id,
-        name: composerInfo.Composers[0].name,
-        birthyear: composerInfo.Composers[0].birthyear,
-        deathyear: composerInfo.Composers[0].deathyear,
-        createdAt: composerInfo.Composers[0].createdAt,
-        updatedAt: composerInfo.Composers[0].updatedAt,
+        composerId: composerInfo.id,
+        name: composerInfo.name,
+        birthyear: composerInfo.birthyear,
+        deathyear: composerInfo.deathyear,
+        createdAt: composerInfo.createdAt,
+        updatedAt: composerInfo.updatedAt,
       };
       pieceInfo.composer = {
         ...composerItem,
@@ -376,17 +377,22 @@ export const useUserStore = defineStore("user", {
       )[0].pieces[indexPiece] = pieceInfo;
     },
     async deletePiece(id, repertoireId) {
-      await PieceDataService.delete(id).catch((e) => {
-        console.log(e);
-      });
-      this.userRoleInfo.repertoires
-        .filter((repertoire) => repertoire.repertoireId === repertoireId)[0]
-        .pieces.splice(
+      await PieceDataService.delete(id)
+        .then(() => {
           this.userRoleInfo.repertoires
             .filter((repertoire) => repertoire.repertoireId === repertoireId)[0]
-            .pieces.findIndex((piece) => piece.pieceId === id),
-          1
-        );
+            .pieces.splice(
+              this.userRoleInfo.repertoires
+                .filter(
+                  (repertoire) => repertoire.repertoireId === repertoireId
+                )[0]
+                .pieces.findIndex((piece) => piece.pieceId === id),
+              1
+            );
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     async createIntrument(instrumentData) {
       let instrumentObject = {};

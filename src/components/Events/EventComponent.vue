@@ -86,7 +86,7 @@
           </v-col>
           <v-col cols="10" align-self="center">
             <!-- Not yet supported in database so hardcoded for now, doesn't effect anything -->
-            <v-card-title class="pb-0 font-weight-bold">
+            <v-card-title class="pb-0 font-weight-semi-bold">
               Accompanist
             </v-card-title>
             <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">

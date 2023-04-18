@@ -18,13 +18,15 @@
     <v-card-text>
       <v-row class="mb-3">
         <v-col cols="4" class="pl-6">
-          <v-card-subtitle class="font-weight-bold pr-13">
+          <v-card-subtitle class="font-weight-bold pl-0">
             Name
           </v-card-subtitle>
           <v-text-field v-model="this.name"></v-text-field>
         </v-col>
         <v-col cols="4" class="pl-6">
-          <v-card-subtitle class="font-weight-bold"> Type </v-card-subtitle>
+          <v-card-subtitle class="font-weight-bold pl-0">
+            Type
+          </v-card-subtitle>
           <v-select
             class="lighterBlur font-weight-semi-bold text-darkBlue"
             v-model="type"

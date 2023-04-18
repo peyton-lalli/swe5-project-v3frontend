@@ -1,7 +1,7 @@
 <template>
   <v-col>
     <v-card
-      class="repertoireItemGradient fullBorderCurve mainblur ml-3 mr-3 pl-4 pr-4 mb-2">
+      class="repertoireItemGradient fullBorderCurve mainBlur ml-3 mr-3 pl-4 pr-4 mb-2">
       <v-row>
         <v-col cols="1" align-self="center">
           <v-avatar class="bg-darkBlue">

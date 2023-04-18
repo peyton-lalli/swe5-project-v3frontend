@@ -18,7 +18,7 @@
     <v-card-text>
       <v-row>
         <v-col>
-          <v-card-subtitle class="font-weight-bold ml-3">
+          <v-card-subtitle class="font-weight-bold ml-3 pl-0">
             Name
           </v-card-subtitle>
           <v-text-field v-model="this.name" class="mr-3 ml-3"></v-text-field>
@@ -26,13 +26,13 @@
       </v-row>
       <v-row class="mb-3">
         <v-col class="pl-6">
-          <v-card-subtitle class="font-weight-bold pr-13">
+          <v-card-subtitle class="font-weight-bold pr-13 pl-0">
             Birth Date
           </v-card-subtitle>
           <v-text-field type="date" v-model="this.birthDate"></v-text-field>
         </v-col>
         <v-col class="pl-6">
-          <v-card-subtitle class="font-weight-bold">
+          <v-card-subtitle class="font-weight-bold pl-0">
             Death Date
           </v-card-subtitle>
           <v-text-field

@@ -76,7 +76,7 @@
     methods: {
       async closeSaveCreateEventDialog() {
         let eventData = {
-          type: this.eventName,
+          title: this.eventName,
           date: this.date,
         };
         let eventTimes = new Array();

@@ -21,10 +21,8 @@
       Role
       <v-select
         v-model="roles"
-        bg-color="lightBlue"
-        class="text-blue"
+        class="lighterBlur"
         :items="roleItems"
-        variant="solo"
         return-object
         multiple>
       </v-select>
@@ -48,10 +46,8 @@
       Classification
       <v-select
         v-model="classification"
-        bg-color="lightBlue"
-        class="text-blue"
+        class="lighterBlur text-darkGray"
         :items="classificationTypes"
-        variant="solo"
         return-object>
       </v-select>
     </v-card-subtitle>

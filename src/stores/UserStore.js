@@ -326,7 +326,6 @@ export const useUserStore = defineStore("user", {
       delete pieceInfo.composerId;
       let tempId = pieceInfo.id;
       delete pieceInfo.id;
-      delete pieceInfo.repertoireId;
       pieceInfo.pieceId = tempId;
       let composerInfo = await this.getComposerInfo(data.composerId);
       let composerItem = {
@@ -340,11 +339,60 @@ export const useUserStore = defineStore("user", {
       pieceInfo.composer = {
         ...composerItem,
       };
+      console.log(pieceInfo);
       this.userRoleInfo.repertoires
         .filter(
           (repertoire) => repertoire.repertoireId === data.repertoireId
         )[0]
         .pieces.push(pieceInfo);
+    },
+    async editPiece(data, id) {
+      let pieceInfo = data;
+      await PieceDataService.update(id, data).catch((e) => {
+        console.log(e);
+      });
+      let composerInfo = await this.getComposerInfo(data.composerId)
+        .Composer[0];
+      delete pieceInfo.composerId;
+      pieceInfo.pieceId = id;
+      delete pieceInfo.id;
+      let composerItem = {
+        composerId: composerInfo.id,
+        name: composerInfo.name,
+        birthyear: composerInfo.birthyear,
+        deathyear: composerInfo.deathyear,
+        createdAt: composerInfo.createdAt,
+        updatedAt: composerInfo.updatedAt,
+      };
+      pieceInfo.composer = {
+        ...composerItem,
+      };
+      let indexPiece = this.userRoleInfo.repertoires
+        .filter(
+          (repertoire) => repertoire.repertoireId === data.repertoireId
+        )[0]
+        .pieces.findIndex((piece) => piece.pieceId === id);
+      this.userRoleInfo.repertoires.filter(
+        (repertoire) => repertoire.repertoireId === data.repertoireId
+      )[0].pieces[indexPiece] = pieceInfo;
+    },
+    async deletePiece(id, repertoireId) {
+      await PieceDataService.delete(id)
+        .then(() => {
+          this.userRoleInfo.repertoires
+            .filter((repertoire) => repertoire.repertoireId === repertoireId)[0]
+            .pieces.splice(
+              this.userRoleInfo.repertoires
+                .filter(
+                  (repertoire) => repertoire.repertoireId === repertoireId
+                )[0]
+                .pieces.findIndex((piece) => piece.pieceId === id),
+              1
+            );
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     async createIntrument(instrumentData) {
       let instrumentObject = {};

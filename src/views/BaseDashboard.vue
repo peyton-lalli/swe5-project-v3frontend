@@ -14,6 +14,12 @@
         this.$route.fullPath != '/events'
       "
       class="dashboardSlot"></FacultyHomeDashboard>
+    <AccompanistHomeDashboard
+      v-if="
+        userDashboard === 'AccompanistDashboard' &&
+        this.$route.fullPath != '/events'
+      "
+      class="dashboardSlot"></AccompanistHomeDashboard>
     <AdminHomeDashboard
       v-if="
         userDashboard === 'AdminDashboard' && this.$route.fullPath != '/events'
@@ -31,6 +37,7 @@
   import UserSidebar from "../components/UserSidebar.vue";
   import StudentHomeDashboard from "../components/Student/StudentHomeDashboard.vue";
   import FacultyHomeDashboard from "../components/Faculty/FacultyHomeDashboard.vue";
+  import AccompanistHomeDashboard from "../components/Accompanist/AccompanistHomeDashboard.vue";
   import AdminHomeDashboard from "../components/Admin/AdminHomeDashbaord.vue";
   import EventsDashboard from "../components/Events/EventsDashboard.vue";
   import { useUserStore } from "../stores/UserStore.js";
@@ -43,6 +50,7 @@
       UserSidebar,
       StudentHomeDashboard,
       FacultyHomeDashboard,
+      AccompanistHomeDashboard,
       AdminHomeDashboard,
       EventsDashboard,
     },
@@ -70,6 +78,8 @@
           this.userDashboard = "FacultyDashboard";
         } else if (this.userDefaultRole.roleId === 3) {
           this.userDashboard = "AdminDashboard";
+        } else if (this.userDefaultRole.roleId === 4) {
+          this.userDashboard = "AccompanistDashboard";
         }
       },
     },

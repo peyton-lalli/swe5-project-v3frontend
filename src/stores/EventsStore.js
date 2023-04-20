@@ -24,7 +24,6 @@ export const useEventsStore = defineStore("events", {
           this.events = response.data;
 
           this.createTimesAndDates();
-          console.log(this.events[0]);
         })
         .catch((e) => {
           console.log(e);

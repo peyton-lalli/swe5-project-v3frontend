@@ -339,13 +339,11 @@
           this.userStore.userRoleInfo.repertoires.filter(
             (r) => r.studentinstrumentId === data.studentinstrumentId
           )[0];
-        console.log(this.userStore.userRoleInfo.instructors);
 
         this.selectedInstructor =
           this.userStore.userRoleInfo.instructors.filter(
             (i) => i.studentinstrumentId === data.studentinstrumentId
           )[0];
-        console.log(this.userStore.userRoleInfo.accompanists);
         this.selectedAccompanist =
           this.userStore.userRoleInfo.accompanists.filter(
             (i) => i.studentinstrumentId === data.studentinstrumentId

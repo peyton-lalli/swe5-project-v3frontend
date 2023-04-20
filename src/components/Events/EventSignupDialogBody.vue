@@ -163,7 +163,7 @@
                           <v-card
                             flat
                             class="rounded-lg my-0 py-0"
-                            v-if="isTimeslotAvailableForInstructor(timeSlot)"
+                            v-if="isTimeslotAvailable(timeSlot)"
                             :class="
                               selectedTimeslot.id === timeSlot.id
                                 ? 'selectedListItem'
@@ -272,12 +272,12 @@
           .songs,
         selectedInstructor: {},
         selectedInstructorAvailability: [],
-        instructorAvailabilityTimeslots: [],
         selectedAccompanist: {},
         selectedAccompanistAvailability: [],
         selectedInstrument: null,
         eventRepertoireSelection: false,
         instrumentRepertoireList: [],
+        availabileTimeslots: [],
       };
     },
     mixins: [DateTimeMixin],
@@ -323,13 +323,31 @@
 
         this.generateFilteredTimeslotList();
       },
+      async selectedAccompanist(accompanist) {
+        if (accompanist) {
+          this.selectedAccompanistAvailability =
+            await this.eventsStore.getAvailaibilityForEventByUserId(
+              accompanist.userId,
+              this.eventData.eventId
+            );
+        }
+
+        this.generateFilteredTimeslotList();
+      },
       selectedInstrument(data) {
         this.instrumentRepertoireList =
           this.userStore.userRoleInfo.repertoires.filter(
             (r) => r.studentinstrumentId === data.studentinstrumentId
           )[0];
+        console.log(this.userStore.userRoleInfo.instructors);
+
         this.selectedInstructor =
           this.userStore.userRoleInfo.instructors.filter(
+            (i) => i.studentinstrumentId === data.studentinstrumentId
+          )[0];
+        console.log(this.userStore.userRoleInfo.accompanists);
+        this.selectedAccompanist =
+          this.userStore.userRoleInfo.accompanists.filter(
             (i) => i.studentinstrumentId === data.studentinstrumentId
           )[0];
       },
@@ -350,24 +368,67 @@
     methods: {
       generateFilteredTimeslotList() {
         let interval = this.eventData.times[0].interval;
-        let times = [];
+        let instructorTimes = [];
         for (let time of this.selectedInstructorAvailability) {
           let obj = {
             startTime: new Date(time.eventDate + " " + time.startTime),
             endTime: new Date(time.eventDate + " " + time.endTime),
             interval: interval,
           };
-          times.push(obj);
+          instructorTimes.push(obj);
         }
 
-        this.instructorAvailabilityTimeslots = this.getTimeSlotsCombined(times);
+        let accompanistTimes = [];
+        for (let time of this.selectedAccompanistAvailability) {
+          let obj = {
+            startTime: new Date(time.eventDate + " " + time.startTime),
+            endTime: new Date(time.eventDate + " " + time.endTime),
+            interval: interval,
+          };
+          accompanistTimes.push(obj);
+        }
+
+        let times = [];
+
+        times = instructorTimes.concat(accompanistTimes);
+
+        let availableTimes = [];
+
+        if (instructorTimes.length === 0 && accompanistTimes.length > 0) {
+          availableTimes = accompanistTimes;
+        } else if (
+          accompanistTimes.length === 0 &&
+          instructorTimes.length > 0
+        ) {
+          availableTimes = instructorTimes;
+        } else if (accompanistTimes.length > 0 && instructorTimes.length > 0) {
+          for (let time of times) {
+            if (
+              times.filter(
+                (t) =>
+                  t.startTime.getTime() === time.startTime.getTime() &&
+                  t.endTime.getTime() === time.endTime.getTime()
+              ).length > 1
+            ) {
+              if (
+                availableTimes.findIndex(
+                  (at) =>
+                    at.startTime.getTime() === time.startTime.getTime() &&
+                    at.endTime.getTime() === time.endTime.getTime()
+                ) === -1
+              ) {
+                availableTimes.push(time);
+              }
+            }
+          }
+        }
+
+        this.availabileTimeslots = this.getTimeSlotsCombined(availableTimes);
       },
-      isTimeslotAvailableForInstructor(timeslot) {
-        if (this.instructorAvailabilityTimeslots.length > 0) {
+      isTimeslotAvailable(timeslot) {
+        if (this.availabileTimeslots.length > 0) {
           let isAvailable = false;
-          this.instructorAvailabilityTimeslots.find(
-            (ts) => ts.time === timeslot.time
-          )
+          this.availabileTimeslots.find((ts) => ts.time === timeslot.time)
             ? (isAvailable = true)
             : (isAvailable = false);
           return isAvailable;

@@ -24,7 +24,7 @@
 </template>
 
 <script>
-  import AttentionComponent from "../Faculty/AttentionComponent.vue";
+  import AttentionComponent from "../AttentionComponent.vue";
   export default {
     components: {
       AttentionComponent,

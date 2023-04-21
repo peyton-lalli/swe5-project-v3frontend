@@ -120,8 +120,8 @@
 
 <script>
   import EventComponent from "../Events/EventComponent.vue";
-  import StudentComponent from "../Faculty/StudentComponent.vue";
-  import AttentionComponent from "../Faculty/AttentionComponent.vue";
+  import StudentComponent from "../StudentComponent.vue";
+  import AttentionComponent from "../AttentionComponent.vue";
   import AdminCreateEvent from "./AdminCreateEvent.vue";
   import EditUsers from "./EditUsers.vue";
   import EditInstruments from "./EditInstruments.vue";

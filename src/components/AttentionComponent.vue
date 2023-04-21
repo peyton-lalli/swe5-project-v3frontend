@@ -75,13 +75,13 @@
 </template>
 
 <script>
-  import CritiqueListComponent from "./CritiqueListComponent.vue";
-  import ViewSignUps from "./ViewSignUps.vue";
-  import AdminEditEvent from "../Admin/AdminEditEvent.vue";
-  import { useUserStore } from "../../stores/UserStore.js";
-  import { useEventsStore } from "../../stores/EventsStore.js";
+  import CritiqueListComponent from "./Faculty/CritiqueListComponent.vue";
+  import ViewSignUps from "./Faculty/ViewSignUps.vue";
+  import AdminEditEvent from "./Admin/AdminEditEvent.vue";
+  import { useUserStore } from "../stores/UserStore.js";
+  import { useEventsStore } from "../stores/EventsStore.js";
   import { mapStores } from "pinia";
-  import { DateTimeMixin } from "../../mixins/DateTimeMixin.js";
+  import { DateTimeMixin } from "../mixins/DateTimeMixin.js";
   export default {
     name: "AttentionComponent",
     components: {

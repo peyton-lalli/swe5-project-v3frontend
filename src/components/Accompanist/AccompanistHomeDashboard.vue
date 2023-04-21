@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="facultyHomeMainGrid">
+  <v-container fluid class="accompanistHomeMainGrid">
     <v-card class="studentsPane mainBlur rounded-lg">
       <v-card-title class="font-weight-bold text-darkBlue">
         <v-row>
@@ -18,16 +18,6 @@
       <v-card-text>
         <v-row>
           <StudentComponent />
-        </v-row>
-      </v-card-text>
-    </v-card>
-    <v-card class="attentionPane mainBlur rounded-lg">
-      <v-card-title class="font-weight-bold text-darkBlue">
-        Events Requiring Your Attention
-      </v-card-title>
-      <v-card-text>
-        <v-row v-for="event in this.eventsStore.events">
-          <AttentionComponent :eventData="event" />
         </v-row>
       </v-card-text>
     </v-card>
@@ -75,7 +65,7 @@
   import { useEventsStore } from "../../stores/EventsStore.js";
   import { mapStores } from "pinia";
   export default {
-    name: "FacultyHomeDashboard",
+    name: "AccompanistHomeDashboard",
     components: {
       EventComponent,
       StudentComponent,
@@ -106,18 +96,15 @@
     padding: 0 !important;
     margin: 0 !important;
   }
-  .facultyHomeMainGrid {
+  .accompanistHomeMainGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: minmax(auto, 1fr), minmax(auto, 1fr);
     grid-template-areas:
-      "studentsPane attentionPane"
-      "eventsPane eventsPane";
+      "studentsPane eventsPane"
+      "studentsPane eventsPane";
     grid-gap: 1.5rem;
     padding-left: 0;
-  }
-  .attentionPane {
-    grid-area: attentionPane;
   }
 
   .eventsPane {

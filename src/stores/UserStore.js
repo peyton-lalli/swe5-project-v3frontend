@@ -2,13 +2,13 @@ import { defineStore } from "pinia";
 import StudentsDataService from "../services/students.js";
 import StudentInstructorDataService from "../services/studentinstructor.js";
 import InstructorDataService from "../services/instructors.js";
+import AccompanistDataService from "../services/accompanists.js";
 import UsersDataService from "../services/users.js";
 import UsersRoleDataService from "../services/userrole.js";
 import PieceDataService from "../services/pieces.js";
 import ComposerDataService from "../services/composers.js";
 import AvailabilityDataService from "../services/availability.js";
 import InstrumentDataService from "../services/instruments.js";
-import AccompanistDataService from "../services/accompanists.js";
 
 export const useUserStore = defineStore("user", {
   state: () => ({ userInfo: "", userRoleInfo: "" }),
@@ -51,6 +51,8 @@ export const useUserStore = defineStore("user", {
         await this.setFacultyRoleInfo();
       } else if (defaultRole.roleId === 3) {
         await this.setAdminRoleInfo();
+      } else if (defaultRole.roleId === 4) {
+        await this.setAccompanistRoleInfo();
       }
     },
     async setStudentRoleInfo() {
@@ -148,29 +150,16 @@ export const useUserStore = defineStore("user", {
       // Load Instructor info into the store
       await InstructorDataService.getAllInfo(this.userInfo.userId)
         .then((response) => {
-          let instructorInfo = response.data[0];
-
-          let availabilities = instructorInfo.user.availabilities;
-          delete instructorInfo.user;
-
-          let students = [];
-
-          for (let sI of instructorInfo.studentinstructors) {
-            sI.student = {
-              ...sI.student,
-              ...{ studentInstructorId: sI.studentInstructorId },
-            };
-            students.push(sI.student);
-          }
-
-          delete instructorInfo.studentinstructors;
-
-          instructorInfo = {
-            ...instructorInfo,
-            ...{ availabilities: availabilities },
-            ...{ students: students },
-          };
-
+          this.userRoleInfo = instructorInfo;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    async setAccompanistRoleInfo() {
+      // Load Instructor info into the store
+      await AccompanistDataService.getAllInfo(this.userInfo.userId)
+        .then((response) => {
           this.userRoleInfo = instructorInfo;
         })
         .catch((e) => {

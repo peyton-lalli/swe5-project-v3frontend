@@ -197,6 +197,7 @@
           );
         }
         this.closeDialog();
+        this.$emit("regenerateAvailabilties");
       },
       combineTimeslots() {
         let combinedTimeslots = [];

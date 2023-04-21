@@ -286,6 +286,26 @@ export const useEventsStore = defineStore("events", {
       this.events.push({ ...eventData, ...{ times: finalTimeData } });
       console.log(this.events);
     },
+    getAvailabileEventsForUser() {
+      let userStore = useUserStore();
+
+      let events = [];
+
+      for (let event of this.events) {
+        let availabilities = userStore.userRoleInfo.availabilities.filter(
+          (a) => a.eventId === event.eventId
+        );
+        if (availabilities.length > 0) {
+          event = {
+            ...event,
+            ...{ availabilities: availabilities },
+          };
+          events.push(event);
+        }
+      }
+
+      return events;
+    },
     async getAvailaibilityForEventByUserId(userId, eventId) {
       let list = [];
       await AvailabilityDataService.getUserAndEvent(userId, eventId)

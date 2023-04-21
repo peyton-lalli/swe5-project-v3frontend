@@ -27,7 +27,7 @@
         <v-row>
           <v-col> Your Events </v-col>
           <v-col class="text-right">
-            <v-btn
+            <!-- <v-btn
               elevation="0"
               size="small"
               rounded="pill"
@@ -44,40 +44,53 @@
                   icon="fa-solid fa-caret-down"
                   class="text-white" />
               </v-icon>
-            </v-btn>
+            </v-btn> -->
           </v-col>
         </v-row>
       </v-card-title>
-      <v-card-text>
-        <v-row>
-          <v-col cols="6"> </v-col>
-          <v-col cols="6"> </v-col>
-        </v-row>
-      </v-card-text>
+      <v-row>
+        <v-col
+          v-for="event in availabileEvents"
+          cols="6"
+          :sm="12"
+          :md="12"
+          :lg="12"
+          :xl="6">
+          <v-card-text class="px-8 pt-4">
+            <EventAvailabilityComponent :eventData="event" />
+          </v-card-text>
+        </v-col>
+      </v-row>
     </v-card>
   </v-container>
 </template>
 
 <script>
-  import EventComponent from "../Events/EventComponent.vue";
+  import EventAvailabilityComponent from "../Events/EventAvailabilityComponent.vue";
   import StudentComponent from "../StudentComponent.vue";
   import AttentionComponent from "../AttentionComponent.vue";
   import { useEventsStore } from "../../stores/EventsStore.js";
+  import { useUserStore } from "../../stores/UserStore.js";
+
   import { mapStores } from "pinia";
   export default {
     name: "AccompanistHomeDashboard",
     components: {
-      EventComponent,
+      EventAvailabilityComponent,
       StudentComponent,
       AttentionComponent,
     },
     data() {
       return {
         toggleText: "Upcoming",
+        availabileEvents: [],
       };
     },
     computed: {
-      ...mapStores(useEventsStore),
+      ...mapStores(useEventsStore, useUserStore),
+    },
+    mounted() {
+      this.availabileEvents = this.eventsStore.getAvailabileEventsForUser();
     },
     methods: {
       changeText() {

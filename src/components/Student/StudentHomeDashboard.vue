@@ -28,14 +28,25 @@
           </v-row>
         </v-card-title>
         <v-card-text flex-grow="1" overflow="auto">
-          <v-row>
+          <v-row v-if="this.toggleText === 'Upcoming'">
             <v-col
               cols="6"
               :sm="12"
               :md="12"
               :lg="6"
               :xl="6"
-              v-for="event in eventSignups">
+              v-for="event in this.upcomingEvents">
+              <EventComponent :eventSignUpData="event" />
+            </v-col>
+          </v-row>
+          <v-row v-if="this.toggleText === 'Past'">
+            <v-col
+              cols="6"
+              :sm="12"
+              :md="12"
+              :lg="6"
+              :xl="6"
+              v-for="event in this.pastEvents">
               <EventComponent :eventSignUpData="event" />
             </v-col>
           </v-row>
@@ -124,6 +135,8 @@
         viewAllRepDialog: false,
         eventSignups: [],
         eventCritiques: [],
+        upcomingEvents: [],
+        pastEvents: [],
       };
     },
     computed: {
@@ -136,6 +149,16 @@
           if (event.critiques.length > 0) {
             this.eventCritiques.push(event);
           }
+        }
+      }
+      for (let event of this.eventSignups) {
+        let eventDate = this.eventsStore.events.filter(
+          (e) => e.eventId === event.eventId
+        )[0].date;
+        if (eventDate > Date.now()) {
+          this.upcomingEvents.push(event);
+        } else {
+          this.pastEvents.push(event);
         }
       }
     },

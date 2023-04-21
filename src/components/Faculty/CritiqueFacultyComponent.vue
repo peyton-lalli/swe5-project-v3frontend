@@ -538,13 +538,12 @@ export default {
       }
 
       await CritiquesDataService.create(critique)
-        .then((response) => {
-          this.sendNotification();
-          this.$emit("closeCritiqueEditDialogEvent", false);
-        })
+        .then((response) => {})
         .catch((e) => {
           console.log(e);
         });
+      await this.sendNotification();
+      this.$emit("closeCritiqueEditDialogEvent", false);
     },
     async sendNotification() {
       const emailData = {
@@ -553,7 +552,13 @@ export default {
         userId: this.userStore.userInfo.userId,
       };
       console.log(emailData);
-      await EmailingService.sendCritiqueNotification(emailData);
+      await EmailingService.sendCritiqueNotification(emailData)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     closeCritiqueEditDialog() {
       this.$emit("closeCritiqueEditDialogEvent", false);

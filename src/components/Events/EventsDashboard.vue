@@ -46,9 +46,21 @@
       </v-card-title>
       <v-card-text
         class="px-8 pt-4"
-        v-for="event in eventSignups"
-        v-if="this.userStore.userInfo.roles.default.roleId === 1">
-        <v-row>
+        v-if="
+          this.userStore.userInfo.roles.default.roleId === 1 &&
+          this.toggleText === 'Upcoming'
+        ">
+        <v-row v-for="event in this.upcomingEvents">
+          <EventComponent :eventSignUpData="event" />
+        </v-row>
+      </v-card-text>
+      <v-card-text
+        class="px-8 pt-4"
+        v-if="
+          this.userStore.userInfo.roles.default.roleId === 1 &&
+          this.toggleText === 'Past'
+        ">
+        <v-row v-for="event in this.pastEvents">
           <EventComponent :eventSignUpData="event" />
         </v-row>
       </v-card-text>
@@ -88,6 +100,8 @@
         createDialog: false,
         availabileEvents: [],
         eventSignups: [],
+        upcomingEvents: [],
+        pastEvents: [],
       };
     },
     computed: {
@@ -104,6 +118,16 @@
         console.log(this.availabileEvents);
       } else {
         this.eventSignups = this.eventsStore.generateEventSignupsForUser();
+        for (let event of this.eventSignups) {
+          let eventDate = this.eventsStore.events.filter(
+            (e) => e.eventId === event.eventId
+          )[0].date;
+          if (eventDate > Date.now()) {
+            this.upcomingEvents.push(event);
+          } else {
+            this.pastEvents.push(event);
+          }
+        }
       }
     },
     methods: {

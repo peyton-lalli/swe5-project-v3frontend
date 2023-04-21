@@ -156,6 +156,7 @@
 <script>
 import CritiqueFacultyComponent from "./CritiqueFacultyComponent.vue";
 import StudentsDataService from "../../services/students.js";
+import StudentInstrumentDataService from "../../services/studentinstruments.js";
 import { DateTimeMixin } from "../../mixins/DateTimeMixin.js";
 import { useEventsStore } from "../../stores/EventsStore.js";
 import { mapStores } from "pinia";
@@ -190,20 +191,28 @@ export default {
           classification: "",
           time: this.currentEvent.signups[i].timeslot,
           signUp: this.currentEvent.signups[i],
-          type: "Voice",
+          type: "",
           picture: "",
+          email: "",
           id: this.currentEvent.signups[i].studentId,
         };
         await StudentsDataService.getStudentById(
           this.currentEvent.signups[i].studentId
         ).then((response) => {
-          tempstudent.classification = response.data.Students[i].classification;
-          tempstudent.picture = response.data.Students[i].user.picture;
+          tempstudent.classification = response.data.Students[0].classification;
+          tempstudent.picture = response.data.Students[0].user.picture;
           tempstudent.name =
-            response.data.Students[i].user.fName +
+            response.data.Students[0].user.fName +
             " " +
-            response.data.Students[i].user.lName;
+            response.data.Students[0].user.lName;
+          tempstudent.email = response.data.Students[0].user.email;
         });
+        await StudentInstrumentDataService.getStudentId(tempstudent.id).then(
+          (response) => {
+            tempstudent.type =
+              response.data.StudentInstruments[0].instrument.name;
+          }
+        );
         this.students.push(tempstudent);
       }
     },

@@ -326,7 +326,6 @@ export const useUserStore = defineStore("user", {
       pieceInfo.composer = {
         ...composerItem,
       };
-      console.log(pieceInfo);
       this.userRoleInfo.repertoires
         .filter(
           (repertoire) => repertoire.repertoireId === data.repertoireId
@@ -402,6 +401,39 @@ export const useUserStore = defineStore("user", {
           console.log(e);
         });
       return composerObject;
+    },
+    async getAccompanistInfo(id) {
+      let accompanist = {};
+      await AccompanistDataService.getAccompanistById(id)
+        .then((response) => {
+          accompanist = response.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      return accompanist;
+    },
+    async getInstructorInfo(id) {
+      let instructor = {};
+      await InstructorDataService.getInstructorByInstructorId(id)
+        .then((response) => {
+          instructor = response.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      return instructor;
+    },
+    async getUserById(id) {
+      let user = {};
+      await UsersDataService.getSingle(id)
+        .then((response) => {
+          user = response.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      return user;
     },
   },
 });

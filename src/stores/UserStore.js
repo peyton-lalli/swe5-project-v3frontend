@@ -150,7 +150,7 @@ export const useUserStore = defineStore("user", {
       // Load Instructor info into the store
       await InstructorDataService.getAllInfo(this.userInfo.userId)
         .then((response) => {
-          this.userRoleInfo = instructorInfo;
+          this.userRoleInfo = response.data;
         })
         .catch((e) => {
           console.log(e);
@@ -160,7 +160,7 @@ export const useUserStore = defineStore("user", {
       // Load Instructor info into the store
       await AccompanistDataService.getAllInfo(this.userInfo.userId)
         .then((response) => {
-          this.userRoleInfo = instructorInfo;
+          this.userRoleInfo = response.data;
         })
         .catch((e) => {
           console.log(e);

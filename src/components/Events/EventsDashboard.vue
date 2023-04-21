@@ -8,7 +8,8 @@
         <v-row>
           <EventSignupItem
             :sent-event-data="event"
-            @regenerateSignups="regenerateSignups()" />
+            @regenerateSignups="regenerateSignups()"
+            @regenerateAvailabilties="regenerateAvailabilties()" />
         </v-row>
       </v-card-text>
     </v-card>
@@ -43,9 +44,23 @@
           </v-col>
         </v-row>
       </v-card-title>
-      <v-card-text class="px-8 pt-4" v-for="event in eventSignups">
+      <v-card-text
+        class="px-8 pt-4"
+        v-for="event in eventSignups"
+        v-if="this.userStore.userInfo.roles.default.roleId === 1">
         <v-row>
           <EventComponent :eventSignUpData="event" />
+        </v-row>
+      </v-card-text>
+      <v-card-text
+        class="px-8 pt-4"
+        v-for="event in availabileEvents"
+        v-if="
+          this.userStore.userInfo.roles.default.roleId === 2 ||
+          this.userStore.userInfo.roles.default.roleId === 4
+        ">
+        <v-row>
+          <EventAvailabilityComponent :eventData="event" />
         </v-row>
       </v-card-text>
     </v-card>
@@ -54,6 +69,7 @@
 
 <script>
   import EventComponent from "./EventComponent.vue";
+  import EventAvailabilityComponent from "./EventAvailabilityComponent.vue";
   import EventSignupItem from "./EventSignupItem.vue";
   import { useUserStore } from "../../stores/UserStore.js";
   import { useEventsStore } from "../../stores/EventsStore.js";
@@ -63,12 +79,14 @@
     name: "EventsDashboard",
     components: {
       EventComponent,
+      EventAvailabilityComponent,
       EventSignupItem,
     },
     data() {
       return {
         toggleText: "Upcoming",
         createDialog: false,
+        availabileEvents: [],
         eventSignups: [],
       };
     },
@@ -78,7 +96,15 @@
     async mounted() {
       await this.eventsStore.setEvents();
 
-      this.eventSignups = this.eventsStore.generateEventSignupsForUser();
+      if (
+        this.userStore.userInfo.roles.default.roleId === 2 ||
+        this.userStore.userInfo.roles.default.roleId === 4
+      ) {
+        this.availabileEvents = this.eventsStore.getAvailabileEventsForUser();
+        console.log(this.availabileEvents);
+      } else {
+        this.eventSignups = this.eventsStore.generateEventSignupsForUser();
+      }
     },
     methods: {
       closeCreateDialog(val) {
@@ -93,6 +119,9 @@
       },
       regenerateSignups() {
         this.eventSignups = this.eventsStore.generateEventSignupsForUser();
+      },
+      regenerateAvailabilties() {
+        this.availabileEvents = this.eventsStore.getAvailabileEventsForUser();
       },
     },
   };

@@ -65,7 +65,7 @@
                 max-width="600px">
                 <EventAvailabilityDialogBody
                   @closeEventDialogEvent="closeEventAvailabilityDialog"
-                  @regenerateSignups="regenerateSignups()"
+                  @regenerateAvailabilties="regenerateAvailabilties()"
                   :sent-event-data="availabilityEventData"
                   :sent-availability-data="availabilityData"
                   :sentBool="isEdit">
@@ -151,6 +151,10 @@
         this.$emit("regenerateSignups");
         this.regenerateEventData();
         this.isEdit = this.hasPriorSignup ? true : false;
+      },
+      regenerateAvailabilties() {
+        // this.setAvailabilityData();
+        this.$emit("regenerateAvailabilties");
       },
       closeEventSignupDialog(val) {
         this.signUpDialog = val;

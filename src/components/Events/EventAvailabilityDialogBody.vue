@@ -18,19 +18,23 @@
         <v-container>
           <v-row>
             <v-col>
+              <v-row
+                v-if="!addNewAvailability"
+                class="py-0 font-weight-bold text-darkBlue">
+                <v-col cols="5" class="py-0"> Start Time </v-col>
+                <v-col cols="5" class="py-0"> End Time </v-col>
+              </v-row>
               <v-row v-for="(availability, index) in availabilities">
                 <v-col cols="5">
                   <v-text-field
                     readonly
-                    type="time"
                     placeholder="Start Time"
                     v-model="availability.starttime"></v-text-field>
                 </v-col>
                 <v-col cols="5">
                   <v-text-field
                     readonly
-                    type="time"
-                    placeholder="End Time"
+                    placeholder="Start Time"
                     v-model="availability.endtime"></v-text-field>
                 </v-col>
                 <v-col cols="2">
@@ -43,18 +47,28 @@
                 </v-col>
               </v-row>
               <!-- New -->
+              <v-row
+                v-if="addNewAvailability"
+                class="py-0 font-weight-bold text-darkBlue">
+                <v-col cols="4" class="py-0"> Start Time </v-col>
+                <v-col cols="4" class="py-0"> End Time </v-col>
+              </v-row>
               <v-row v-if="addNewAvailability">
                 <v-col cols="4">
-                  <v-text-field
-                    type="time"
+                  <v-select
+                    :items="timeslots"
                     placeholder="Start Time"
-                    v-model="newAvailability.starttime"></v-text-field>
+                    item-title="time"
+                    item-value="time"
+                    v-model="newAvailability.starttime"></v-select>
                 </v-col>
                 <v-col cols="4">
-                  <v-text-field
-                    type="time"
+                  <v-select
+                    :items="timeslots"
                     placeholder="End Time"
-                    v-model="newAvailability.endtime"></v-text-field>
+                    item-title="time"
+                    item-value="time"
+                    v-model="newAvailability.endtime"></v-select>
                 </v-col>
                 <v-col cols="2">
                   <v-btn
@@ -135,7 +149,12 @@
     mixins: [DateTimeMixin],
     props: {
       sentEventData: {},
-      sentAvailabilityData: [],
+      sentAvailabilityData: {
+        type: [Array],
+        default() {
+          return [];
+        },
+      },
       sentBool: false,
     },
     computed: {
@@ -144,10 +163,15 @@
     watch: {
       sentBool(newBool) {
         this.isEdit = newBool;
+        if (!this.isEdit) {
+          this.addAvailabilitySlot();
+        }
       },
       sentEventData(data) {
         this.eventData = JSON.parse(JSON.stringify(data));
-        this.timeslots = this.eventData.timeslots;
+
+        this.combineTimeslots();
+
         this.timesInfoString = this.eventData.timesInfoString;
       },
       sentAvailabilityData(data) {
@@ -156,6 +180,8 @@
       },
     },
     async mounted() {
+      this.combineTimeslots();
+
       if (!this.isEdit) {
         this.addAvailabilitySlot();
       }
@@ -172,6 +198,14 @@
         }
         this.closeDialog();
       },
+      combineTimeslots() {
+        let combinedTimeslots = [];
+        for (let timeslotGroup of this.eventData.timeslots) {
+          combinedTimeslots = combinedTimeslots.concat(timeslotGroup);
+        }
+
+        this.timeslots = combinedTimeslots;
+      },
       closeDialog() {
         this.$emit("closeEventDialogEvent");
       },
@@ -180,8 +214,8 @@
           alert("Already adding new availability");
         } else {
           this.newAvailability = {
-            starttime: "",
-            endtime: "",
+            starttime: "--:--:--",
+            endtime: "--:--:--",
             eventId: this.eventData.eventId,
           };
           this.addNewAvailability = true;
@@ -192,10 +226,30 @@
         this.availabilities.splice(index, 1);
       },
       saveNewAvailabilitySlot() {
-        this.availabilities.push(this.newAvailability);
-        this.newAvailabilities.push(this.newAvailability);
-        this.newAvailability = {};
-        this.addNewAvailability = false;
+        if (this.newAvailability.starttime === "--:--:--") {
+          alert("Please Select an Availability Start Time");
+        } else {
+          if (this.newAvailability.endtime === "--:--:--") {
+            alert("Please Select an Availability End Time");
+          } else {
+            let date = this.eventData.date.split("T", 1);
+            let start = new Date(date + " " + this.newAvailability.starttime);
+            let end = new Date(date + " " + this.newAvailability.endtime);
+
+            if (start.getTime() > end.getTime()) {
+              alert("Availability start cannot be after availaiblity end.");
+            } else if (end.getTime() === start.getTime()) {
+              alert(
+                "Availability start and availability end cannot be the same."
+              );
+            } else {
+              this.availabilities.push(this.newAvailability);
+              this.newAvailabilities.push(this.newAvailability);
+              this.newAvailability = {};
+              this.addNewAvailability = false;
+            }
+          }
+        }
       },
       cancelAddNewAvailabilitySlot() {
         this.newAvailability = {};

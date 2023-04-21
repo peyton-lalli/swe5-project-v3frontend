@@ -102,6 +102,9 @@
       return {
         input: ref(""),
         selectedPieces: JSON.parse(JSON.stringify(this.sentSelectedPieces)),
+        selectedInstrument: JSON.parse(
+          JSON.stringify(this.sentSelectedInstrument)
+        ),
         currentSelectedPieces: [],
       };
     },
@@ -110,6 +113,12 @@
         type: [Array],
         default() {
           return [];
+        },
+      },
+      sentSelectedInstrument: {
+        type: [Object],
+        default() {
+          return {};
         },
       },
       isEdit: false,
@@ -123,9 +132,15 @@
     mounted() {},
     methods: {
       filteredList() {
-        return this.userStore.userRoleInfo.repertoires[0].pieces.filter(
-          (piece) => piece.name.toLowerCase().includes(this.input.toLowerCase())
-        );
+        return this.userStore.userRoleInfo.repertoires
+          .filter(
+            (r) =>
+              r.studentinstrumentId ===
+              this.selectedInstrument.studentinstrumentId
+          )[0]
+          .pieces.filter((piece) =>
+            piece.name.toLowerCase().includes(this.input.toLowerCase())
+          );
       },
       setSelectedPiece(piece) {
         if (this.isEdit) {
@@ -161,6 +176,9 @@
     watch: {
       sentSelectedPiece(newPieces) {
         this.selectedPieces = JSON.parse(JSON.stringify(newPieces));
+      },
+      sentSelectedInstrument(newInstrument) {
+        this.selectedInstrument = JSON.parse(JSON.stringify(newInstrument));
       },
     },
   };

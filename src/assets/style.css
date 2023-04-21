@@ -167,7 +167,7 @@
   padding: 6px 0 6px 0;
 }
 
-.v-select .v-input__details {
+/* .v-select .v-input__details {
   display: none !important;
 }
 
@@ -177,7 +177,7 @@
 
 .v-select .v-field__overlay {
   display: none !important;
-}
+} */
 
 .v-select .v-field__input {
   padding-top: 0 !important;

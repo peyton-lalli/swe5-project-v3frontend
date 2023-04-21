@@ -182,6 +182,9 @@
         }
 
         this.signupEventData = { ...this.eventData };
+        this.signupEventData.timeslots = this.combineTimeslotsArrays(
+          this.signupEventData.timeslots
+        );
         delete this.signupEventData.signups;
         this.signupEventData.timesInfoString = this.timesInfoString;
 
@@ -192,6 +195,9 @@
           ...this.eventData,
           ...{ timesInfoString: this.timesInfoString },
         };
+        this.availabilityEventData.timeslots = this.combineTimeslotsArrays(
+          this.availabilityEventData.timeslots
+        );
         delete this.availabilityEventData.signups;
         this.availabilityData =
           this.userStore.getCurrentInstructorAvailabilityForEventId(

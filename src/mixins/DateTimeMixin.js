@@ -7,6 +7,13 @@ export const DateTimeMixin = {
       let minutes = t.getMinutes() === 0 ? "00" : t.getMinutes();
       return hours + ":" + minutes + suffix;
     },
+    get12HourTimeStringFromString(t) {
+      return parseInt(t.substring(0, 2)) > 12
+        ? parseInt(t.substring(0, 2)) - 12 + t.substring(2, t.length - 3)
+        : parseInt(t.substring(0, 2)) < 10
+        ? t.substring(1, t.length - 3)
+        : t.substring(0, t.length - 3);
+    },
     formatDate(date) {
       const options = { year: "numeric", month: "numeric", day: "numeric" };
       return new Date(date).toLocaleDateString("us-EN", options);
@@ -98,6 +105,14 @@ export const DateTimeMixin = {
       dateTimeParse = dateTime.toString().split("T");
       dateTimeParse = dateTimeParse[1].split(".");
       return dateTimeParse[0];
+    },
+    combineTimeslotsArrays(timeslots) {
+      let combined = [];
+      for (let ts of timeslots) {
+        combined = combined.concat(ts);
+      }
+
+      return combined;
     },
   },
 };

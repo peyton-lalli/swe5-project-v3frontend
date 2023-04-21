@@ -45,6 +45,8 @@
                     ? hasPriorSignup
                       ? "Edit"
                       : "Signup"
+                    : this.availabilityData.length > 0
+                    ? "Edit Availability"
                     : "Add Availability"
                 }}
               </v-btn>
@@ -114,6 +116,8 @@
       this.timesInfoString = this.createTimesInfoString(this.eventData.times);
       this.eventData.signups ? this.checkForPriorSignup() : null;
       this.isEdit = this.hasPriorSignup ? true : false;
+
+      this.setAvailabilityData();
     },
     props: {
       sentEventData: {},
@@ -124,6 +128,7 @@
         this.timesInfoString = this.createTimesInfoString(this.eventData.times);
         this.eventData.signups ? this.checkForPriorSignup() : null;
         this.isEdit = this.hasPriorSignup ? true : false;
+        this.setAvailabilityData();
       },
     },
     methods: {
@@ -153,6 +158,7 @@
 
       closeEventAvailabilityDialog(val) {
         this.availabilityDialog = val;
+        this.setAvailabilityData();
       },
       getTotalTimeslots() {
         let total = 0;
@@ -182,21 +188,34 @@
         }
 
         this.signupEventData = { ...this.eventData };
+        this.signupEventData.timeslots = this.combineTimeslotsArrays(
+          this.signupEventData.timeslots
+        );
         delete this.signupEventData.signups;
         this.signupEventData.timesInfoString = this.timesInfoString;
 
         this.signUpDialog = true;
+      },
+      setAvailabilityData() {
+        if (
+          this.userStore.userInfo.roles.default.roleId === 2 ||
+          this.userStore.userInfo.roles.default.roleId === 4
+        ) {
+          this.availabilityData =
+            this.userStore.getCurrentInstructorAvailabilityForEventId(
+              this.eventData.eventId
+            );
+        }
       },
       async openEventAvailabilityDialog() {
         this.availabilityEventData = {
           ...this.eventData,
           ...{ timesInfoString: this.timesInfoString },
         };
+        this.availabilityEventData.timeslots = this.combineTimeslotsArrays(
+          this.availabilityEventData.timeslots
+        );
         delete this.availabilityEventData.signups;
-        this.availabilityData =
-          this.userStore.getCurrentInstructorAvailabilityForEventId(
-            this.eventData.eventId
-          );
 
         if (this.availabilityData.length > 0) {
           this.isEdit = true;

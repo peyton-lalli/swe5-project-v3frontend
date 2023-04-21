@@ -19,9 +19,8 @@
           <v-col>
             <v-row>
               <v-col>
-                <!-- Not supported in database yet, so hardcoded for now, but doesn't effect anything -->
                 <v-card-subtitle class="font-weight-bold text-darkGray pb-2">
-                  Voice Part
+                  Instrument
                 </v-card-subtitle>
                 <v-select
                   class="lighterBlue font-weight-semi-bold text-darkBlue mx-4"
@@ -74,7 +73,7 @@
                         elevation="0"
                         rounded="lg"
                         class="text-none searchGradient text-white font-weight-bold"
-                        @click="eventRepertoireSelection = true">
+                        @click="openRepertoireSelection()">
                         Search your repertoire
                         <template v-slot:append>
                           <v-icon
@@ -151,63 +150,39 @@
             <v-row class="pt-3">
               <v-col>
                 <v-sheet
-                  class="overflow-y-auto"
+                  rounded="lg"
+                  class="overflow-y-auto lighterBlur pa-4"
                   max-height="35vh"
                   min-height="35vh">
-                  <v-row v-for="slotsList in timeslots" class="pb-4">
-                    <v-col>
-                      <v-row
-                        v-for="timeSlot in slotsList"
-                        class="mx-0 px-0 pb-2 my-0">
-                        <v-col class="pa-0 mx-0">
-                          <v-card
-                            flat
-                            class="rounded-lg my-0 py-0"
-                            v-if="isTimeslotAvailable(timeSlot)"
-                            :class="
-                              selectedTimeslot.id === timeSlot.id
-                                ? 'selectedListItem'
-                                : 'unSelectedListItem'
-                            "
-                            @click="setSelectedTimeslot(timeSlot)"
-                            :key="timeSlot">
-                            <v-row class="py-2">
-                              <v-col class="">
-                                <v-card-subtitle
-                                  class="font-weight-bold"
-                                  :class="
-                                    selectedTimeslot.id === timeSlot.id
-                                      ? 'text-white'
-                                      : 'text-darkGray'
-                                  ">
-                                  {{
-                                    parseInt(timeSlot.time.substring(0, 2)) > 12
-                                      ? parseInt(
-                                          timeSlot.time.substring(0, 2)
-                                        ) -
-                                        12 +
-                                        timeSlot.time.substring(
-                                          2,
-                                          timeSlot.time.length - 3
-                                        )
-                                      : parseInt(
-                                          timeSlot.time.substring(0, 2)
-                                        ) < 10
-                                      ? timeSlot.time.substring(
-                                          1,
-                                          timeSlot.time.length - 3
-                                        )
-                                      : timeSlot.time.substring(
-                                          0,
-                                          timeSlot.time.length - 3
-                                        )
-                                  }}
-                                </v-card-subtitle>
-                              </v-col>
-                            </v-row>
-                          </v-card>
-                        </v-col>
-                      </v-row>
+                  <v-row
+                    v-for="timeSlot in availabileTimeslots"
+                    class="mx-0 px-0 pb-2 my-0">
+                    <v-col class="pa-0 mx-0">
+                      <v-card
+                        flat
+                        class="rounded-lg my-0 py-0"
+                        v-if="isTimeslotAvailable(timeSlot)"
+                        :class="
+                          selectedTimeslot.id === timeSlot.id
+                            ? 'selectedListItem'
+                            : 'unSelectedListItem'
+                        "
+                        @click="setSelectedTimeslot(timeSlot)"
+                        :key="timeSlot">
+                        <v-row class="py-2">
+                          <v-col class="">
+                            <v-card-subtitle
+                              class="font-weight-bold"
+                              :class="
+                                selectedTimeslot.id === timeSlot.id
+                                  ? 'text-white'
+                                  : 'text-darkGray'
+                              ">
+                              {{ get12HourTimeStringFromString(timeSlot.time) }}
+                            </v-card-subtitle>
+                          </v-col>
+                        </v-row>
+                      </v-card>
                     </v-col>
                   </v-row>
                 </v-sheet>
@@ -235,6 +210,7 @@
     </v-card>
     <v-dialog v-model="eventRepertoireSelection" max-width="600px">
       <EventRepertoireSelectionBody
+        :sent-selected-instrument="selectedInstrument"
         :sent-selected-pieces="selectedPieces"
         :is-edit="isEdit"
         @setOrAddSelectedPieces="setOrAddSelectedPieces"
@@ -270,9 +246,9 @@
         selectedPieces: JSON.parse(JSON.stringify(this.sentSignupData)).songs,
         selectedEventSongs: JSON.parse(JSON.stringify(this.sentSignupData))
           .songs,
-        selectedInstructor: {},
+        selectedInstructor: null,
         selectedInstructorAvailability: [],
-        selectedAccompanist: {},
+        selectedAccompanist: null,
         selectedAccompanistAvailability: [],
         selectedInstrument: null,
         eventRepertoireSelection: false,
@@ -298,12 +274,10 @@
 
         this.setDefaultSelectedInstructorAndAccompanist();
 
-        for (let time of this.timeslots) {
-          for (let ts of time) {
-            if (ts.time === this.signupData.timeslot) {
-              this.selectedTimeslot = ts;
-              break;
-            }
+        for (let ts of this.timeslots) {
+          if (ts.time === this.signupData.timeslot) {
+            this.selectedTimeslot = ts;
+            break;
           }
         }
       },
@@ -313,15 +287,15 @@
         this.timesInfoString = this.eventData.timesInfoString;
       },
       async selectedInstructor(instructor) {
+        console.log(instructor);
         if (instructor) {
           this.selectedInstructorAvailability =
             await this.eventsStore.getAvailaibilityForEventByUserId(
               instructor.userId,
               this.eventData.eventId
             );
+          this.generateFilteredTimeslotList();
         }
-
-        this.generateFilteredTimeslotList();
       },
       async selectedAccompanist(accompanist) {
         if (accompanist) {
@@ -330,36 +304,38 @@
               accompanist.userId,
               this.eventData.eventId
             );
+          this.generateFilteredTimeslotList();
         }
-
-        this.generateFilteredTimeslotList();
       },
       selectedInstrument(data) {
-        this.instrumentRepertoireList =
-          this.userStore.userRoleInfo.repertoires.filter(
-            (r) => r.studentinstrumentId === data.studentinstrumentId
-          )[0];
+        if (data) {
+          this.instrumentRepertoireList =
+            this.userStore.userRoleInfo.repertoires.filter(
+              (r) => r.studentinstrumentId === data.studentinstrumentId
+            )[0];
 
-        this.selectedInstructor =
-          this.userStore.userRoleInfo.instructors.filter(
-            (i) => i.studentinstrumentId === data.studentinstrumentId
-          )[0];
-        this.selectedAccompanist =
-          this.userStore.userRoleInfo.accompanists.filter(
-            (i) => i.studentinstrumentId === data.studentinstrumentId
-          )[0];
+          this.selectedInstructor =
+            this.userStore.userRoleInfo.instructors.filter(
+              (i) => i.studentinstrumentId === data.studentinstrumentId
+            )[0];
+          this.selectedAccompanist =
+            this.userStore.userRoleInfo.accompanists.filter(
+              (i) => i.studentinstrumentId === data.studentinstrumentId
+            )[0];
+        }
       },
     },
     mounted() {
+      console.log(this.timeslots);
       // Set default selected piece
       this.setDefaultSelectedInstructorAndAccompanist();
 
-      for (let time of this.timeslots) {
-        for (let ts of time) {
-          if (ts.time === this.signupData.timeslot) {
-            this.selectedTimeslot = ts;
-            break;
-          }
+      // this.availabileTimeslots = this.timeslots;
+
+      for (let ts of this.timeslots) {
+        if (ts.time === this.signupData.timeslot) {
+          this.selectedTimeslot = ts;
+          break;
         }
       }
     },
@@ -392,13 +368,18 @@
 
         let availableTimes = [];
 
+        console.log(accompanistTimes);
+        console.log(instructorTimes);
+
         if (instructorTimes.length === 0 && accompanistTimes.length > 0) {
           availableTimes = accompanistTimes;
+          this.availabileTimeslots = this.getTimeSlotsCombined(availableTimes);
         } else if (
           accompanistTimes.length === 0 &&
           instructorTimes.length > 0
         ) {
           availableTimes = instructorTimes;
+          this.availabileTimeslots = this.getTimeSlotsCombined(availableTimes);
         } else if (accompanistTimes.length > 0 && instructorTimes.length > 0) {
           for (let time of times) {
             if (
@@ -419,9 +400,14 @@
               }
             }
           }
+          this.availabileTimeslots = this.getTimeSlotsCombined(availableTimes);
+        } else if (
+          accompanistTimes.length === 0 &&
+          instructorTimes.length === 0
+        ) {
+          console.log("empty");
+          this.availabileTimeslots = this.timeslots;
         }
-
-        this.availabileTimeslots = this.getTimeSlotsCombined(availableTimes);
       },
       isTimeslotAvailable(timeslot) {
         if (this.availabileTimeslots.length > 0) {
@@ -437,20 +423,38 @@
         this.selectedPieces = pieces;
         this.eventRepertoireSelection = false;
       },
+      openRepertoireSelection() {
+        if (!this.selectedInstrument) {
+          alert("Please Select an Instrument First.");
+        } else {
+          this.eventRepertoireSelection = true;
+        }
+      },
       setDefaultSelectedInstructorAndAccompanist() {
-        this.signupData.instructorId
-          ? (this.selectedInstructor =
-              this.userStore.userRoleInfo.instructors.filter(
-                (i) => i.instructorId === this.signupData.instructorId
-              )[0])
-          : (this.selectedInstructor = null);
+        if (this.signupData.instructorId != null) {
+          this.signupData.instructorId
+            ? (this.selectedInstructor =
+                this.userStore.userRoleInfo.instructors.filter(
+                  (i) => i.instructorId === this.signupData.instructorId
+                )[0])
+            : (this.selectedInstructor = null);
 
-        this.signupData.accompanistId
-          ? (this.selectedAccompanist =
-              this.userStore.userRoleInfo.accompanists.filter(
-                (i) => i.accompanistId === this.signupData.accompanistId
-              )[0])
-          : (this.selectedAccompanist = null);
+          this.selectedInstrument =
+            this.userStore.userRoleInfo.instruments.filter(
+              (i) =>
+                i.studentinstrumentId ===
+                this.selectedInstructor.studentinstrumentId
+            )[0];
+        }
+
+        if (this.signupData.accompanistId != null) {
+          this.signupData.accompanistId
+            ? (this.selectedAccompanist =
+                this.userStore.userRoleInfo.accompanists.filter(
+                  (i) => i.accompanistId === this.signupData.accompanistId
+                )[0])
+            : (this.selectedAccompanist = null);
+        }
       },
       setSelectedTimeslot(timeslot) {
         this.selectedTimeslot = timeslot;

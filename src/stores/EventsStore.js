@@ -21,6 +21,7 @@ export const useEventsStore = defineStore("events", {
     async setEvents() {
       await EventDataService.getAllEventsWithInfo()
         .then((response) => {
+          console.log(response);
           this.events = response.data;
 
           this.createTimesAndDates();
@@ -95,6 +96,9 @@ export const useEventsStore = defineStore("events", {
             eventtimeId: time.eventtimeId,
           };
         }
+
+        event.times.sort((a, b) => a.startTime - b.startTime);
+
         this.events[i].timeslots = DateTimeMixin.methods.getTimeSlots(
           this.events[i].times
         );

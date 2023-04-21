@@ -538,13 +538,12 @@ export default {
       }
 
       await CritiquesDataService.create(critique)
-        .then((response) => {
-          this.sendNotification();
-          this.$emit("closeCritiqueEditDialogEvent", false);
-        })
+        .then((response) => {})
         .catch((e) => {
           console.log(e);
         });
+      await this.sendNotification();
+      this.$emit("closeCritiqueEditDialogEvent", false);
     },
     async sendNotification() {
       const emailData = {

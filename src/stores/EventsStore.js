@@ -24,6 +24,60 @@ export const useEventsStore = defineStore("events", {
           this.events = response.data;
 
           this.createTimesAndDates();
+
+          for (let [i, event] of this.events.entries()) {
+            for (let [j, signup] of event.signups.entries()) {
+              for (let [k, juror] of signup.jurors.entries()) {
+                juror.instructor = {
+                  ...juror.instructor,
+                  ...juror.instructor.user,
+                };
+                this.events[i].signups[j].jurors[k] = {
+                  ...juror,
+                  ...juror.instructor,
+                };
+                this.events[i].signups[j].jurors[k].name =
+                  this.events[i].signups[j].jurors[k].fName +
+                  " " +
+                  this.events[i].signups[j].jurors[k].lName;
+                delete this.events[i].signups[j].jurors[k].fName;
+                delete this.events[i].signups[j].jurors[k].lName;
+                delete this.events[i].signups[j].jurors[k].instructor;
+                delete this.events[i].signups[j].jurors[k].user;
+              }
+            }
+          }
+
+          for (let [i, event] of this.events.entries()) {
+            for (let [j, signup] of event.signups.entries()) {
+              for (let [k, critique] of signup.critiques.entries()) {
+                let juror =
+                  this.events[i].signups[j].critiques[k].eventsignupjuror;
+
+                juror.instructor = {
+                  ...juror.instructor,
+                  ...juror.instructor.user,
+                };
+                this.events[i].signups[j].critiques[k].eventsignupjuror = {
+                  ...juror,
+                  ...juror.instructor,
+                };
+                this.events[i].signups[j].critiques[k].eventsignupjuror.name =
+                  this.events[i].signups[j].critiques[k].eventsignupjuror
+                    .fName +
+                  " " +
+                  this.events[i].signups[j].critiques[k].eventsignupjuror.lName;
+                delete this.events[i].signups[j].critiques[k].eventsignupjuror
+                  .fName;
+                delete this.events[i].signups[j].critiques[k].eventsignupjuror
+                  .lName;
+                delete this.events[i].signups[j].critiques[k].eventsignupjuror
+                  .instructor;
+                delete this.events[i].signups[j].critiques[k].eventsignupjuror
+                  .user;
+              }
+            }
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -33,7 +87,6 @@ export const useEventsStore = defineStore("events", {
     async createTimesAndDates() {
       let timesFinal = [];
       for (let [i, event] of this.events.entries()) {
-        console.log(event.date);
         for (let [j, time] of event.times.entries()) {
           this.events[i].times[j] = {
             startTime: new Date(event.date + " " + time.starttime),
@@ -204,7 +257,17 @@ export const useEventsStore = defineStore("events", {
             time.eventId = response.data.id;
             await EventTimeDataService.create(time)
               .then(async (response) => {
-                finalTimeData.push(response.data);
+                let tempData = response.data;
+                let temp = {
+                  startTime: new Date(
+                    eventData.date + " " + tempData.starttime
+                  ),
+                  endTime: new Date(eventData.date + " " + tempData.endtime),
+                  eventtimeId: tempData.id,
+                  interval: tempData.interval,
+                };
+                console.log(temp);
+                finalTimeData.push(temp);
               })
               .catch((e) => {
                 console.log(e);
@@ -217,6 +280,7 @@ export const useEventsStore = defineStore("events", {
 
       // Update the EventsStore.events with the new data
       this.events.push({ ...eventData, ...{ times: finalTimeData } });
+      console.log(this.events);
     },
     async getAvailaibilityForEventByUserId(userId, eventId) {
       let list = [];

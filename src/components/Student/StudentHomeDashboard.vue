@@ -91,8 +91,8 @@
         Recent Critiques
       </v-card-title>
       <v-card-text>
-        <v-row>
-          <CritiqueComponent />
+        <v-row v-for="(event, i) of this.eventSignups" :key="i">
+          <CritiqueComponent :event="this.eventSignups[i]" />
         </v-row>
       </v-card-text>
     </v-card>
@@ -129,7 +129,13 @@
       ...mapStores(useEventsStore, useUserStore),
     },
     mounted() {
-      this.eventSignups = this.eventsStore.generateEventSignupsForUser();
+      for (let event of this.eventsStore.generateEventSignupsForUser()) {
+        if (event.critiques) {
+          if (event.critiques.length > 0) {
+            this.eventSignups.push(event);
+          }
+        }
+      }
     },
     methods: {
       closeCreateDialog(val) {

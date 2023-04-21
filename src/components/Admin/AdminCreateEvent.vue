@@ -18,6 +18,13 @@
     <v-card-subtitle class="text-left">
       Event Name
       <v-text-field v-model="this.eventName" class="mb-3"></v-text-field>
+      Event Type
+      <v-select
+        class="lighterBlur font-weight-semi-bold text-darkBlue mb-3"
+        v-model="type"
+        :items="this.types"
+        return-object>
+      </v-select>
       Date
       <v-text-field type="date" v-model="this.date" class="mb-3"></v-text-field>
       <v-row v-for="timeSlot in this.timeSlots" class="mb-3">
@@ -71,12 +78,15 @@
             endtime: "",
           },
         ],
+        types: ["Vocal", "Instrumental"],
+        type: "",
       };
     },
     methods: {
       async closeSaveCreateEventDialog() {
         let eventData = {
           title: this.eventName,
+          type: this.type,
           date: this.date,
         };
         let eventTimes = new Array();

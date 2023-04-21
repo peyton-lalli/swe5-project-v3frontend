@@ -257,7 +257,17 @@ export const useEventsStore = defineStore("events", {
             time.eventId = response.data.id;
             await EventTimeDataService.create(time)
               .then(async (response) => {
-                finalTimeData.push(response.data);
+                let tempData = response.data;
+                let temp = {
+                  startTime: new Date(
+                    eventData.date + " " + tempData.starttime
+                  ),
+                  endTime: new Date(eventData.date + " " + tempData.endtime),
+                  eventtimeId: tempData.id,
+                  interval: tempData.interval,
+                };
+                console.log(temp);
+                finalTimeData.push(temp);
               })
               .catch((e) => {
                 console.log(e);
@@ -270,6 +280,7 @@ export const useEventsStore = defineStore("events", {
 
       // Update the EventsStore.events with the new data
       this.events.push({ ...eventData, ...{ times: finalTimeData } });
+      console.log(this.events);
     },
     async getAvailaibilityForEventByUserId(userId, eventId) {
       let list = [];

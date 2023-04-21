@@ -18,6 +18,13 @@
     <v-card-subtitle class="text-left">
       Event Name
       <v-text-field v-model="this.eventName" class="mb-3"></v-text-field>
+      Event Type
+      <v-select
+        class="lighterBlur font-weight-semi-bold text-darkBlue mb-3"
+        v-model="type"
+        :items="this.types"
+        return-object>
+      </v-select>
       Date
       <v-text-field type="date" v-model="this.date" class="mb-3"></v-text-field>
       <v-row v-for="timeSlot in this.timeSlots" class="mb-3">
@@ -72,6 +79,8 @@
         date: "",
         interval: "",
         timeSlots: [],
+        types: ["Vocal", "Instrumental"],
+        type: "",
       };
     },
     mixins: [DateTimeMixin],
@@ -84,7 +93,8 @@
     },
     methods: {
       setAllItems() {
-        this.eventName = this.eventData.type;
+        this.eventName = this.eventData.title;
+        this.type = this.eventData.type;
         this.date = this.parseDate();
         this.interval = this.eventData.times[0].interval;
         for (let timeSlot of this.eventData.times) {
@@ -98,7 +108,8 @@
       },
       async closeSaveEditEventDialog() {
         let eventData = {
-          type: this.eventName,
+          title: this.eventName,
+          type: this.type,
           date: this.date,
           updatedAt: new Date(),
         };

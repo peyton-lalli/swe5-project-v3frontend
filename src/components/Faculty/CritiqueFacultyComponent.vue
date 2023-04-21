@@ -553,7 +553,13 @@ export default {
         userId: this.userStore.userInfo.userId,
       };
       console.log(emailData);
-      await EmailingService.sendCritiqueNotification(emailData);
+      await EmailingService.sendCritiqueNotification(emailData)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     closeCritiqueEditDialog() {
       this.$emit("closeCritiqueEditDialogEvent", false);

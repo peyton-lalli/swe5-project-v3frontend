@@ -1,10 +1,17 @@
 <template>
   <v-container fluid class="eventComponent"
-    ><v-card class="fullBorderCurve mainBlur" @click="createDialog = true">
+    ><v-card class="fullBorderCurve mainBlur">
       <v-card-title class="font-weight-bold text-black">
         <v-row>
-          <v-col>{{ title }}</v-col>
-          <v-col>
+          <v-col
+            >{{
+              this.eventsStore.events.filter(
+                (e) => e.eventId === this.event.eventId
+              )[0].title
+            }}
+            Critique</v-col
+          >
+          <v-col class="text-right">
             <v-btn class="outlined" rounded="pill" size="small" elevation="0">{{
               type
             }}</v-btn>
@@ -14,20 +21,24 @@
       <v-card-subtitle class="font-weight-medium text-mediumBlue">
         {{ date }}
       </v-card-subtitle>
-      <v-card-title class="font-weight-bold text-darkBlue pt-5">
+      <v-card-title class="font-weight-bold text-darkBlue pt-5 ml-2">
         Jurors
       </v-card-title>
       <v-card-text class="pl-0">
-        <v-row justify="center" class="pl-5 mt-0" v-for="juror in jurors">
-          <v-col cols="1" align-self="center">
-            <v-avatar class="bg-darkBlue">
-              <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
-            </v-avatar>
-          </v-col>
-          <v-col cols="11">
-            <v-card-title class="text-darkBlue font-weight-bold pb-2">
-              {{ juror }}
-            </v-card-title>
+        <v-row class="pl-6">
+          <v-col v-for="juror in this.event.jurors" cols="10" :xl="5">
+            <v-row>
+              <v-col cols="1" align-self="center">
+                <v-avatar class="bg-darkBlue">
+                  <v-img :src="juror.picture"></v-img>
+                </v-avatar>
+              </v-col>
+              <v-col>
+                <v-card-title class="text-darkBlue font-weight-bold pb-2 ml-3">
+                  {{ juror.name }}
+                </v-card-title>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </v-card-text>
@@ -36,60 +47,89 @@
           Musical Selection
         </v-card-title>
         <v-card-text class="pl-0">
-          <v-row justify="center" v-for="song in songs">
+          <v-row justify="center" v-for="song in this.event.songs">
             <v-col align-self="center">
               <v-card-title class="pb-0 font-weight-bold">
-                {{ song.name }}
+                {{ song.piece.name }}
               </v-card-title>
               <v-card-subtitle class="text-darkBlue font-weight-bold">
-                {{ song.person }}
+                {{ song.piece.composer.name }}
               </v-card-subtitle>
             </v-col>
           </v-row>
         </v-card-text>
       </v-card>
+      <v-card-text>
+        <v-btn
+          @click="createDialog = true"
+          elevation="0"
+          size="small"
+          rounded="pill"
+          class="buttonGradient mr-3 text-white font-weight-bold ml-1 mb-2">
+          View Full Critique
+        </v-btn>
+        <v-dialog v-model="createDialog" persistent max-width="800px">
+          <StudentReviewComponent
+            :event="event"
+            @closeDialogEvent="closeCreateDialog"></StudentReviewComponent>
+        </v-dialog>
+      </v-card-text>
     </v-card>
-    <v-dialog v-model="createDialog" persistent max-width="800px">
-      <StudentReviewComponent
-        @closeDialogEvent="closeCreateDialog"></StudentReviewComponent>
-    </v-dialog>
   </v-container>
 </template>
 
 <script>
   import StudentReviewComponent from "./StudentReviewComponent.vue";
+  import { useEventsStore } from "../../stores/EventsStore.js";
+  import { useUserStore } from "../../stores/UserStore.js";
+  import { mapStores } from "pinia";
   export default {
     name: "CritiqueComponent",
     components: {
       StudentReviewComponent,
     },
+    props: {
+      event: {},
+    },
     data() {
       return {
         createDialog: false,
-        title: "Jury Critique",
-        type: "Soprano",
-        date: "04/22/2023",
-        jurors: ["Nathan Lalli", "Peyton Lalli", "Logan Demaray"],
-        songs: [
-          {
-            name: "Bird Upon The Tree",
-            person: "Blitzstein, Marc",
-          },
-          {
-            name: "Much More",
-            person: "Schmidt, Harvey",
-          },
-          {
-            name: "In My Life",
-            person: "Schonberg, Claude-Michel",
-          },
-        ],
+        title: "Vocal Jury Critique",
+        type: "",
+        date: "",
       };
     },
     methods: {
       closeCreateDialog(val) {
         this.createDialog = val;
       },
+      findInstrument() {
+        let studentInstrumentId =
+          this.userStore.userRoleInfo.repertoires.filter(
+            (r) => r.repertoireId === this.event.songs[0].piece.repertoireId
+          )[0].studentinstrumentId;
+        this.type = this.userStore.userRoleInfo.instruments.filter(
+          (i) => i.studentinstrumentId === studentInstrumentId
+        )[0].name;
+      },
+      getDate() {
+        let date = new Date(
+          this.eventsStore.events.filter(
+            (e) => e.eventId === this.event.eventId
+          )[0].date
+        );
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+        let year = date.getFullYear();
+        return month + "/" + day + "/" + year;
+      },
+    },
+    computed: {
+      ...mapStores(useEventsStore, useUserStore),
+    },
+    mounted() {
+      this.findInstrument();
+      this.date = this.getDate();
     },
   };
 </script>

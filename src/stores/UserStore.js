@@ -157,7 +157,7 @@ export const useUserStore = defineStore("user", {
         });
     },
     async setAccompanistRoleInfo() {
-      // Load Instructor info into the store
+      // Load Accompanist info into the store
       await AccompanistDataService.getAllInfo(this.userInfo.userId)
         .then((response) => {
           this.userRoleInfo = response.data;

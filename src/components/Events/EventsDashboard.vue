@@ -75,7 +75,9 @@
     computed: {
       ...mapStores(useEventsStore, useUserStore),
     },
-    mounted() {
+    async mounted() {
+      await this.eventsStore.setEvents();
+
       this.eventSignups = this.eventsStore.generateEventSignupsForUser();
     },
     methods: {

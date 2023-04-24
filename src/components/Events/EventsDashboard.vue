@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="eventsMainGrid">
-    <v-card class="openSignupsPane mainBlur rounded-lg">
+    <v-card class="openSignupsPane mainCardBorder pa-2">
       <v-card-title class="font-weight-bold text-h5 text-darkBlue">
         Open Event Signups
       </v-card-title>
@@ -13,7 +13,7 @@
         </v-row>
       </v-card-text>
     </v-card>
-    <v-card class="yourEventsPane mainBlur rounded-lg">
+    <v-card class="yourEventsPane mainCardBorder pa-2">
       <v-card-title class="font-weight-bold text-h5 text-darkBlue">
         <v-row>
           <v-col cols="auto" class="text-h5 font-weight-bold">
@@ -30,16 +30,6 @@
               class="buttonGradient text-white font-weight-bold"
               @click="changeText()">
               {{ toggleText }}
-              <v-icon size="small" v-if="toggleText == 'Upcoming'">
-                <font-awesome-icon
-                  icon="fa-solid fa-caret-up"
-                  class="text-white" />
-              </v-icon>
-              <v-icon size="small" v-else>
-                <font-awesome-icon
-                  icon="fa-solid fa-caret-down"
-                  class="text-white" />
-              </v-icon>
             </v-btn>
           </v-col>
         </v-row>

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="menuBarGrid">
-    <v-card class="menuBarPane rounded-s-0 rounded-e-lg mainBlur">
+    <v-card class="menuBarPane menuBarBorder">
       <v-img
         alt="OC Logo"
         class="shrink mx-3 mt-4 mb-15"
@@ -55,15 +55,15 @@
             v-bind="props">
             <v-icon size="xx-large">
               <font-awesome-icon
-                icon="fa-solid fa-music"
+                icon="fa-solid fa-compact-disc"
                 class="text-darkBlue" />
             </v-icon>
           </v-btn>
         </template>
       </v-tooltip>
       <v-spacer></v-spacer>
-      <!-- Comments -->
-      <v-tooltip text="Comments">
+      <!-- Critiques -->
+      <v-tooltip text="Critiques">
         <template v-slot:activator="{ props }">
           <v-btn
             elevation="0"
@@ -72,7 +72,7 @@
             v-bind="props">
             <v-icon size="xx-large">
               <font-awesome-icon
-                icon="fa-solid fa-comments"
+                icon="fa-solid fa-square-pen"
                 class="text-darkBlue" />
             </v-icon>
           </v-btn>

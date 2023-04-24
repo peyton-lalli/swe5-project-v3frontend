@@ -52,8 +52,7 @@ export const useEventsStore = defineStore("events", {
           for (let [i, event] of this.events.entries()) {
             for (let [j, signup] of event.signups.entries()) {
               for (let [k, critique] of signup.critiques.entries()) {
-                let juror =
-                  this.events[i].signups[j].critiques[k].eventsignupjuror;
+                let juror = critique.eventsignupjuror;
 
                 juror.instructor = {
                   ...juror.instructor,

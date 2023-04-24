@@ -1,19 +1,23 @@
 <template>
   <v-container>
-    <v-card>
-      <v-card-title class="font-weight-bold text-darkBlue">
+    <v-card elevation="0" class="pa-4 fullBorderCurve">
+      <v-card-title class="font-weight-bold text-darkBlue mb-6">
         <v-row>
-          <v-col class="text-h5 font-weight-bold">Repertoire</v-col>
-          <v-col class="text-right">
-            <v-btn elevation="0" @click="closeViewAllDialog()">
+          <v-col cols="auto" class="pa-0 pt-1">
+            <v-avatar class="pr-0">
               <v-icon>
                 <font-awesome-icon
-                  icon="a-solid fa-circle-xmark"
-                  class="text-lightBlue">
-                </font-awesome-icon>
+                  icon="fa-solid fa-compact-disc"
+                  class="text-darkBlue" />
               </v-icon>
-            </v-btn>
+            </v-avatar>
           </v-col>
+          <v-col cols="auto" class="text-h5 font-weight-bold pa-0">
+            <v-card-title class="font-weight-bold text-h5 pl-2"
+              >Repertoire</v-card-title
+            >
+          </v-col>
+          <v-spacer></v-spacer>
         </v-row>
       </v-card-title>
       <v-card-text>

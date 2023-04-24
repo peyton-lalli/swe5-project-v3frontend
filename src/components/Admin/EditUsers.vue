@@ -16,7 +16,17 @@
       </v-row>
     </v-card-title>
     <v-card-text>
-      <v-row v-for="user in users">
+      <v-row>
+        <v-text-field
+          class="ml-6 mr-6"
+          autofocus
+          v-model="input"
+          append-icon="mdi-magnify"
+          placeholder="Search"
+          single-line
+          hide-details></v-text-field>
+      </v-row>
+      <v-row v-for="user in this.filteredList()">
         <AdminUserComponent :userData="user" />
       </v-row>
     </v-card-text>
@@ -27,6 +37,7 @@
   import AdminUserComponent from "./AdminUserComponent.vue";
   import { useUserStore } from "../../stores/UserStore.js";
   import { mapStores } from "pinia";
+  import { ref } from "vue";
   export default {
     name: "EditUsers",
     components: {
@@ -35,9 +46,17 @@
     data() {
       return {
         users: [],
+        input: ref(""),
       };
     },
     methods: {
+      filteredList() {
+        return this.users.filter(
+          (user) =>
+            user.fName.toLowerCase().includes(this.input.toLowerCase()) ||
+            user.lName.toLowerCase().includes(this.input.toLowerCase())
+        );
+      },
       closeEditUsersDialog() {
         this.$emit("closeEditUsersDialogEvent");
       },

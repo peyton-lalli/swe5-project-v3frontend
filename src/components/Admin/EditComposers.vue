@@ -17,6 +17,16 @@
     </v-card-title>
     <v-card-text>
       <v-row>
+        <v-text-field
+          class="ml-6 mr-6"
+          autofocus
+          v-model="input"
+          append-icon="mdi-magnify"
+          placeholder="Search"
+          single-line
+          hide-details></v-text-field>
+      </v-row>
+      <v-row>
         <v-col>
           <v-card-subtitle class="font-weight-bold ml-3 pl-0">
             Name
@@ -51,7 +61,7 @@
       </v-card-text>
       <v-card
         class="repertoireItemGradient fullBorderCurve mainblur ml-3 mr-3 pl-4 pr-4 mb-2 pt-3 pb-3"
-        v-for="composers of this.composers">
+        v-for="composers of this.filteredList()">
         <v-row>
           <v-col cols="1" align-self="center">
             <v-avatar class="bg-darkBlue">
@@ -83,6 +93,7 @@
 
 <script>
   import ComposersDataService from "../../services/composers.js";
+  import { ref } from "vue";
   import { useUserStore } from "../../stores/UserStore.js";
   import { mapStores } from "pinia";
   export default {
@@ -94,6 +105,7 @@
         birthDate: "",
         deathDate: "",
         composers: [],
+        input: ref(""),
       };
     },
     async mounted() {
@@ -103,6 +115,11 @@
       ...mapStores(useUserStore),
     },
     methods: {
+      filteredList() {
+        return this.composers.filter((composer) =>
+          composer.name.toLowerCase().includes(this.input.toLowerCase())
+        );
+      },
       async addComposer() {
         let composerData = {
           name: this.name,

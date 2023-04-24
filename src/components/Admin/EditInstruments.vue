@@ -16,6 +16,16 @@
       </v-row>
     </v-card-title>
     <v-card-text>
+      <v-row>
+        <v-text-field
+          class="ml-6 mr-6"
+          autofocus
+          v-model="input"
+          append-icon="mdi-magnify"
+          placeholder="Search"
+          single-line
+          hide-details></v-text-field>
+      </v-row>
       <v-row class="mb-3">
         <v-col cols="4" class="pl-6">
           <v-card-subtitle class="font-weight-bold pl-0">
@@ -44,7 +54,7 @@
         </v-col>
       </v-row>
       <v-card
-        v-for="instrument of this.instruments"
+        v-for="instrument of this.filteredList()"
         class="repertoireItemGradient fullBorderCurve mainblur ml-3 mr-3 pl-4 pr-4 mb-2">
         <v-row>
           <v-col cols="9" align-self="center">
@@ -72,6 +82,7 @@
 
 <script>
   import InstrumentDataService from "../../services/instruments.js";
+  import { ref } from "vue";
   import { useUserStore } from "../../stores/UserStore.js";
   import { mapStores } from "pinia";
   export default {
@@ -83,12 +94,18 @@
         name: "",
         type: "",
         types: ["Vocal", "Instrument"],
+        input: ref(""),
       };
     },
     async mounted() {
       await this.getInstrumentList();
     },
     methods: {
+      filteredList() {
+        return this.instruments.filter((instrument) =>
+          instrument.name.toLowerCase().includes(this.input.toLowerCase())
+        );
+      },
       async addInstrument() {
         let instrumentData = {
           name: this.name,

@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title class="font-weight-bold text-darkBlue">
       <v-row>
-        <v-col class="text-h5 font-weight-bold">{{ eventData.type }}</v-col>
+        <v-col class="text-h5 font-weight-bold">{{ eventData.title }}</v-col>
         <v-col class="text-right">
           <v-btn elevation="0" @click="closeViewSignUpsDialog()">
             <v-icon>
@@ -38,7 +38,12 @@
           <v-row>
             <v-col cols="1" align-self="center">
               <v-avatar class="bg-darkBlue">
-                <font-awesome-icon icon="fa-solid fa-user" class="text-white" />
+                <v-img
+                  :src="
+                    this.userStore.userRoleInfo.users.filter(
+                      (u) => u.studentId === signup.studentId
+                    )[0].picture
+                  "></v-img>
               </v-avatar>
             </v-col>
             <v-col cols="3" align-self="center">

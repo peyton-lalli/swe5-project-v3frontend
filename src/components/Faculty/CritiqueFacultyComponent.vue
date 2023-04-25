@@ -552,8 +552,6 @@ export default {
         };
       }
 
-      console.log(critique);
-
       await CritiquesDataService.create(critique)
         .then((response) => {})
         .catch((e) => {

@@ -35,7 +35,7 @@
         </v-card-subtitle>
       </v-col>
       <v-col>
-        <v-card-subtitle class="font-weight-bold text-darkGray pl-1">
+        <!-- <v-card-subtitle class="font-weight-bold text-darkGray pl-1">
           0/{{ slotsCount[0] + slotsCount[1] }} Timeslots Filled
         </v-card-subtitle>
         <v-row v-for="time in this.currentEvent.time">
@@ -56,7 +56,7 @@
               >{{ time2 }}</v-btn
             >
           </v-card-text>
-        </v-row>
+        </v-row> -->
       </v-col>
     </v-row>
     <v-row>

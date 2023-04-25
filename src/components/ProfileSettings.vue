@@ -67,6 +67,9 @@
     </v-card-text>
 
     <v-card-text v-if="userRole === 2 || userRole === 3">
+      <v-card-subtitle class="pl-0 pb-1 font-weight-semi-bold text-mediumBlue">
+        Title
+      </v-card-subtitle>
       <v-text-field
         clear-icon="font-weight-semi-bold text-darkGray"
         v-model="userTitle"></v-text-field>

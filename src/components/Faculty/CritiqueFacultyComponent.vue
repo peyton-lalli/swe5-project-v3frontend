@@ -502,6 +502,7 @@ export default {
     async saveCritique() {
       var eventId = -1;
       var critique = {};
+      var eventsignupjurorId = -1;
 
       for (var i = 0; i < this.currentEvent.signups.length; i++) {
         if (this.currentEvent.signups[i].studentId == this.currentStudent.id) {
@@ -509,12 +510,26 @@ export default {
         }
       }
 
+      var jurorCreator = {
+        instructorId: this.userStore.userRoleInfo.instructorId,
+        eventsignupId: eventId,
+      };
+
+      await EventSignUpJurorDataService.create(jurorCreator)
+        .then((response) => {
+          eventsignupjurorId = response.data.id;
+          console.log(eventsignupjurorId);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
       if (!this.isExpanded) {
         critique = {
           isExpanded: this.isExpanded,
           eventsignupId: eventId,
           critiqueText: this.critiqueText,
-          eventsignupjurorId: this.userStore.userInfo.userId,
+          eventsignupjurorId: eventsignupjurorId,
         };
       } else {
         critique = {
@@ -533,9 +548,11 @@ export default {
           accuracyRating: this.sections[2].first.rating,
           balance: this.sections[2].second.text,
           balanceRating: this.sections[2].second.rating,
-          eventsignupjurorId: this.userStore.userInfo.userId,
+          eventsignupjurorId: eventsignupjurorId,
         };
       }
+
+      console.log(critique);
 
       await CritiquesDataService.create(critique)
         .then((response) => {})
@@ -553,9 +570,7 @@ export default {
       };
       console.log(emailData);
       await EmailingService.sendCritiqueNotification(emailData)
-        .then((response) => {
-          console.log(response);
-        })
+        .then((response) => {})
         .catch((e) => {
           console.log(e);
         });

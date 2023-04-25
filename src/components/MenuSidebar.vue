@@ -118,7 +118,11 @@
                 v-bind="props">
                 <font-awesome-icon
                   icon="fa-solid fa-gear"
-                  class="text-mediumBlue" />
+                  :class="
+                    this.$route.fullPath.includes('/settings')
+                      ? 'text-darkBlue'
+                      : 'text-mediumBlue'
+                  " />
               </v-icon>
             </template>
           </v-tooltip>

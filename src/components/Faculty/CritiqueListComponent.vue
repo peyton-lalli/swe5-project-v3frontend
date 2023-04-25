@@ -35,34 +35,15 @@
         </v-card-subtitle>
       </v-col>
       <v-col>
-        <v-card-subtitle class="font-weight-bold text-darkGray pl-1">
+        <!-- <v-card-subtitle class="font-weight-bold text-darkGray pl-1">
           0/{{ slotsCount[0] + slotsCount[1] }} Timeslots Filled
         </v-card-subtitle>
-        <v-row class="pt-3">
+        <v-row v-for="time in this.currentEvent.time">
           <v-card-text
-            v-for="(time, index) in getTimeSlots(
-              getDates(this.currentEvent.times[0].startTime),
-              getDates(this.currentEvent.times[0].endTime),
-              this.currentEvent.times[0].interval,
-              0
-            )"
-            :key="index"
-          >
-            <v-btn
-              elevation="0"
-              rounded="lg"
-              size="x-small"
-              class="buttonGradient text-white font-weight-bold"
-              >{{ time }}</v-btn
-            >
-          </v-card-text>
-        </v-row>
-        <v-row>
-          <v-card-text
-            v-for="(time, index) in getTimeSlots(
-              getDates(this.currentEvent.times[1].startTime),
-              getDates(this.currentEvent.times[1].endTime),
-              this.currentEvent.times[1].interval,
+            v-for="(time2, index) in getTimeSlots(
+              getDates(time.startTime),
+              getDates(time.endTime),
+              time.interval,
               1
             )"
             :key="index"
@@ -72,10 +53,10 @@
               rounded="lg"
               size="x-small"
               class="buttonGradient text-white font-weight-bold"
-              >{{ time }}</v-btn
+              >{{ time2 }}</v-btn
             >
           </v-card-text>
-        </v-row>
+        </v-row> -->
       </v-col>
     </v-row>
     <v-row>

@@ -5,29 +5,30 @@
     <StudentHomeDashboard
       v-if="
         userDashboard === 'StudentDashboard' &&
-        this.$route.fullPath != '/events'
+        !this.$route.fullPath.includes('/events')
       "
       class="dashboardSlot"></StudentHomeDashboard>
     <FacultyHomeDashboard
       v-if="
         userDashboard === 'FacultyDashboard' &&
-        this.$route.fullPath != '/events'
+        !this.$route.fullPath.includes('/events')
       "
       class="dashboardSlot"></FacultyHomeDashboard>
     <AccompanistHomeDashboard
       v-if="
         userDashboard === 'AccompanistDashboard' &&
-        this.$route.fullPath != '/events'
+        !this.$route.fullPath.includes('/events')
       "
       class="dashboardSlot"></AccompanistHomeDashboard>
     <AdminHomeDashboard
       v-if="
-        userDashboard === 'AdminDashboard' && this.$route.fullPath != '/events'
+        userDashboard === 'AdminDashboard' &&
+        !this.$route.fullPath.includes('/events')
       "
       class="dashboardSlot"></AdminHomeDashboard>
 
     <EventsDashboard
-      v-if="this.$route.fullPath === '/events'"
+      v-if="this.$route.fullPath.includes('/events')"
       class="dashboardSlot"></EventsDashboard>
   </v-container>
 </template>

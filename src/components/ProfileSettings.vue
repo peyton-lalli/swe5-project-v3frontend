@@ -1,64 +1,92 @@
 <template>
-  <v-card>
-    <v-row>
-      <v-col
-        ><v-card-title class="text-darkBlue font-weight-bold"
-          >Profile Settings</v-card-title
-        ></v-col
-      >
-      <v-col class="text-right">
-        <v-btn elevation="0" @click="closeDialog()">
-          <v-icon>
-            <font-awesome-icon
-              icon="a-solid fa-circle-xmark"
-              class="text-lightBlue">
-            </font-awesome-icon>
-          </v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
+  <v-card class="fullBorderCurve pa-4">
+    <v-card-title class="font-weight-bold text-darkBlue mb-6">
+      <v-row>
+        <v-col cols="auto" class="pa-0 pt-1">
+          <v-avatar class="pr-0">
+            <v-icon>
+              <font-awesome-icon
+                icon="fa-solid fa-gear"
+                class="text-darkBlue" />
+            </v-icon>
+          </v-avatar>
+        </v-col>
+        <v-col cols="auto" class="text-h5 font-weight-bold pa-0">
+          <v-card-title class="font-weight-bold text-h5 pl-2"
+            >Settings</v-card-title
+          >
+        </v-col>
+        <v-spacer></v-spacer>
+      </v-row>
+    </v-card-title>
     <v-card-text class="mx-auto">
       <v-avatar class="bg-darkBlue" size="148">
         <v-img :src="userPictureLink"></v-img>
       </v-avatar>
     </v-card-text>
-    <v-card-title class="mx-auto font-weight-bold">{{
-      userName.toUpperCase()
-    }}</v-card-title>
-    <v-card-title class="mx-auto text-lightBlue"> {{ userEmail }}</v-card-title>
-    <v-card-text v-if="userRole === 1">
+
+    <v-card-title
+      class="mx-auto font-weight-black text-darkGray text-h4 text-uppercase">
+      {{ userName }}
+    </v-card-title>
+
+    <v-card-subtitle class="mx-auto text-mediumBlue">
+      {{ userEmail }}</v-card-subtitle
+    >
+
+    <v-card-text v-if="userRole === 1" class="px-1">
+      <v-card-subtitle class="pl-0 pb-1 font-weight-semi-bold text-mediumBlue">
+        Major
+      </v-card-subtitle>
+      <v-text-field
+        class="mb-4 font-weight-semi-bold text-darkGray"
+        v-model="userMajor"></v-text-field>
+
+      <v-card-subtitle class="pl-0 pb-1 font-weight-semi-bold text-mediumBlue">
+        Classification
+      </v-card-subtitle>
       <v-select
-        bg-color="lightBlue"
-        class="text-blue"
-        :placeholder="userTitleOrMajor"
-        :items="['Vocal Music', 'Computer Science', 'Psychology']"
-        variant="solo"
-        text="darkBlue"></v-select>
+        class="mb-4 font-weight-semi-bold text-darkGray"
+        v-model="userClassification"
+        :items="[
+          'Freshman',
+          'Sophomore',
+          'Junior',
+          'Senior',
+          'Graduate',
+        ]"></v-select>
+
+      <v-card-subtitle class="pl-0 pb-1 font-weight-semi-bold text-mediumBlue">
+        Semesters
+      </v-card-subtitle>
+
+      <v-text-field
+        type="number"
+        v-model="userSemesters"
+        class="font-weight-semi-bold text-darkGray"></v-text-field>
     </v-card-text>
+
     <v-card-text v-if="userRole === 2 || userRole === 3">
-      <v-text-field :placeholder="userTitleOrMajor"></v-text-field>
+      <v-text-field
+        clear-icon="font-weight-semi-bold text-darkGray"
+        v-model="userTitle"></v-text-field>
     </v-card-text>
-    <v-card-text v-if="userRole === 1">
-      <v-select
-        bg-color="lightBlue"
-        class="text-blue"
-        :placeholder="userClassification"
-        :items="['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate']"
-        variant="solo"
-        text="darkBlue"></v-select>
-    </v-card-text>
-    <v-card-text v-if="userRole === 1">
-      <v-select
-        bg-color="lightBlue"
-        class="text-blue"
-        placeholder="Semesters Studied"
-        :items="['1', '2', '3', '4', '5', '6', '7', '8']"
-        variant="solo"
-        text="darkBlue"></v-select>
-    </v-card-text>
-    <v-card-actions class="mx-auto font-weight-bold">
-      <v-btn @click="closeDialog()" color="darkBlue">Save</v-btn>
-      <v-btn @click="closeDialog()" color="red">Cancel</v-btn>
+
+    <v-card-actions class="px-1 pb-0">
+      <v-btn
+        rounded="lg"
+        elevation="0"
+        class="text-none buttonCancel ml-auto mr-3 text-white font-weight-bold"
+        @click="closeDialog()">
+        Cancel
+      </v-btn>
+      <v-btn
+        rounded="lg"
+        elevation="0"
+        class="text-none buttonGradient text-white font-weight-bold"
+        @click="saveUserInfo()">
+        Save
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -70,7 +98,6 @@
 </style>
 
 <script>
-  import InstructorsDataService from "../services/instructors.js";
   import { mapStores } from "pinia";
   import { useUserStore } from "../stores/UserStore.js";
 
@@ -81,11 +108,12 @@
       return {
         userRole: "",
         userPictureLink: "",
-        userName: "Delta Roman",
-        userEmail: "delta.roman@oc.edu",
-        userTitleOrMajor: "",
-        userClassification: "Senior",
-        userSemesters: 8,
+        userName: "",
+        userEmail: "",
+        userMajor: "",
+        userTitle: "",
+        userClassification: "",
+        userSemesters: null,
       };
     },
     computed: {
@@ -96,19 +124,46 @@
     },
     methods: {
       retrieveInfo() {
-        this.userRole = this.userStore.userInfo.roles.default;
+        this.userRole = this.userStore.userInfo.roles.default.roleId;
         this.userName = this.userStore.getFullName;
         this.userEmail = this.userStore.userInfo.email;
         this.userPictureLink = this.userStore.userInfo.picture;
+
         if (this.userRole === 1) {
-          this.userTitleOrMajor = this.userStore.userRoleInfo.major;
+          this.userMajor = this.userStore.userRoleInfo.major;
+          this.userClassification = this.userStore.userRoleInfo.classification;
+          this.userSemesters = this.userStore.userRoleInfo.semesters;
         } else if (this.userRole === 2) {
-          this.userTitleOrMajor = this.userStore.userRoleInfo.title;
+          this.userTitle = this.userStore.userRoleInfo.title;
         }
       },
       closeDialog() {
-        this.$emit("closeCourseDialogEvent", false);
+        let mainPage = this.$route.fullPath.split("/")[1];
+        this.$router.push({ path: "/" + mainPage });
+      },
+      saveUserInfo() {
+        if (this.userStore.userInfo.roles.default.roleId === 1) {
+          let user = {
+            major: this.userMajor,
+            classification: this.userClassification,
+            semesters: this.userSemesters,
+          };
+          this.userStore.updateUserInfo(
+            user,
+            this.userStore.userRoleInfo.studentId
+          );
+        }
+        this.closeDialog();
       },
     },
   };
 </script>
+
+<style scoped>
+  * {
+    font-family: Inter, sans-serif !important;
+  }
+  .v-card-subtitle {
+    opacity: 100%;
+  }
+</style>

@@ -22,7 +22,7 @@
               elevation="0"
               size="small"
               rounded="pill"
-              class="buttonWhite text-mediumBlue font-weight-bold mt-2">
+              class="buttonWhite text-mediumBlue font-weight-bold mt-5">
               Edit
             </v-btn>
             <v-dialog v-model="editRepertoire" max-width="600px">

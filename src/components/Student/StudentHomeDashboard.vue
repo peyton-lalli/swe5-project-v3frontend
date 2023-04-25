@@ -91,18 +91,15 @@
                   "></RepertoireCreate>
               </v-dialog>
               <v-btn
-                @click="viewAllRepDialog = true"
+                @click="routePage('dashboard/repertoire')"
                 elevation="0"
                 size="small"
                 rounded="pill"
                 class="buttonGradient text-white font-weight-bold text-none">
                 View all
               </v-btn>
-              <v-dialog v-model="viewAllRepDialog" max-width="600px">
-                <StudentRepertoireViewAll
-                  @closeRepViewAllEvent="
-                    this.viewAllRepDialog = false
-                  "></StudentRepertoireViewAll>
+              <v-dialog persistent v-model="viewAllRepDialog" max-width="600px">
+                <StudentRepertoireViewAll></StudentRepertoireViewAll>
               </v-dialog>
             </v-col>
           </v-row>
@@ -168,7 +165,7 @@
       return {
         toggleText: "Upcoming",
         createDialog: false,
-        viewAllRepDialog: false,
+        viewAllRepDialog: this.$route.fullPath === "/dashboard/repertoire",
         eventSignups: [],
         eventCritiques: [],
         upcomingEvents: [],
@@ -208,6 +205,14 @@
         } else {
           this.toggleText = "Upcoming";
         }
+      },
+      routePage(page) {
+        this.$router.push({ path: page });
+      },
+    },
+    watch: {
+      "$route.fullPath": function (newRoute) {
+        this.viewAllRepDialog = newRoute === "/dashboard/repertoire";
       },
     },
   };

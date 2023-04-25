@@ -77,7 +77,7 @@
           class="buttonGradient ml-auto text-white font-weight-bold text-none buttonBorder">
           View full critique
         </v-btn>
-        <v-dialog v-model="createDialog" persistent max-width="800px">
+        <v-dialog v-model="createDialog" max-width="900px">
           <StudentReviewComponent
             :event="event"
             @closeDialogEvent="closeCreateDialog"></StudentReviewComponent>

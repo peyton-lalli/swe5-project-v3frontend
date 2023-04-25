@@ -435,5 +435,19 @@ export const useUserStore = defineStore("user", {
         });
       return user;
     },
+    async updateUserInfo(user, id) {
+      if (this.userInfo.roles.default.roleId === 1) {
+        await StudentsDataService.update(id, user)
+          .then(() => {
+            console.log(this.userRoleInfo);
+            this.userRoleInfo.major = user.major;
+            this.userRoleInfo.classification = user.classification;
+            this.userRoleInfo.semesters = user.semesters;
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+    },
   },
 });

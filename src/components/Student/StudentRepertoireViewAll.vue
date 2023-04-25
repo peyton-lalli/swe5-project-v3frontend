@@ -26,6 +26,15 @@
           <RepertoireComponent :sentPiece="piece" />
         </v-row>
       </v-card-text>
+      <v-card-actions class="ml-auto pa-0 pr-1">
+        <v-btn
+          rounded="lg"
+          elevation="0"
+          class="text-none buttonGradient ml-auto text-white font-weight-bold"
+          @click="closeViewAllDialog()">
+          Close
+        </v-btn>
+      </v-card-actions>
     </v-card>
   </v-container>
 </template>
@@ -47,7 +56,7 @@
     },
     methods: {
       closeViewAllDialog() {
-        this.$emit("closeRepViewAllEvent");
+        this.$router.push({ path: "/dashboard" });
       },
     },
   };

@@ -10,7 +10,11 @@
         {{ this.userStore.getFullName.toUpperCase() }}
       </v-card-title>
       <v-card-subtitle class="font-weight-medium text-darkBlue">
-        {{ userTitleOrMajor }}
+        {{
+          this.userStore.userInfo.roles.default.roleId === 1
+            ? this.userStore.userRoleInfo.major
+            : this.userStore.userRoleInfo.title
+        }}
       </v-card-subtitle>
       <v-card-subtitle
         v-if="isStudent"

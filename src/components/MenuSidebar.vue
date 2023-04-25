@@ -89,7 +89,7 @@
             <template v-slot:activator="{ props }">
               <v-icon
                 size="xx-large"
-                @click="routePage('critiques')"
+                @click="routePage('/dashboard')"
                 v-bind="props">
                 <font-awesome-icon
                   icon="fa-solid fa-square-pen"

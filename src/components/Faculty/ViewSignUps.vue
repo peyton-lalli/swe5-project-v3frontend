@@ -95,9 +95,19 @@
                 elevation="0"
                 size="small"
                 rounded="pill"
-                class="buttonWhite text-mediumBlue font-weight-bold">
+                class="buttonWhite text-mediumBlue font-weight-bold"
+                @click="signUpDialog = true">
                 Edit
               </v-btn>
+              <v-dialog v-model="signUpDialog" persistent max-width="1000px">
+                <EventSignupDialogBody
+                  @closeEventDialogEvent="closeEventSignupDialog"
+                  @regenerateSignups="regenerateSignups()"
+                  :sent-signup-data="signup"
+                  :sent-signup-event-data="this.eventData"
+                  :sentBool="true">
+                </EventSignupDialogBody>
+              </v-dialog>
             </v-col>
           </v-row>
         </v-card>
@@ -108,6 +118,7 @@
 
 <script>
   import CritiqueFacultyComponent from "./CritiqueFacultyComponent.vue";
+  import EventSignupDialogBody from "../Admin/AdminEventSignupDialogBody.vue";
   import { useUserStore } from "../../stores/UserStore.js";
   import { useEventsStore } from "../../stores/EventsStore.js";
   import { mapStores } from "pinia";
@@ -115,12 +126,15 @@
     name: "CritiqueListComponent",
     components: {
       CritiqueFacultyComponent,
+      EventSignupDialogBody,
     },
     props: {
       eventData: {},
     },
     data() {
-      return {};
+      return {
+        signUpDialog: false,
+      };
     },
     methods: {
       printSignup(signup) {
@@ -184,6 +198,15 @@
         hours = ((hours + 11) % 12) + 1;
         let minutes = t.getMinutes() === 0 ? "00" : t.getMinutes();
         return hours + ":" + minutes + suffix;
+      },
+      closeEventSignupDialog(val) {
+        this.signUpDialog = val;
+      },
+      regenerateSignups() {
+        console.log("regenerateSignups");
+        // this.$emit("regenerateSignups");
+        // this.regenerateEventData();
+        // this.isEdit = this.hasPriorSignup ? true : false;
       },
     },
     computed: {

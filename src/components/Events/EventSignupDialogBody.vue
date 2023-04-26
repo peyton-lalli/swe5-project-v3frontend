@@ -162,20 +162,18 @@
                           <v-card
                             flat
                             class="my-0 py-0"
-                            :disabled="
-                              this.availableTimeslotsHoverData[i] != null
-                            "
+                            :disabled="timeSlot.hoverData != null"
                             v-if="isTimeslotAvailable(timeSlot)"
                             :class="[
-                              this.availableTimeslotsHoverData[i] != null
+                              timeSlot.hoverData != null
                                 ? 'disabledListItem'
                                 : selectedTimeslot.id === timeSlot.id
                                 ? 'selectedListItem'
                                 : 'unSelectedListItem',
-                              isHovering && this.availableTimeslotsHoverData[i]
+                              isHovering && timeSlot.hoverData
                                 ? 'topBorderCurve'
                                 : 'fullBorderCurve',
-                              this.availableTimeslotsHoverData[i] != null
+                              timeSlot.hoverData != null
                                 ? 'bg-lightGray'
                                 : 'unSelectedListItem',
                             ]"
@@ -200,9 +198,7 @@
                           <v-card
                             flat
                             class="bottomBorderCurve pa-2"
-                            v-if="
-                              isHovering && this.availableTimeslotsHoverData[i]
-                            ">
+                            v-if="isHovering && timeSlot.hoverData">
                             <v-row>
                               <v-col class="bg-lightGray">
                                 <v-row>
@@ -213,8 +209,7 @@
                                     <v-avatar size="24">
                                       <v-img
                                         :src="
-                                          this.availableTimeslotsHoverData[i]
-                                            .picture
+                                          timeSlot.hoverData.picture
                                         "></v-img>
                                     </v-avatar>
                                   </v-col>
@@ -225,11 +220,9 @@
                                     <v-card-text
                                       class="text-body-1 font-weight-bold text-darkBlue pa-0">
                                       {{
-                                        this.availableTimeslotsHoverData[i]
-                                          .fName +
+                                        timeSlot.hoverData.fName +
                                         " " +
-                                        this.availableTimeslotsHoverData[i]
-                                          .lName
+                                        timeSlot.hoverData.lName
                                       }}
                                     </v-card-text>
                                   </v-col>
@@ -245,10 +238,8 @@
                                       @click="
                                         sendChangeRequest(
                                           timeSlot.time,
-                                          this.availableTimeslotsHoverData[i]
-                                            .email,
-                                          this.availableTimeslotsHoverData[i]
-                                            .fName
+                                          timeSlot.hoverData.email,
+                                          timeSlot.hoverData.fName
                                         )
                                       ">
                                       Request Change
@@ -481,10 +472,17 @@
         }
 
         this.availableTimeslotsHoverData = [];
-        for (let timeslot of this.availableTimeslots) {
-          this.availableTimeslotsHoverData.push(
-            await this.generateTimeslotHoverData(timeslot.time)
-          );
+        for (let [i, timeslot] of this.availableTimeslots.entries()) {
+          this.availableTimeslots[i] = {
+            ...this.availableTimeslots[i],
+            ...{
+              hoverData: await this.generateTimeslotHoverData(timeslot.time),
+            },
+          };
+
+          // this.availableTimeslotsHoverData.push(
+          //   await this.generateTimeslotHoverData(timeslot.time)
+          // );
         }
       },
       isTimeslotAvailable(timeslot) {

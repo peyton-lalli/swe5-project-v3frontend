@@ -1,17 +1,31 @@
 <template>
   <v-container fluid class="adminMainGrid">
     <v-container fluid class="eventsRepPane adminHomeLeftGrid noPadMarg">
-      <v-card class="eventsPane mainBlur rounded-lg">
-        <v-card-title class="font-weight-bold text-darkBlue">
+      <v-card class="eventsPane mainCardBorder pa-4">
+        <v-card-title class="font-weight-bold text-darkBlue mb-6">
           <v-row>
-            <v-col> Events </v-col>
-            <v-col class="text-right">
+            <v-col cols="auto" class="pa-0 pt-1">
+              <v-avatar class="pr-0">
+                <v-icon>
+                  <font-awesome-icon
+                    icon="fa-solid fa-compact-disc"
+                    class="text-darkBlue" />
+                </v-icon>
+              </v-avatar>
+            </v-col>
+            <v-col cols="4" class="text-h5 font-weight-bold pa-0">
+              <v-card-title class="font-weight-bold text-h5 pl-2"
+                >Events</v-card-title
+              >
+            </v-col>
+            <v-spacer></v-spacer>
+            <v-col class="text-right pa-0">
               <v-btn
                 @click="createEventDialog = true"
                 elevation="0"
                 size="small"
                 rounded="pill"
-                class="buttonGradient text-white font-weight-bold mr-2">
+                class="buttonGradient mr-3 text-white font-weight-bold text-none">
                 Add new
               </v-btn>
               <v-btn
@@ -19,8 +33,8 @@
                 elevation="0"
                 size="small"
                 rounded="pill"
-                class="buttonGradient text-white font-weight-bold">
-                View All
+                class="buttonGradient text-white font-weight-bold text-none">
+                View all
               </v-btn>
               <v-dialog v-model="viewAllEvents" max-width="800px">
                 <ViewAllEvents
@@ -38,24 +52,56 @@
           </v-row>
         </v-card-text>
       </v-card>
-      <v-card class="attentionPane mainBlur rounded-lg">
-        <v-card-title class="font-weight-bold text-darkBlue">
-          Alerts Requiring Your Attention
+      <v-card class="attentionPane mainCardBorder pa-4">
+        <v-card-title class="font-weight-bold text-darkBlue mb-4">
+          <v-row>
+            <v-col cols="auto" class="pa-0 pt-1">
+              <v-avatar class="pr-0">
+                <v-icon>
+                  <font-awesome-icon
+                    icon="fa-solid fa-bell"
+                    class="text-darkBlue" />
+                </v-icon>
+              </v-avatar>
+            </v-col>
+            <v-col cols="auto" class="text-h5 font-weight-bold pa-0">
+              <v-card-title class="font-weight-bold text-h5 pl-2"
+                >Alerts Requiring Your Attention</v-card-title
+              >
+            </v-col>
+            <v-spacer></v-spacer>
+          </v-row>
         </v-card-title>
         <v-card-text>
           <v-row> </v-row>
         </v-card-text>
       </v-card>
     </v-container>
-    <v-card class="adminControlPane mainBlur rounded-lg">
-      <v-card-title class="font-weight-bold text-darkBlue">
-        Admin Controls
+    <v-card class="adminControlPane mainCardBorder pa-4">
+      <v-card-title class="font-weight-bold text-darkBlue mb-4">
+        <v-row>
+          <v-col cols="auto" class="pa-0 pt-1">
+            <v-avatar class="pr-0">
+              <v-icon>
+                <font-awesome-icon
+                  icon="fa-solid fa-screwdriver-wrench"
+                  class="text-darkBlue" />
+              </v-icon>
+            </v-avatar>
+          </v-col>
+          <v-col cols="auto" class="text-h5 font-weight-bold pa-0">
+            <v-card-title class="font-weight-bold text-h5 pl-2"
+              >Admin Controls</v-card-title
+            >
+          </v-col>
+          <v-spacer></v-spacer>
+        </v-row>
       </v-card-title>
-      <v-card-text>
+      <v-card-text class="px-0">
         <!-- These buttons will be constant -->
         <v-btn
           @click="createEventDialog = true"
-          class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
+          class="eventsGradient rounded-lg font-weight-bold text-white buttonControl lighterBlur mb-4"
           block>
           Create Events
         </v-btn>
@@ -67,7 +113,7 @@
         </v-dialog>
         <v-btn
           @click="editUsersDialog = true"
-          class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
+          class="eventsGradient rounded-lg font-weight-bold text-white buttonControl lighterBlur mb-4"
           block>
           Edit Users
         </v-btn>
@@ -79,7 +125,7 @@
         </v-dialog>
         <v-btn
           @click="editInstDialog = true"
-          class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
+          class="eventsGradient rounded-lg font-weight-bold text-white buttonControl lighterBlur mb-4"
           block>
           Edit Instruments/Vocals
         </v-btn>
@@ -91,7 +137,7 @@
         </v-dialog>
         <v-btn
           @click="editComposersDialog = true"
-          class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
+          class="eventsGradient rounded-lg font-weight-bold text-white buttonControl lighterBlur mb-4"
           block>
           Edit Composers
         </v-btn>
@@ -103,7 +149,7 @@
         </v-dialog>
         <v-btn
           @click="sendEmailDialog = true"
-          class="eventsGradient rounded-lg text-white buttonControl lighterBlur mb-4"
+          class="eventsGradient rounded-lg font-weight-bold text-white buttonControl lighterBlur mb-4"
           block>
           Send Email
         </v-btn>
@@ -161,6 +207,9 @@
 </script>
 
 <style scoped>
+  * {
+    font-family: Inter, sans-serif !important;
+  }
   .noPadMarg {
     padding: 0 !important;
     margin: 0 !important;

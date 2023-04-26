@@ -81,8 +81,8 @@
                   elevation="0"
                   size="small"
                   rounded="pill"
-                  class="buttonWhite text-mediumBlue font-weight-bold">
-                  Add Your Critique
+                  class="buttonWhite text-mediumBlue font-weight-bold text-none">
+                  Add your critique
                 </v-btn>
                 <v-dialog
                   v-model="critiqueEditDialog"

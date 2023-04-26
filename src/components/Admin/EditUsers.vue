@@ -1,33 +1,40 @@
 <template>
-  <v-card>
-    <v-card-title class="font-weight-bold text-darkBlue">
+  <v-card class="fullBorderCurve pa-4">
+    <v-card-title class="font-weight-bold text-darkBlue mb-6">
       <v-row>
-        <v-col class="text-h5 font-weight-bold">Edit Users</v-col>
-        <v-col class="text-right">
-          <v-btn elevation="0" @click="closeEditUsersDialog()">
+        <v-col cols="auto" class="pa-0 pt-1">
+          <v-avatar class="pr-0">
             <v-icon>
               <font-awesome-icon
-                icon="a-solid fa-circle-xmark"
-                class="text-lightBlue">
-              </font-awesome-icon>
+                icon="fa-solid fa-user"
+                class="text-darkBlue" />
             </v-icon>
-          </v-btn>
+          </v-avatar>
         </v-col>
+        <v-col cols="auto" class="text-h5 font-weight-bold pa-0">
+          <v-card-title class="font-weight-bold text-h5 pl-2">
+            Edit Users
+          </v-card-title>
+        </v-col>
+        <v-spacer></v-spacer>
       </v-row>
     </v-card-title>
-    <v-card-text>
-      <v-row>
-        <v-text-field
-          class="ml-6 mr-6"
-          autofocus
-          v-model="input"
-          append-icon="mdi-magnify"
-          placeholder="Search"
-          single-line
-          hide-details></v-text-field>
+    <v-card-text class="pa-2 pt-0">
+      <v-row class="pb-2">
+        <v-col class="px-4">
+          <v-text-field
+            autofocus
+            v-model="input"
+            append-icon="mdi-magnify"
+            placeholder="Search"
+            single-line
+            hide-details></v-text-field>
+        </v-col>
       </v-row>
       <v-row v-for="user in this.filteredList()">
-        <AdminUserComponent :userData="user" />
+        <v-col class="pb-2">
+          <AdminUserComponent :userData="user" />
+        </v-col>
       </v-row>
     </v-card-text>
   </v-card>

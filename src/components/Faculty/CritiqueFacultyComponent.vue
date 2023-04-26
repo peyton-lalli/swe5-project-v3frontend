@@ -262,16 +262,14 @@
     </v-card-text>
     <v-card-actions class="ml-auto pa-0 pr-1">
       <v-btn
-        rounded="lg"
         elevation="0"
-        class="text-none buttonCancel ml-auto text-white font-weight-bold"
+        class="text-none buttonCancel ml-auto text-white font-weight-bold buttonBorder"
         @click="closeCritiqueEditDialog()">
         Close
       </v-btn>
       <v-btn
-        rounded="lg"
         elevation="0"
-        class="text-none buttonGradient ml-3 text-white font-weight-bold"
+        class="text-none buttonGradient ml-3 text-white font-weight-bold buttonBorder"
         @click="saveCritique()">
         Save
       </v-btn>

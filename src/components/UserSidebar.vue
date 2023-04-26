@@ -96,6 +96,7 @@
       return {
         isStudent: false,
         isFaculty: false,
+        isAdmin: false,
         isAccomapnist: false,
         userTitleOrMajor: "",
       };
@@ -115,6 +116,9 @@
         } else if (this.userStore.userInfo.roles.default.roleId === 2) {
           this.isFaculty = true;
           this.userTitleOrMajor = this.userStore.userRoleInfo.title;
+        } else if (this.userStore.userInfo.roles.default.roleId === 3) {
+          this.isAdmin = true;
+          this.userTitleOrMajor = "Administrator";
         } else if (this.userStore.userInfo.roles.default.roleId === 4) {
           this.isAccomapnist = true;
           this.userTitleOrMajor = "Accompanist";

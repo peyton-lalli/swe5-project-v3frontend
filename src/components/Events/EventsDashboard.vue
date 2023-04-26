@@ -137,7 +137,6 @@
         this.userStore.userInfo.roles.default.roleId === 4
       ) {
         this.availabileEvents = this.eventsStore.getAvailabileEventsForUser();
-        console.log(this.availabileEvents);
       } else {
         this.eventSignups = this.eventsStore.generateEventSignupsForUser();
         for (let event of this.eventSignups) {
@@ -165,6 +164,18 @@
       },
       regenerateSignups() {
         this.eventSignups = this.eventsStore.generateEventSignupsForUser();
+        this.upcomingEvents = [];
+        this.pastEvents = [];
+        for (let event of this.eventSignups) {
+          let eventDate = this.eventsStore.events.filter(
+            (e) => e.eventId === event.eventId
+          )[0].date;
+          if (eventDate > Date.now()) {
+            this.upcomingEvents.push(event);
+          } else {
+            this.pastEvents.push(event);
+          }
+        }
       },
       regenerateAvailabilties() {
         this.availabileEvents = this.eventsStore.getAvailabileEventsForUser();

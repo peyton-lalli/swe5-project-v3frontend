@@ -21,7 +21,6 @@ export const useEventsStore = defineStore("events", {
     async setEvents() {
       await EventDataService.getAllEventsWithInfo()
         .then((response) => {
-          console.log(response);
           this.events = response.data;
 
           this.createTimesAndDates();
@@ -269,7 +268,6 @@ export const useEventsStore = defineStore("events", {
                   eventtimeId: tempData.id,
                   interval: tempData.interval,
                 };
-                console.log(temp);
                 finalTimeData.push(temp);
               })
               .catch((e) => {
@@ -283,7 +281,6 @@ export const useEventsStore = defineStore("events", {
 
       // Update the EventsStore.events with the new data
       this.events.push({ ...eventData, ...{ times: finalTimeData } });
-      console.log(this.events);
     },
     getAvailabileEventsForUser() {
       let userStore = useUserStore();

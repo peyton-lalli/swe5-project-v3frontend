@@ -287,7 +287,6 @@
         this.timesInfoString = this.eventData.timesInfoString;
       },
       async selectedInstructor(instructor) {
-        console.log(instructor);
         if (instructor) {
           this.selectedInstructorAvailability =
             await this.eventsStore.getAvailaibilityForEventByUserId(
@@ -326,11 +325,8 @@
       },
     },
     mounted() {
-      console.log(this.timeslots);
       // Set default selected piece
       this.setDefaultSelectedInstructorAndAccompanist();
-
-      // this.availabileTimeslots = this.timeslots;
 
       for (let ts of this.timeslots) {
         if (ts.time === this.signupData.timeslot) {
@@ -368,9 +364,6 @@
 
         let availableTimes = [];
 
-        console.log(accompanistTimes);
-        console.log(instructorTimes);
-
         if (instructorTimes.length === 0 && accompanistTimes.length > 0) {
           availableTimes = accompanistTimes;
           this.availabileTimeslots = this.getTimeSlotsCombined(availableTimes);
@@ -405,7 +398,6 @@
           accompanistTimes.length === 0 &&
           instructorTimes.length === 0
         ) {
-          console.log("empty");
           this.availabileTimeslots = this.timeslots;
         }
       },

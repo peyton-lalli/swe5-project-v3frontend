@@ -294,7 +294,6 @@ export const useUserStore = defineStore("user", {
       let composer = {};
       await ComposerDataService.getId(id)
         .then((response) => {
-          console.log(response);
           composer = response.data.Composers[0];
         })
         .catch((e) => {
@@ -441,7 +440,6 @@ export const useUserStore = defineStore("user", {
       if (this.userInfo.roles.default.roleId === 1) {
         await StudentsDataService.update(id, user)
           .then(() => {
-            console.log(this.userRoleInfo);
             this.userRoleInfo.major = user.major;
             this.userRoleInfo.classification = user.classification;
             this.userRoleInfo.semesters = user.semesters;

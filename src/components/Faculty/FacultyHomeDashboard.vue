@@ -56,7 +56,7 @@
         </v-row>
       </v-card-title>
 
-      <v-card-text class="pt-4 px-0">
+      <v-card-text class="pt-4 px-4">
         <v-row v-for="event in this.eventsStore.events">
           <AttentionComponent :eventData="event" />
         </v-row>

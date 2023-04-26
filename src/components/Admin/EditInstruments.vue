@@ -20,6 +20,31 @@
       </v-row>
     </v-card-title>
     <v-card-text class="pa-2 pt-0 mt-2">
+      <v-row class="pb-2 pt-0">
+        <v-col cols="4" class="pl-6 pt-0">
+          <v-card-text
+            class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1 pt-0">
+            Name
+          </v-card-text>
+          <v-text-field v-model="this.name"></v-text-field>
+        </v-col>
+        <v-col cols="4" class="pl-6 pt-0">
+          <v-card-text
+            class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1 pt-0ehtn">
+            Type
+          </v-card-text>
+          <v-select v-model="type" :items="this.types" return-object>
+          </v-select>
+        </v-col>
+        <v-col align-self="end" cols="4" class="pl-15 pt-0">
+          <v-btn
+            elevation="0"
+            class="buttonGradient text-white font-weight-bold mt-5"
+            @click="addInstrument()">
+            Add New
+          </v-btn>
+        </v-col>
+      </v-row>
       <v-row class="pa-0">
         <v-col class="pa-0">
           <v-text-field
@@ -64,32 +89,6 @@
               </v-row>
             </v-card>
           </v-sheet>
-        </v-col>
-      </v-row>
-
-      <v-row class="">
-        <v-col cols="4" class="pl-6 pt-0">
-          <v-card-text
-            class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1">
-            Name
-          </v-card-text>
-          <v-text-field v-model="this.name"></v-text-field>
-        </v-col>
-        <v-col cols="4" class="pl-6 pt-0">
-          <v-card-text
-            class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1">
-            Type
-          </v-card-text>
-          <v-select v-model="type" :items="this.types" return-object>
-          </v-select>
-        </v-col>
-        <v-col align-self="end" cols="4" class="pl-15 pt-0">
-          <v-btn
-            elevation="0"
-            class="buttonGradient text-white font-weight-bold mt-5"
-            @click="addInstrument()">
-            Add New
-          </v-btn>
         </v-col>
       </v-row>
     </v-card-text>

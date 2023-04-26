@@ -19,6 +19,24 @@ const router = createRouter({
       component: BaseDashboard,
       name: "events",
     },
+    {
+      path: "/dashboard",
+      alias: "/dashboard/repertoire",
+      component: BaseDashboard,
+      name: "repertoire",
+    },
+    {
+      path: "/dashboard",
+      alias: "/dashboard/settings",
+      component: BaseDashboard,
+      name: "dashboardSettings",
+    },
+    {
+      path: "/dashboard",
+      alias: "/events/settings",
+      component: BaseDashboard,
+      name: "eventsSettings",
+    },
     { path: "/", alias: "/login", component: LoginPage, name: "loginPage" },
   ],
 });

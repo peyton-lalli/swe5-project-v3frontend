@@ -1,100 +1,146 @@
 <template>
-  <v-card>
-    <v-row>
-      <v-col
-        ><v-card-title class="text-darkBlue font-weight-bold"
-          >Add to Repertoire</v-card-title
-        ></v-col
-      >
-      <v-col class="text-right">
-        <v-btn elevation="0" @click="closeDialog()">
-          <v-icon>
-            <font-awesome-icon
-              icon="a-solid fa-circle-xmark"
-              class="text-lightBlue">
-            </font-awesome-icon>
-          </v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
-    <v-card-subtitle class="font-weight-bold ml-2">
-      Instrument
-    </v-card-subtitle>
-    <v-card-text>
-      <v-select
-        :items="instruments"
-        item-title="name"
-        item-value="id"
-        class="lighterBlur font-weight-semi-bold text-darkBlue"
-        v-model="selectedInstrument"
-        return-object>
-      </v-select>
-    </v-card-text>
-    <v-card-subtitle class="font-weight-bold ml-2">
-      Piece Title
-    </v-card-subtitle>
-    <v-card-text>
-      <v-text-field
-        class="lighterBlur font-weight-semi-bold text-darkBlue"
-        v-model="this.titlePiece">
-      </v-text-field>
-    </v-card-text>
-    <v-card-subtitle class="font-weight-bold ml-2"> Composer </v-card-subtitle>
-    <v-card-text>
-      <v-select
-        :items="composers"
-        item-title="name"
-        item-value="id"
-        class="lighterBlur font-weight-semi-bold text-darkBlue"
-        v-model="selectedComposer"
-        return-object>
-      </v-select>
-    </v-card-text>
-    <v-card-subtitle class="font-weight-bold ml-2"> Lyrics </v-card-subtitle>
-    <v-card-text>
-      <v-textarea
-        class="lighterBlur font-weight-semi-bold text-darkBlue"
-        v-model="this.lyrics">
-      </v-textarea>
-    </v-card-text>
-    <v-card-text>
+  <v-card class="fullBorderCurve pa-4">
+    <v-card-title class="font-weight-bold text-darkBlue mb-4">
       <v-row>
-        <v-col>
+        <v-col cols="auto" class="pa-0 pt-1">
+          <v-avatar class="pr-0">
+            <v-icon>
+              <font-awesome-icon
+                icon="fa-solid fa-compact-disc"
+                class="text-darkBlue" />
+            </v-icon>
+          </v-avatar>
+        </v-col>
+        <v-col cols="auto" class="text-h5 font-weight-bold pa-0">
+          <v-card-title class="font-weight-bold text-h5 pl-2"
+            >Add to Repertoire</v-card-title
+          >
+        </v-col>
+        <v-spacer></v-spacer>
+      </v-row>
+    </v-card-title>
+    <v-card-text class="pa-4 pt-0">
+      <v-row class="pa-0">
+        <v-col class="pa-0 pb-4">
+          <v-card-text
+            class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1 pt-0">
+            Instrument
+          </v-card-text>
+          <v-select
+            :items="instruments"
+            item-title="name"
+            item-value="id"
+            class="lighterBlur font-weight-semi-bold text-darkBlue"
+            v-model="selectedInstrument"
+            return-object>
+          </v-select>
+        </v-col>
+      </v-row>
+
+      <v-row class="pa-0">
+        <v-col class="pa-0 pb-4">
+          <v-card-text
+            class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1 pt-0">
+            Piece Title
+          </v-card-text>
+          <v-text-field
+            class="lighterBlur font-weight-semi-bold text-darkBlue"
+            v-model="this.titlePiece">
+          </v-text-field>
+        </v-col>
+      </v-row>
+
+      <v-row class="pa-0">
+        <v-col class="pa-0 pb-4">
+          <v-card-text
+            class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1 pt-0">
+            Composer
+          </v-card-text>
+          <v-select
+            :items="composers"
+            item-title="name"
+            item-value="id"
+            class="lighterBlur font-weight-semi-bold text-darkBlue"
+            v-model="selectedComposer"
+            return-object>
+          </v-select>
+        </v-col>
+      </v-row>
+
+      <v-row class="pa-0">
+        <v-col class="pa-0 pb-4">
+          <v-card-text
+            class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1 pt-0">
+            Lyrics
+          </v-card-text>
+          <v-textarea
+            class="lighterBlur font-weight-semi-bold text-darkBlue"
+            v-model="this.lyrics">
+          </v-textarea>
+        </v-col>
+      </v-row>
+
+      <v-row class="pa-0">
+        <v-col class="pa-0 pb-4">
           <v-checkbox
-            class="font-weight-bold checkbox-noGradient"
+            class="font-weight-bold"
             label="Foreign"
             v-model="showTranslation"></v-checkbox>
         </v-col>
-        <v-col v-if="showTranslation">
-          <v-card-subtitle class="font-weight-bold mb-3" v-if="showTranslation">
+        <v-col v-if="showTranslation" align-self="start">
+          <v-card-text
+            class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1 pt-0">
             Language
-          </v-card-subtitle>
+          </v-card-text>
+
           <v-text-field
-            class="lighterBlur font-weight-semi-bold text-darkBlue ml-3"
+            class="lighterBlur font-weight-semi-bold text-darkBlue"
             v-model="this.language">
           </v-text-field>
         </v-col>
       </v-row>
+      <v-row v-if="showTranslation">
+        <v-col class="pa-0 pb-4">
+          <v-card-text
+            class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1 pt-0">
+            Translation
+          </v-card-text>
+          <v-textarea
+            class="lighterBlur font-weight-semi-bold text-darkBlue"
+            v-model="this.translation">
+          </v-textarea>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col class="pa-0 pb-4 text-center">
+          <v-btn
+            @click="createDialog = true"
+            elevation="0"
+            class="buttonGradient text-white font-weight-semi-bold">
+            Missing some information? Request it here.
+          </v-btn>
+          <v-dialog v-model="createDialog" persistent max-width="600px">
+            <MissingInformation
+              @closeCourseDialogEvent="closeCreateDialog"></MissingInformation>
+          </v-dialog>
+        </v-col>
+      </v-row>
     </v-card-text>
-    <v-card-subtitle class="font-weight-bold ml-2" v-if="showTranslation">
-      Translation
-    </v-card-subtitle>
-    <v-card-text v-if="showTranslation">
-      <v-textarea
-        class="lighterBlur font-weight-semi-bold text-darkBlue"
-        v-model="this.translation">
-      </v-textarea>
-    </v-card-text>
-    <v-btn @click="createDialog = true" elevation="0" class="text-darkBlue">
-      Missing some information? Request it here.
-    </v-btn>
-    <v-dialog v-model="createDialog" persistent max-width="600px">
-      <MissingInformation
-        @closeCourseDialogEvent="closeCreateDialog"></MissingInformation>
-    </v-dialog>
-    <v-card-actions class="mx-auto font-weight-bold">
-      <v-btn @click="closeAndAddDialog()" color="darkBlue">Add</v-btn>
-      <v-btn @click="closeDialog()" color="red">Cancel</v-btn>
+
+    <v-card-actions class="ml-auto pa-0 pr-1">
+      <v-btn
+        elevation="0"
+        class="text-none buttonCancel ml-auto text-white font-weight-bold buttonBorder"
+        @click="closeDialog()">
+        Cancel
+      </v-btn>
+      <v-btn
+        elevation="0"
+        class="text-none buttonGradient ml-3 text-white font-weight-bold buttonBorder"
+        @click="closeAndAddDialog()">
+        Add
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>

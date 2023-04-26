@@ -1,50 +1,42 @@
 <template>
-  <v-card>
-    <v-card-title class="font-weight-bold text-darkBlue">
+  <v-card class="fullBorderCurve pa-4">
+    <v-card-title class="font-weight-bold text-darkBlue mb-6">
       <v-row>
-        <v-col class="text-h5 font-weight-bold">Edit Instruments</v-col>
-        <v-col class="text-right">
-          <v-btn elevation="0" @click="closeEditInstDialog()">
+        <v-col cols="auto" class="pa-0 pt-1">
+          <v-avatar class="pr-0">
             <v-icon>
               <font-awesome-icon
-                icon="a-solid fa-circle-xmark"
-                class="text-lightBlue">
-              </font-awesome-icon>
+                icon="fa-solid fa-guitar"
+                class="text-darkBlue" />
             </v-icon>
-          </v-btn>
+          </v-avatar>
         </v-col>
+        <v-col cols="auto" class="text-h5 font-weight-bold pa-0">
+          <v-card-title class="font-weight-bold text-h5 pl-2">
+            Edit Instruments
+          </v-card-title>
+        </v-col>
+        <v-spacer></v-spacer>
       </v-row>
     </v-card-title>
-    <v-card-text>
-      <v-row>
-        <v-text-field
-          class="ml-6 mr-6"
-          autofocus
-          v-model="input"
-          append-icon="mdi-magnify"
-          placeholder="Search"
-          single-line
-          hide-details></v-text-field>
-      </v-row>
-      <v-row class="mb-3">
-        <v-col cols="4" class="pl-6">
-          <v-card-subtitle class="font-weight-bold pl-0">
+    <v-card-text class="pa-2 pt-0 mt-2">
+      <v-row class="pb-2 pt-0">
+        <v-col cols="4" class="pl-6 pt-0">
+          <v-card-text
+            class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1 pt-0">
             Name
-          </v-card-subtitle>
+          </v-card-text>
           <v-text-field v-model="this.name"></v-text-field>
         </v-col>
-        <v-col cols="4" class="pl-6">
-          <v-card-subtitle class="font-weight-bold pl-0">
+        <v-col cols="4" class="pl-6 pt-0">
+          <v-card-text
+            class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1 pt-0ehtn">
             Type
-          </v-card-subtitle>
-          <v-select
-            class="lighterBlur font-weight-semi-bold text-darkBlue"
-            v-model="type"
-            :items="this.types"
-            return-object>
+          </v-card-text>
+          <v-select v-model="type" :items="this.types" return-object>
           </v-select>
         </v-col>
-        <v-col cols="4" class="pl-15">
+        <v-col align-self="end" cols="4" class="pl-15 pt-0">
           <v-btn
             elevation="0"
             class="buttonGradient text-white font-weight-bold mt-5"
@@ -53,29 +45,52 @@
           </v-btn>
         </v-col>
       </v-row>
-      <v-card
-        v-for="instrument of this.filteredList()"
-        class="repertoireItemGradient fullBorderCurve mainblur ml-3 mr-3 pl-4 pr-4 mb-2">
-        <v-row>
-          <v-col cols="9" align-self="center">
-            <v-card-title class="pb-0 font-weight-bold">
-              {{ instrument.name }}
-            </v-card-title>
-            <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-              {{ instrument.type }}
-            </v-card-subtitle>
-          </v-col>
-          <v-col cols="3" align-self="center" class="text-right">
-            <v-btn
+      <v-row class="pa-0">
+        <v-col class="pa-0">
+          <v-text-field
+            class="mx-4"
+            autofocus
+            v-model="input"
+            append-icon="mdi-magnify"
+            placeholder="Search"
+            single-line
+            hide-details></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row class="pa-0">
+        <v-col class="pa-0">
+          <v-sheet
+            class="overflow-y-auto lightCardBorder pa-4 ma-4"
+            max-height="400px"
+            min-height="400px">
+            <v-card
+              v-for="instrument of this.filteredList()"
               elevation="0"
-              size="small"
-              rounded="pill"
-              class="buttonWhite text-mediumBlue font-weight-bold">
-              Disable
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-card>
+              class="repertoireItemGradient fullBorderCurve pa-1 mb-4 pr-2">
+              <v-row>
+                <v-col cols="9" align-self="center">
+                  <v-card-title class="pb-0 font-weight-bold text-darkGray">
+                    {{ instrument.name }}
+                  </v-card-title>
+                  <v-card-subtitle
+                    class="text-darkBlue font-weight-medium pb-2">
+                    {{ instrument.type }}
+                  </v-card-subtitle>
+                </v-col>
+                <v-col cols="3" align-self="center" class="text-right">
+                  <v-btn
+                    elevation="0"
+                    size="small"
+                    rounded="pill"
+                    class="buttonWhite text-mediumBlue font-weight-bold text-none">
+                    Disable
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-sheet>
+        </v-col>
+      </v-row>
     </v-card-text>
   </v-card>
 </template>

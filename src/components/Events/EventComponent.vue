@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="eventComponent">
-    <v-card elevation="0" class="eventsGradient rounded-lg">
-      <v-card class="ma-3 rounded-lg lighterBlur">
+    <v-card elevation="0" class="eventsGradient fullBorderCurve">
+      <v-card class="ma-4 lightHalfCardBorder">
         <v-card-title class="font-weight-bold text-h5 text-darkGray pb-0">
           <v-row>
             <v-col>

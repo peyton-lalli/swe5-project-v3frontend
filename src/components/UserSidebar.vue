@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="sidebarGrid">
-    <v-card class="userProfilePane mainBlur rounded-lg pa-3">
+    <v-card class="userProfilePane mainCardBorder pa-3">
       <v-card-title class="pt-4">
         <v-avatar size="68" class="bg-darkBlue">
           <v-img :src="this.userStore.userInfo.picture"></v-img>
@@ -20,14 +20,29 @@
       <v-card-text v-if="isStudent">
         <v-row>
           <v-col cols="12">
-            <v-card-subtitle class="text-darkBlue pl-0">
-              {{ "Vocal Level " + this.userStore.userRoleInfo.level }}
+            <v-card-subtitle
+              v-if="this.userStore.userRoleInfo.level < 4"
+              class="text-mediumBlue font-weight-semi-bold pl-0">
+              {{ "Vocal Level " }}
             </v-card-subtitle>
-            <v-progress-linear
-              rounded
-              v-model="userLevelPercent"
-              color="darkBlue"
-              height="10"></v-progress-linear>
+            <v-row>
+              <v-col cols="10">
+                <v-progress-linear
+                  color="white"
+                  rounded
+                  v-model="userLevelPercent"
+                  :height="this.userStore.userRoleInfo.level < 4 ? 15 : 25">
+                  <v-card-text
+                    v-if="this.userStore.userRoleInfo.level >= 4"
+                    class="text-left font-weight-bold text-white"
+                    >Vocal Level
+                  </v-card-text>
+                </v-progress-linear>
+              </v-col>
+              <v-col cols="2" class="font-weight-bold text-mediumBlue">
+                {{ this.userStore.userRoleInfo.level }}/8</v-col
+              >
+            </v-row>
           </v-col>
           <v-col cols="12">
             <v-card elevation="0" class="rounded-lg privateInstructorGradient">
@@ -57,7 +72,7 @@
     </v-card>
 
     <v-card
-      class="notificationGradient mainBlur notificationsPane rounded-lg overflow-auto pa-3">
+      class="notificationGradient mainCardBorder notificationsPane overflow-auto pa-3">
       <v-card-title class="text-white font-weight-bold text-h5 pb-4">
         Notifications
       </v-card-title>
@@ -77,6 +92,7 @@
       return {
         isStudent: false,
         isFaculty: false,
+        isAdmin: false,
         isAccomapnist: false,
         userTitleOrMajor: "",
       };
@@ -96,13 +112,16 @@
         } else if (this.userStore.userInfo.roles.default.roleId === 2) {
           this.isFaculty = true;
           this.userTitleOrMajor = this.userStore.userRoleInfo.title;
+        } else if (this.userStore.userInfo.roles.default.roleId === 3) {
+          this.isAdmin = true;
+          this.userTitleOrMajor = "Administrator";
         } else if (this.userStore.userInfo.roles.default.roleId === 4) {
           this.isAccomapnist = true;
           this.userTitleOrMajor = "Accompanist";
         }
       },
       setUserLevelPercent(level) {
-        this.userLevelPercent = level * 10;
+        this.userLevelPercent = level * 12.5;
       },
     },
   };

@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="eventComponent">
+  <v-container fluid class="eventComponent pa-0">
     <v-card elevation="0" class="eventsGradient rounded-lg">
       <v-card class="ma-3 rounded-lg lighterBlur">
         <v-card-title class="font-weight-bold text-h5 text-darkGray pb-0">
@@ -64,7 +64,6 @@
     data() {
       return {
         editDialog: false,
-        eventData: [],
       };
     },
     mixins: [DateTimeMixin],
@@ -73,9 +72,6 @@
     },
     computed: {
       ...mapStores(useEventsStore, useUserStore),
-    },
-    mounted() {
-      console.log(this.eventData);
     },
     methods: {
       closeEventDialog(val) {

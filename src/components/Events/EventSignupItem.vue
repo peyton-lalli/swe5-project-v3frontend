@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="pa-0">
     <v-card class="lighterBlur eventsSignupItemGradient rounded-lg pa-0">
       <v-row class="pa-4" no-gutters align="center">
         <v-col cols="auto">

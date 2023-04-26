@@ -1,10 +1,30 @@
 <template>
   <v-container fluid class="eventsMainGrid">
-    <v-card class="openSignupsPane mainBlur rounded-lg">
-      <v-card-title class="font-weight-bold text-h5 text-darkBlue">
-        Open Event Signups
+    <v-card class="openSignupsPane mainCardBorder pa-4">
+      <v-card-title class="font-weight-bold text-darkBlue mb-8">
+        <v-row>
+          <v-col cols="auto" class="pa-0 pt-1">
+            <v-avatar class="pr-0">
+              <v-icon>
+                <font-awesome-icon
+                  icon="fa-solid fa-calendar"
+                  class="text-darkBlue" />
+              </v-icon>
+            </v-avatar>
+          </v-col>
+          <v-col cols="6" class="text-h5 font-weight-bold pa-0">
+            <v-card-title class="font-weight-bold text-h5 pl-2"
+              >Open Event Signups</v-card-title
+            >
+          </v-col>
+          <v-spacer></v-spacer>
+        </v-row>
       </v-card-title>
-      <v-card-text v-for="event in this.eventsStore.events">
+      <v-card-text
+        v-for="event in this.eventsStore.events.filter(
+          (e) => e.date >= new Date()
+        )"
+        class="mb-2">
         <v-row>
           <EventSignupItem
             :sent-event-data="event"
@@ -13,66 +33,68 @@
         </v-row>
       </v-card-text>
     </v-card>
-    <v-card class="yourEventsPane mainBlur rounded-lg">
-      <v-card-title class="font-weight-bold text-h5 text-darkBlue">
+    <v-card class="yourEventsPane mainCardBorder pa-4">
+      <v-card-title class="font-weight-bold text-darkBlue">
         <v-row>
-          <v-col cols="auto" class="text-h5 font-weight-bold">
-            Your Events
+          <v-col cols="auto" class="pa-0 pt-1">
+            <v-avatar class="pr-0">
+              <v-icon>
+                <font-awesome-icon
+                  icon="fa-solid fa-calendar"
+                  class="text-darkBlue" />
+              </v-icon>
+            </v-avatar>
+          </v-col>
+          <v-col cols="6" class="text-h5 font-weight-bold pa-0">
+            <v-card-title class="font-weight-bold text-h5 pl-2"
+              >Your Events</v-card-title
+            >
           </v-col>
           <v-spacer></v-spacer>
-          <v-col cols="auto">
-            <!-- Toggle does not work yet, similar issue to on EventsDashboard with upcoming and current -->
-            <!-- @ethanimooney: Resolve -->
+          <v-col cols="4" class="text-right pa-0">
             <v-btn
               elevation="0"
               size="small"
               rounded="pill"
-              class="buttonGradient text-white font-weight-bold"
+              class="buttonGradient text-white font-weight-bold text-none"
               @click="changeText()">
               {{ toggleText }}
-              <v-icon size="small" v-if="toggleText == 'Upcoming'">
-                <font-awesome-icon
-                  icon="fa-solid fa-caret-up"
-                  class="text-white" />
-              </v-icon>
-              <v-icon size="small" v-else>
-                <font-awesome-icon
-                  icon="fa-solid fa-caret-down"
-                  class="text-white" />
-              </v-icon>
             </v-btn>
           </v-col>
         </v-row>
       </v-card-title>
       <v-card-text
-        class="px-8 pt-4"
+        class="pt-4 mt-4"
         v-if="
           this.userStore.userInfo.roles.default.roleId === 1 &&
           this.toggleText === 'Upcoming'
         ">
         <v-row v-for="event in this.upcomingEvents">
-          <EventComponent :eventSignUpData="event" />
+          <EventComponent :eventSignUpData="event" class="pb-4" />
         </v-row>
       </v-card-text>
       <v-card-text
-        class="px-8 pt-4"
+        class="pt-4 mt-4"
         v-if="
           this.userStore.userInfo.roles.default.roleId === 1 &&
           this.toggleText === 'Past'
         ">
         <v-row v-for="event in this.pastEvents">
-          <EventComponent :eventSignUpData="event" />
+          <EventComponent :eventSignUpData="event" class="pb-4" />
         </v-row>
       </v-card-text>
       <v-card-text
-        class="px-8 pt-4"
+        class="pt-4 mt-4"
         v-for="event in availabileEvents"
         v-if="
           this.userStore.userInfo.roles.default.roleId === 2 ||
           this.userStore.userInfo.roles.default.roleId === 4
         ">
         <v-row>
-          <EventAvailabilityComponent :eventData="event" />
+          <EventAvailabilityComponent
+            :eventData="event"
+            @regenerateAvailabilties="regenerateAvailabilties()"
+            class="pb-4" />
         </v-row>
       </v-card-text>
     </v-card>
@@ -146,6 +168,7 @@
       },
       regenerateAvailabilties() {
         this.availabileEvents = this.eventsStore.getAvailabileEventsForUser();
+        console.log(this.availabileEvents);
       },
     },
   };

@@ -1,50 +1,68 @@
 <template>
   <v-container fluid class="accompanistHomeMainGrid">
-    <v-card class="studentsPane mainBlur rounded-lg">
+    <v-card class="studentsPane mainCardBorder pa-4">
       <v-card-title class="font-weight-bold text-darkBlue">
         <v-row>
-          <v-col> Students </v-col>
-          <v-col class="text-right">
+          <v-col cols="auto" class="pa-0 pt-1">
+            <v-avatar class="pr-0">
+              <v-icon>
+                <font-awesome-icon
+                  icon="fa-solid fa-user"
+                  class="text-darkBlue" />
+              </v-icon>
+            </v-avatar>
+          </v-col>
+          <v-col cols="4" class="text-h5 font-weight-bold pa-0">
+            <v-card-title class="font-weight-bold text-h5 pl-2"
+              >Your Students</v-card-title
+            >
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="4" class="text-right pa-0">
             <v-btn
               elevation="0"
               size="small"
               rounded="pill"
-              class="buttonGradient mr-3 text-white font-weight-bold">
+              class="buttonGradient mr-3 text-white font-weight-bold text-none">
               View All
             </v-btn>
           </v-col>
         </v-row>
       </v-card-title>
-      <v-card-text>
-        <v-row>
-          <StudentComponent />
+      <v-card-text class="mt-8">
+        <v-row v-for="student in this.userStore.userRoleInfo.students">
+          <StudentComponent :student="student" />
         </v-row>
       </v-card-text>
     </v-card>
 
-    <v-card class="eventsPane mainBlur rounded-lg">
+    <v-card class="eventsPane mainCardBorder pa-4">
       <v-card-title class="font-weight-bold text-darkBlue">
         <v-row>
-          <v-col> Your Events </v-col>
-          <v-col class="text-right">
-            <!-- <v-btn
+          <v-col cols="auto" class="pa-0 pt-1">
+            <v-avatar class="pr-0">
+              <v-icon>
+                <font-awesome-icon
+                  icon="fa-solid fa-calendar"
+                  class="text-darkBlue" />
+              </v-icon>
+            </v-avatar>
+          </v-col>
+          <v-col cols="6" class="text-h5 font-weight-bold pa-0">
+            <v-card-title class="font-weight-bold text-h5 pl-2"
+              >Your Events</v-card-title
+            >
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="4" class="text-right pa-0">
+            <v-btn
               elevation="0"
               size="small"
               rounded="pill"
-              class="buttonGradient text-white font-weight-bold"
+              class="buttonGradient text-white font-weight-bold text-none"
               @click="changeText()">
               {{ toggleText }}
-              <v-icon size="small" v-if="toggleText == 'Upcoming'">
-                <font-awesome-icon
-                  icon="fa-solid fa-caret-up"
-                  class="text-white" />
-              </v-icon>
-              <v-icon size="small" v-else>
-                <font-awesome-icon
-                  icon="fa-solid fa-caret-down"
-                  class="text-white" />
-              </v-icon>
-            </v-btn> -->
+            </v-btn>
           </v-col>
         </v-row>
       </v-card-title>
@@ -55,8 +73,8 @@
           :sm="12"
           :md="12"
           :lg="12"
-          :xl="6">
-          <v-card-text class="px-8 pt-4">
+          :xl="12">
+          <v-card-text class="pt-4">
             <EventAvailabilityComponent :eventData="event" />
           </v-card-text>
         </v-col>

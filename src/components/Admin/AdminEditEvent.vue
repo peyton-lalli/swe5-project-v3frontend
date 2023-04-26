@@ -1,70 +1,91 @@
 <template>
-  <v-card>
-    <v-card-title class="font-weight-bold text-darkBlue">
+  <v-card class="fullBorderCurve pa-4">
+    <v-card-title class="font-weight-bold text-darkBlue mb-6">
       <v-row>
-        <v-col class="text-h5 font-weight-bold">Edit Event</v-col>
-        <v-col class="text-right">
-          <v-btn elevation="0" @click="closeEditEventDialog()">
+        <v-col cols="auto" class="pa-0 pt-1">
+          <v-avatar class="pr-0">
             <v-icon>
               <font-awesome-icon
-                icon="a-solid fa-circle-xmark"
-                class="text-lightBlue">
-              </font-awesome-icon>
+                icon="fa-solid fa-user"
+                class="text-darkBlue" />
             </v-icon>
-          </v-btn>
+          </v-avatar>
         </v-col>
+        <v-col cols="auto" class="text-h5 font-weight-bold pa-0">
+          <v-card-title class="font-weight-bold text-h5 pl-2">
+            Edit Event
+          </v-card-title>
+        </v-col>
+        <v-spacer></v-spacer>
       </v-row>
     </v-card-title>
-    <v-card-subtitle class="text-left">
-      Event Name
+    <v-card-text class="text-left pa-2 pt-0">
+      <v-card-text
+        class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1 pt-0">
+        Event Name
+      </v-card-text>
       <v-text-field v-model="this.eventName" class="mb-3"></v-text-field>
-      Event Type
-      <v-select
-        class="lighterBlur font-weight-semi-bold text-darkBlue mb-3"
-        v-model="type"
-        :items="this.types"
-        return-object>
+      <v-card-text
+        class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1">
+        Event Type
+      </v-card-text>
+      <v-select class="mb-3" v-model="type" :items="this.types" return-object>
       </v-select>
-      Date
+      <v-card-text
+        class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1">
+        Date
+      </v-card-text>
       <v-text-field type="date" v-model="this.date" class="mb-3"></v-text-field>
       <v-row v-for="timeSlot in this.timeSlots" class="mb-3">
         <v-col>
-          Start Time
+          <v-card-text
+            class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1">
+            Start Time
+          </v-card-text>
           <v-text-field type="time" v-model="timeSlot.starttime"></v-text-field>
         </v-col>
         <v-col>
-          End Time
+          <v-card-text
+            class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1">
+            End Time
+          </v-card-text>
           <v-text-field type="time" v-model="timeSlot.endtime"></v-text-field>
         </v-col>
       </v-row>
       <v-card-text class="text-center">
-        <v-btn class="buttonGradient text-white mb-3" @click="addTimeSlots()">
+        <v-btn
+          elevation="0"
+          class="text-none buttonGradient ml-auto text-white font-weight-bold buttonBorder"
+          @click="addTimeSlots()">
           Add Time Slot
         </v-btn>
         <v-btn
-          class="buttonGradient text-white mb-3 ml-2"
+          elevation="0"
+          class="text-none buttonGradient ml-3 text-white font-weight-bold buttonBorder"
           @click="removeTimeSlots()">
           Remove Time Slot
         </v-btn>
       </v-card-text>
-      Interval
+      <v-card-text
+        class="text-body-2 font-weight-semi-bold text-mediumBlue pl-0 pb-1">
+        Interval
+      </v-card-text>
       <v-text-field v-model="this.interval" class="mb-3"></v-text-field>
-    </v-card-subtitle>
-    <v-card-text class="text-center">
+    </v-card-text>
+    <v-card-actions class="ml-auto pa-0 pr-1">
       <v-btn
-        rounded="pill"
-        class="buttonGradient text-white mr-3"
-        @click="closeSaveEditEventDialog()">
-        Save
-      </v-btn>
-      <v-btn
-        rounded="pill"
-        color="#DA9B9B"
-        class="text-white mr-3"
+        elevation="0"
+        class="text-none buttonCancel ml-auto text-white font-weight-bold buttonBorder"
         @click="closeEditEventDialog()">
         Cancel
       </v-btn>
-    </v-card-text>
+      <v-btn
+        elevation="0"
+        class="text-none buttonGradient ml-3 text-white font-weight-bold buttonBorder"
+        @click="closeSaveEditEventDialog()">
+        Save
+      </v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 

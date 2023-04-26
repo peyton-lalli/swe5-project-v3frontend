@@ -1,33 +1,37 @@
 <template>
   <v-container fluid class="studentHomeMainGrid">
     <v-container fluid class="eventsRepPane studentHomeLeftGrid noPadMarg">
-      <v-card class="eventsPane mainBlur rounded-lg">
+      <v-card class="eventsPane mainCardBorder pa-4">
         <v-card-title class="font-weight-bold text-darkBlue">
           <v-row>
-            <v-col class="text-h5 font-weight-bold"> Your Events </v-col>
-            <v-col class="text-right">
+            <v-col cols="auto" class="pa-0 pt-1">
+              <v-avatar class="pr-0">
+                <v-icon>
+                  <font-awesome-icon
+                    icon="fa-solid fa-calendar"
+                    class="text-darkBlue" />
+                </v-icon>
+              </v-avatar>
+            </v-col>
+            <v-col cols="4" class="text-h5 font-weight-bold pa-0">
+              <v-card-title class="font-weight-bold text-h5 pl-2"
+                >Your Events</v-card-title
+              >
+            </v-col>
+            <v-spacer></v-spacer>
+            <v-col cols="4" class="text-right pa-0">
               <v-btn
                 elevation="0"
                 size="small"
                 rounded="pill"
-                class="buttonGradient text-white font-weight-bold"
+                class="buttonGradient text-white font-weight-bold text-none"
                 @click="changeText()">
                 {{ toggleText }}
-                <v-icon size="small" v-if="toggleText == 'Upcoming'">
-                  <font-awesome-icon
-                    icon="fa-solid fa-caret-up"
-                    class="text-white" />
-                </v-icon>
-                <v-icon size="small" v-else>
-                  <font-awesome-icon
-                    icon="fa-solid fa-caret-down"
-                    class="text-white" />
-                </v-icon>
               </v-btn>
             </v-col>
           </v-row>
         </v-card-title>
-        <v-card-text flex-grow="1" overflow="auto">
+        <v-card-text flex-grow="1" overflow="auto" class="px-0">
           <v-row v-if="this.toggleText === 'Upcoming'">
             <v-col
               cols="6"
@@ -53,18 +57,32 @@
         </v-card-text>
       </v-card>
 
-      <v-card class="repertoirePane mainBlur rounded-lg">
-        <v-card-title class="font-weight-bold text-darkBlue">
+      <v-card class="repertoirePane mainCardBorder pa-4">
+        <v-card-title class="font-weight-bold text-darkBlue mb-6">
           <v-row>
-            <v-col class="text-h5 font-weight-bold"> Repertoire </v-col>
-            <v-col class="text-right">
+            <v-col cols="auto" class="pa-0 pt-1">
+              <v-avatar class="pr-0">
+                <v-icon>
+                  <font-awesome-icon
+                    icon="fa-solid fa-compact-disc"
+                    class="text-darkBlue" />
+                </v-icon>
+              </v-avatar>
+            </v-col>
+            <v-col cols="4" class="text-h5 font-weight-bold pa-0">
+              <v-card-title class="font-weight-bold text-h5 pl-2"
+                >Repertoire</v-card-title
+              >
+            </v-col>
+            <v-spacer></v-spacer>
+            <v-col class="text-right pa-0">
               <v-btn
                 @click="createDialog = true"
                 elevation="0"
                 size="small"
                 rounded="pill"
-                class="buttonGradient mr-3 text-white font-weight-bold">
-                Add New
+                class="buttonGradient mr-3 text-white font-weight-bold text-none">
+                Add new
               </v-btn>
               <v-dialog v-model="createDialog" persistent max-width="600px">
                 <RepertoireCreate
@@ -73,33 +91,48 @@
                   "></RepertoireCreate>
               </v-dialog>
               <v-btn
-                @click="viewAllRepDialog = true"
+                @click="routePage('dashboard/repertoire')"
                 elevation="0"
                 size="small"
                 rounded="pill"
-                class="buttonGradient text-white font-weight-bold">
-                View All
+                class="buttonGradient text-white font-weight-bold text-none">
+                View all
               </v-btn>
-              <v-dialog v-model="viewAllRepDialog" persistent max-width="600px">
-                <StudentRepertoireViewAll
-                  @closeRepViewAllEvent="
-                    this.viewAllRepDialog = false
-                  "></StudentRepertoireViewAll>
+              <v-dialog persistent v-model="viewAllRepDialog" max-width="600px">
+                <StudentRepertoireViewAll></StudentRepertoireViewAll>
               </v-dialog>
             </v-col>
           </v-row>
         </v-card-title>
+
         <v-card-text>
           <v-row
-            v-for="piece in this.userStore.userRoleInfo.repertoires[0].pieces">
+            v-for="piece in this.userStore.userRoleInfo.repertoires[0].pieces"
+            class="pa-0">
             <RepertoireComponent :sentPiece="piece" />
           </v-row>
         </v-card-text>
       </v-card>
     </v-container>
-    <v-card class="critiquesPane mainBlur rounded-lg">
-      <v-card-title class="font-weight-bold text-h5 text-darkBlue">
-        Recent Critiques
+    <v-card class="critiquesPane mainCardBorder pa-4">
+      <v-card-title class="font-weight-bold text-darkBlue mb-4">
+        <v-row>
+          <v-col cols="auto" class="pa-0 pt-1">
+            <v-avatar class="pr-0">
+              <v-icon>
+                <font-awesome-icon
+                  icon="fa-solid fa-square-pen"
+                  class="text-darkBlue" />
+              </v-icon>
+            </v-avatar>
+          </v-col>
+          <v-col cols="auto" class="text-h5 font-weight-bold pa-0">
+            <v-card-title class="font-weight-bold text-h5 pl-2"
+              >Recent Critiques</v-card-title
+            >
+          </v-col>
+          <v-spacer></v-spacer>
+        </v-row>
       </v-card-title>
       <v-card-text>
         <v-row v-for="(event, i) of this.eventCritiques" :key="i">
@@ -132,7 +165,7 @@
       return {
         toggleText: "Upcoming",
         createDialog: false,
-        viewAllRepDialog: false,
+        viewAllRepDialog: this.$route.fullPath === "/dashboard/repertoire",
         eventSignups: [],
         eventCritiques: [],
         upcomingEvents: [],
@@ -172,6 +205,14 @@
         } else {
           this.toggleText = "Upcoming";
         }
+      },
+      routePage(page) {
+        this.$router.push({ path: page });
+      },
+    },
+    watch: {
+      "$route.fullPath": function (newRoute) {
+        this.viewAllRepDialog = newRoute === "/dashboard/repertoire";
       },
     },
   };

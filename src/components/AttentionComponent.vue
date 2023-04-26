@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="eventComponent pt-5">
+  <v-container fluid class="eventComponent pb-5 px-0">
     <v-row>
       <v-col>
         <v-card class="eventsGradient fullBorderCurve mainBlur">
@@ -13,11 +13,14 @@
                     elevation="0"
                     size="small"
                     rounded="pill"
-                    class="buttonGradient text-white font-weight-bold mr-2"
+                    class="buttonGradient text-white font-weight-bold mr-2 text-none"
                     v-if="this.userStore.userInfo.roles.default.roleId === 3">
                     Edit
                   </v-btn>
-                  <v-dialog v-model="editEventDialog" max-width="600px">
+                  <v-dialog
+                    persistent
+                    v-model="editEventDialog"
+                    max-width="600px">
                     <AdminEditEvent
                       :eventData="this.eventData"
                       @closeEditEventDialogEvent="
@@ -39,7 +42,7 @@
               elevation="0"
               size="small"
               rounded="pill"
-              class="buttonWhite text-mediumBlue font-weight-bold ml-1"
+              class="buttonWhite text-mediumBlue font-weight-bold ml-1 text-none"
               @click="viewSignUpsDialog = true"
               v-if="this.userStore.userInfo.roles.default.roleId === 3">
               View Signups
@@ -56,7 +59,7 @@
               elevation="0"
               size="small"
               rounded="pill"
-              class="buttonWhite text-mediumBlue font-weight-bold"
+              class="buttonWhite text-mediumBlue font-weight-bold text-none"
               v-if="this.userStore.userInfo.roles.default.roleId === 2">
               Critiques
             </v-btn>

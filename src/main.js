@@ -32,6 +32,11 @@ import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { faCaretUp } from "@fortawesome/free-solid-svg-icons";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faCompactDisc } from "@fortawesome/free-solid-svg-icons";
+import { faSquarePen } from "@fortawesome/free-solid-svg-icons";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { faScrewdriverWrench } from "@fortawesome/free-solid-svg-icons";
+import { faGuitar } from "@fortawesome/free-solid-svg-icons";
 
 // FontAwesome Icons for Dashboard
 import { faHouseChimney } from "@fortawesome/free-solid-svg-icons";
@@ -65,6 +70,11 @@ library.add(faCaretDown);
 library.add(faCaretUp);
 library.add(faCircleXmark);
 library.add(faMagnifyingGlass);
+library.add(faCompactDisc);
+library.add(faSquarePen);
+library.add(faBell);
+library.add(faScrewdriverWrench);
+library.add(faGuitar);
 
 // FontAwesome Icons for Dashboard
 library.add(faHouseChimney);

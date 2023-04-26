@@ -1,58 +1,55 @@
 <template>
-  <v-col>
-    <v-card
-      class="repertoireItemGradient fullBorderCurve mainBlur ml-3 mr-3 pl-4 pr-4 mb-2">
-      <v-row>
-        <v-col cols="1" align-self="center">
-          <v-avatar class="bg-darkBlue">
-            <v-img :src="userData.picture"></v-img>
-          </v-avatar>
-        </v-col>
-        <v-col cols="7" align-self="center">
-          <v-card-title class="pb-0 font-weight-bold">
-            {{ userData.lName }}, {{ userData.fName }} - {{ rolesString }}
-          </v-card-title>
-          <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
-            {{ userData.email }}
-          </v-card-subtitle>
-        </v-col>
-        <v-col
-          cols="4"
-          align-self="center"
-          class="text-right pr-7 pl-7"
-          v-if="userData.role != 'student'">
-          <v-row>
-            <v-col>
-              <v-btn
-                @click="this.editSingleUser = true"
-                elevation="0"
-                size="small"
-                rounded="pill"
-                class="buttonWhite text-mediumBlue font-weight-bold">
-                Edit
-              </v-btn>
-              <v-dialog v-model="editSingleUser" max-width="600px">
-                <EditSingleUserDialog
-                  :userData="userData"
-                  @closeEditSingleUserDialogEvent="
-                    this.editSingleUser = false
-                  "></EditSingleUserDialog>
-              </v-dialog>
-            </v-col>
-            <v-col v-if="!isStudent">
-              <v-btn
-                elevation="0"
-                size="small"
-                rounded="pill"
-                class="buttonWhite text-mediumBlue font-weight-bold">
-                Disable
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-card>
-  </v-col>
+  <v-card class="repertoireItemGradient fullBorderCurve mainBlur pl-4">
+    <v-row>
+      <v-col cols="1" align-self="center">
+        <v-avatar class="bg-darkBlue">
+          <v-img :src="userData.picture"></v-img>
+        </v-avatar>
+      </v-col>
+      <v-col cols="7" align-self="center">
+        <v-card-title class="pb-0 font-weight-bold">
+          {{ userData.lName }}, {{ userData.fName }} - {{ rolesString }}
+        </v-card-title>
+        <v-card-subtitle class="text-darkBlue font-weight-medium pb-2">
+          {{ userData.email }}
+        </v-card-subtitle>
+      </v-col>
+      <v-col
+        cols="4"
+        align-self="center"
+        class="text-right pr-7 pl-7"
+        v-if="userData.role != 'student'">
+        <v-row>
+          <v-col>
+            <v-btn
+              @click="this.editSingleUser = true"
+              elevation="0"
+              size="small"
+              rounded="pill"
+              class="buttonWhite text-mediumBlue font-weight-bold text-none">
+              Edit
+            </v-btn>
+            <v-dialog v-model="editSingleUser" max-width="600px">
+              <EditSingleUserDialog
+                :userData="userData"
+                @closeEditSingleUserDialogEvent="
+                  this.editSingleUser = false
+                "></EditSingleUserDialog>
+            </v-dialog>
+          </v-col>
+          <v-col v-if="!isStudent">
+            <v-btn
+              elevation="0"
+              size="small"
+              rounded="pill"
+              class="buttonWhite text-mediumBlue font-weight-bold text-none">
+              Disable
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-card>
 </template>
 
 <script>

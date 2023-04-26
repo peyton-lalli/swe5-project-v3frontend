@@ -56,7 +56,7 @@
               elevation="0"
               size="small"
               rounded="pill"
-              class="buttonWhite text-mediumBlue font-weight-bold"
+              class="buttonWhite text-mediumBlue font-weight-bold text-none"
               v-if="this.userStore.userInfo.roles.default.roleId === 2">
               Critiques
             </v-btn>

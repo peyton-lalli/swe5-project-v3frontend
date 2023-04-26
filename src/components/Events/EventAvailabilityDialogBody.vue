@@ -187,11 +187,13 @@
       }
     },
     methods: {
-      createOrEditAvailabilities() {
+      async createOrEditAvailabilities() {
         if (!this.isEdit) {
-          this.userStore.createAvailabilitiesForEvent(this.availabilities);
+          await this.userStore.createAvailabilitiesForEvent(
+            this.availabilities
+          );
         } else {
-          this.userStore.updateAvailabilitiesForEvent(
+          await this.userStore.updateAvailabilitiesForEvent(
             this.newAvailabilities,
             this.removedAvailabilities
           );

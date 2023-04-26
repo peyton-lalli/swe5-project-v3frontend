@@ -297,6 +297,14 @@
   letter-spacing: 0.25px !important;
 }
 
+.v-input
+  .v-input--horizontal
+  .v-input--density-default
+  .v-input--dirty
+  .v-checkbox {
+  background: none !important;
+}
+
 .buttonBorder {
   border-radius: 5.5px !important;
 }

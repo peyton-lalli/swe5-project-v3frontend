@@ -8,7 +8,7 @@
               <v-avatar class="pr-0">
                 <v-icon>
                   <font-awesome-icon
-                    icon="fa-solid fa-compact-disc"
+                    icon="fa-solid fa-calendar"
                     class="text-darkBlue" />
                 </v-icon>
               </v-avatar>

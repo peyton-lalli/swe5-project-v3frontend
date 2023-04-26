@@ -195,7 +195,7 @@
         this.signupEventData.timeslots = this.combineTimeslotsArrays(
           this.signupEventData.timeslots
         );
-        delete this.signupEventData.signups;
+        // delete this.signupEventData.signups;
         this.signupEventData.timesInfoString = this.timesInfoString;
 
         this.signUpDialog = true;

@@ -15,6 +15,9 @@ class StudentsDataService {
   getAllInfo(id) {
     return http.get(`/performance-t3/students/allInfo/${id}`);
   }
+  getUserInfo(id) {
+    return http.get(`/performance-t3/students/userInfo/${id}`);
+  }
   getStudentById(id) {
     return http.get(`/performance-t3/students/id/${id}`);
   }

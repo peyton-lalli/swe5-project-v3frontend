@@ -21,6 +21,7 @@ export default createVuetify({
           lightBlue: "#B8D3EA",
           darkGray: "#343434",
           lightRed: "#DA9B9B",
+          lightGray: "#EBEBEB",
         },
       },
     },

@@ -140,6 +140,10 @@
   ) !important;
 }
 
+.disabledListItem {
+  background-color: #ebebeb !important;
+}
+
 /* ************* */
 /* Border Styles */
 /* ************* */
@@ -149,9 +153,16 @@
 }
 
 .rightBorderCurve {
-  border-radius: 0 9px 9px 0 !important;
+  border-radius: 0 11px 11px 0 !important;
 }
 
+.topBorderCurve {
+  border-radius: 11px 11px 0px 0px !important;
+}
+
+.bottomBorderCurve {
+  border-radius: 0px 0px 11px 11px !important;
+}
 /* Instead of this, you can use 'rounded-lg */
 .fullBorderCurve {
   border-radius: 11px !important;
@@ -163,6 +174,11 @@
 
 .mainCardBorder {
   border-radius: 11px !important;
+  box-shadow: 8px 10px 34px 2px rgba(0, 0, 0, 0.16) !important;
+}
+
+.mainCardBorderTopFlat {
+  border-radius: 0px 0px 11px 11px !important;
   box-shadow: 8px 10px 34px 2px rgba(0, 0, 0, 0.16) !important;
 }
 

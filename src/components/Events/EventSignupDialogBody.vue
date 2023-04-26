@@ -154,37 +154,114 @@
                   class="overflow-y-auto lighterBlur pa-4"
                   max-height="35vh"
                   min-height="35vh">
-                  <v-row
-                    v-for="timeSlot in availabileTimeslots"
-                    class="mx-0 px-0 pb-2 my-0">
-                    <v-col class="pa-0 mx-0">
-                      <v-card
-                        flat
-                        class="rounded-lg my-0 py-0"
-                        v-if="isTimeslotAvailable(timeSlot)"
-                        :class="
-                          selectedTimeslot.id === timeSlot.id
-                            ? 'selectedListItem'
-                            : 'unSelectedListItem'
-                        "
-                        @click="setSelectedTimeslot(timeSlot)"
-                        :key="timeSlot">
-                        <v-row class="py-2">
-                          <v-col class="">
-                            <v-card-subtitle
-                              class="font-weight-bold"
-                              :class="
-                                selectedTimeslot.id === timeSlot.id
-                                  ? 'text-white'
-                                  : 'text-darkGray'
-                              ">
-                              {{ get12HourTimeStringFromString(timeSlot.time) }}
-                            </v-card-subtitle>
-                          </v-col>
-                        </v-row>
-                      </v-card>
-                    </v-col>
-                  </v-row>
+                  <v-hover
+                    v-for="[i, timeSlot] of availableTimeslots.entries()">
+                    <template v-slot:default="{ isHovering, props }">
+                      <v-row v-bind="props" class="mx-0 px-0 pb-2 my-0">
+                        <v-col class="pa-0 mx-0">
+                          <v-card
+                            flat
+                            class="my-0 py-0"
+                            :disabled="
+                              this.availableTimeslotsHoverData[i] != null
+                            "
+                            v-if="isTimeslotAvailable(timeSlot)"
+                            :class="[
+                              this.availableTimeslotsHoverData[i] != null
+                                ? 'disabledListItem'
+                                : selectedTimeslot.id === timeSlot.id
+                                ? 'selectedListItem'
+                                : 'unSelectedListItem',
+                              isHovering && this.availableTimeslotsHoverData[i]
+                                ? 'topBorderCurve'
+                                : 'fullBorderCurve',
+                              this.availableTimeslotsHoverData[i] != null
+                                ? 'bg-lightGray'
+                                : 'unSelectedListItem',
+                            ]"
+                            @click="setSelectedTimeslot(timeSlot)"
+                            :key="timeSlot">
+                            <v-row class="py-2">
+                              <v-col class="">
+                                <v-card-subtitle
+                                  class="font-weight-bold"
+                                  :class="
+                                    selectedTimeslot.id === timeSlot.id
+                                      ? 'text-white'
+                                      : 'text-darkGray'
+                                  ">
+                                  {{
+                                    get12HourTimeStringFromString(timeSlot.time)
+                                  }}
+                                </v-card-subtitle>
+                              </v-col>
+                            </v-row>
+                          </v-card>
+                          <v-card
+                            flat
+                            class="bottomBorderCurve pa-2"
+                            v-if="
+                              isHovering && this.availableTimeslotsHoverData[i]
+                            ">
+                            <v-row>
+                              <v-col class="bg-lightGray">
+                                <v-row>
+                                  <v-col
+                                    cols="1"
+                                    class="pa-4"
+                                    align-self="center">
+                                    <v-avatar size="24">
+                                      <v-img
+                                        :src="
+                                          this.availableTimeslotsHoverData[i]
+                                            .picture
+                                        "></v-img>
+                                    </v-avatar>
+                                  </v-col>
+                                  <v-col
+                                    cols="auto"
+                                    class="pa-4"
+                                    align-self="center">
+                                    <v-card-text
+                                      class="text-body-1 font-weight-bold text-darkBlue pa-0">
+                                      {{
+                                        this.availableTimeslotsHoverData[i]
+                                          .fName +
+                                        " " +
+                                        this.availableTimeslotsHoverData[i]
+                                          .lName
+                                      }}
+                                    </v-card-text>
+                                  </v-col>
+                                  <v-spacer></v-spacer>
+                                  <v-col
+                                    cols="auto"
+                                    class="pa-4"
+                                    align-self="center">
+                                    <v-btn
+                                      flat
+                                      size="xs"
+                                      class="fullBorderCurve buttonGradient text-white font-weight-semi-bold pa-2 text-none"
+                                      @click="
+                                        sendChangeRequest(
+                                          timeSlot.time,
+                                          this.availableTimeslotsHoverData[i]
+                                            .email,
+                                          this.availableTimeslotsHoverData[i]
+                                            .fName
+                                        )
+                                      ">
+                                      Request Change
+                                    </v-btn>
+                                  </v-col>
+                                </v-row>
+                              </v-col>
+                            </v-row>
+                          </v-card>
+                        </v-col>
+                      </v-row>
+                    </template>
+                  </v-hover>
                 </v-sheet>
               </v-col>
             </v-row>
@@ -227,6 +304,7 @@
   import { mapStores } from "pinia";
   import { DateTimeMixin } from "../../mixins/DateTimeMixin.js";
   import EventRepertoireSelectionBody from "./EventRepertoireSelectionBody.vue";
+  import EmailingService from "../../services/emailing.js";
 
   export default {
     name: "EventSignupDialogBody",
@@ -253,7 +331,8 @@
         selectedInstrument: null,
         eventRepertoireSelection: false,
         instrumentRepertoireList: [],
-        availabileTimeslots: [],
+        availableTimeslots: [],
+        availableTimeslotsHoverData: [],
       };
     },
     mixins: [DateTimeMixin],
@@ -336,7 +415,7 @@
       }
     },
     methods: {
-      generateFilteredTimeslotList() {
+      async generateFilteredTimeslotList() {
         let interval = this.eventData.times[0].interval;
         let instructorTimes = [];
         for (let time of this.selectedInstructorAvailability) {
@@ -366,13 +445,13 @@
 
         if (instructorTimes.length === 0 && accompanistTimes.length > 0) {
           availableTimes = accompanistTimes;
-          this.availabileTimeslots = this.getTimeSlotsCombined(availableTimes);
+          this.availableTimeslots = this.getTimeSlotsCombined(availableTimes);
         } else if (
           accompanistTimes.length === 0 &&
           instructorTimes.length > 0
         ) {
           availableTimes = instructorTimes;
-          this.availabileTimeslots = this.getTimeSlotsCombined(availableTimes);
+          this.availableTimeslots = this.getTimeSlotsCombined(availableTimes);
         } else if (accompanistTimes.length > 0 && instructorTimes.length > 0) {
           for (let time of times) {
             if (
@@ -393,18 +472,25 @@
               }
             }
           }
-          this.availabileTimeslots = this.getTimeSlotsCombined(availableTimes);
+          this.availableTimeslots = this.getTimeSlotsCombined(availableTimes);
         } else if (
           accompanistTimes.length === 0 &&
           instructorTimes.length === 0
         ) {
-          this.availabileTimeslots = this.timeslots;
+          this.availableTimeslots = this.timeslots;
+        }
+
+        this.availableTimeslotsHoverData = [];
+        for (let timeslot of this.availableTimeslots) {
+          this.availableTimeslotsHoverData.push(
+            await this.generateTimeslotHoverData(timeslot.time)
+          );
         }
       },
       isTimeslotAvailable(timeslot) {
-        if (this.availabileTimeslots.length > 0) {
+        if (this.availableTimeslots.length > 0) {
           let isAvailable = false;
-          this.availabileTimeslots.find((ts) => ts.time === timeslot.time)
+          this.availableTimeslots.find((ts) => ts.time === timeslot.time)
             ? (isAvailable = true)
             : (isAvailable = false);
           return isAvailable;
@@ -491,6 +577,43 @@
           this.$emit("regenerateSignups");
           this.closeDialog();
         }
+      },
+      async generateTimeslotHoverData(timeslot) {
+        let signup = this.eventData.signups.filter(
+          (s) => s.timeslot === timeslot
+        );
+
+        signup.length > 0 ? (signup = signup[0]) : (signup = null);
+
+        if (signup) {
+          let userInfo = await this.userStore.getUserInfoForStudentId(
+            signup.studentId
+          );
+          return userInfo;
+        } else {
+          return null;
+        }
+      },
+      async sendChangeRequest(timeslot, email, name) {
+        const emailData = {
+          changerEmail: email,
+          requesterEmail: this.userStore.userInfo.email,
+          requesterName:
+            this.userStore.userInfo.fName + " " + this.userStore.userInfo.lName,
+          timeslot: this.get12HourTimeStringFromString(timeslot),
+          date: this.formatDate(this.eventData.date),
+          eventTitle: this.eventData.title,
+          userId: this.userStore.userInfo.userId,
+        };
+        await EmailingService.sendChangeRequest(emailData)
+          .then(() => {})
+          .catch((e) => {
+            // console.log(e);
+          });
+
+        // CHANGE THIS LATER AFTER FIX WITH ERROR
+        alert("Request sent to " + name + ", please check back later.");
+        this.closeDialog();
       },
     },
   };

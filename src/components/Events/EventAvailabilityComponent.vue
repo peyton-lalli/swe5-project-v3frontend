@@ -64,7 +64,6 @@
     data() {
       return {
         editDialog: false,
-        eventData: [],
       };
     },
     mixins: [DateTimeMixin],
@@ -73,9 +72,6 @@
     },
     computed: {
       ...mapStores(useEventsStore, useUserStore),
-    },
-    mounted() {
-      console.log(this.eventData);
     },
     methods: {
       closeEventDialog(val) {

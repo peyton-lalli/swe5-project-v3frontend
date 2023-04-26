@@ -2,14 +2,14 @@
   <v-container fluid class="studentComponent pa-0">
     <v-card class="mainCardBorder mb-4 pa-2">
       <v-card-text class="pt-0">
-        <v-row justify="left" class="mt-0 flex-nowrap">
+        <v-row class="mt-0 flex-nowrap">
           <v-col cols="1" align-self="center" class="pa-0">
             <v-avatar class="bg-darkBlue" size="64">
               <v-img :src="student.picture"></v-img>
             </v-avatar>
           </v-col>
           <v-spacer cols="1"></v-spacer>
-          <v-col cols="9" class="pa-0">
+          <v-col cols="10" class="pa-0">
             <v-card-title class="py-0 font-weight-bold text-darkGray">
               {{ student.fName + " " + student.lName }}
             </v-card-title>
@@ -21,14 +21,16 @@
               Vocal Level: {{ student.level }}
             </v-card-subtitle>
           </v-col>
-          <v-col cols="auto" align-self="center" justify="left">
+          <v-spacer cols="auto"></v-spacer>
+          <!-- Commenting out until functionality is available -->
+          <!-- <v-col cols="auto" align-self="center">
             <v-btn color="transparent" class="buttonGradient" rounded flat>
               <v-icon size="x-large">
                 <font-awesome-icon
                   icon="fa-solid fa-caret-down"
                   class="text-white" /> </v-icon
             ></v-btn>
-          </v-col>
+          </v-col> -->
         </v-row>
       </v-card-text>
     </v-card>
@@ -47,7 +49,7 @@
     },
     props: {
       student: {
-        type: [Array],
+        type: [Object],
         default() {
           return {};
         },
@@ -55,9 +57,6 @@
     },
     computed: {
       ...mapStores(useUserStore),
-    },
-    mounted() {
-      console.log(this.student);
     },
     methods: {},
   };

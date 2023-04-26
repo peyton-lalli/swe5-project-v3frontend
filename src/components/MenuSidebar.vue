@@ -60,7 +60,9 @@
 
       <v-spacer></v-spacer>
       <!-- Repertoire -->
-      <v-row class="pb-12">
+      <v-row
+        class="pb-12"
+        v-if="this.userStore.userInfo.roles.default.roleId === 1">
         <v-col>
           <v-tooltip text="Repertoire">
             <template v-slot:activator="{ props }">
@@ -83,7 +85,7 @@
 
       <v-spacer></v-spacer>
       <!-- Critiques -->
-      <v-row>
+      <v-row v-if="this.userStore.userInfo.roles.default.roleId === 1">
         <v-col>
           <v-tooltip text="Critiques">
             <template v-slot:activator="{ props }">

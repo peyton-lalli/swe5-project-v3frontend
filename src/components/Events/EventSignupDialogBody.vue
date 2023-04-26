@@ -165,12 +165,17 @@
                             :disabled="timeSlot.hoverData != null"
                             v-if="isTimeslotAvailable(timeSlot)"
                             :class="[
-                              timeSlot.hoverData != null
+                              timeSlot.hoverData != null &&
+                              timeSlot.hoverData.userId !=
+                                this.userStore.userInfo.userId
                                 ? 'disabledListItem'
                                 : selectedTimeslot.id === timeSlot.id
                                 ? 'selectedListItem'
                                 : 'unSelectedListItem',
-                              isHovering && timeSlot.hoverData
+                              isHovering &&
+                              timeSlot.hoverData &&
+                              timeSlot.hoverData.userId !=
+                                this.userStore.userInfo.userId
                                 ? 'topBorderCurve'
                                 : 'fullBorderCurve',
                               timeSlot.hoverData != null
@@ -198,7 +203,12 @@
                           <v-card
                             flat
                             class="bottomBorderCurve pa-2"
-                            v-if="isHovering && timeSlot.hoverData">
+                            v-if="
+                              isHovering &&
+                              timeSlot.hoverData &&
+                              timeSlot.hoverData.userId !=
+                                this.userStore.userInfo.userId
+                            ">
                             <v-row>
                               <v-col class="bg-lightGray">
                                 <v-row>

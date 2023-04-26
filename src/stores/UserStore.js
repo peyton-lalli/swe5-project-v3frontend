@@ -449,5 +449,17 @@ export const useUserStore = defineStore("user", {
           });
       }
     },
+    async getUserInfoForStudentId(studentId) {
+      let info = {};
+      await StudentsDataService.getUserInfo(studentId)
+        .then((response) => {
+          info = response.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      return info;
+    },
   },
 });

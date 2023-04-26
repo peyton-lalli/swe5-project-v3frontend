@@ -265,7 +265,7 @@
         elevation="0"
         class="text-none buttonCancel ml-auto text-white font-weight-bold buttonBorder"
         @click="closeCritiqueEditDialog()">
-        Close
+        Cancel
       </v-btn>
       <v-btn
         elevation="0"

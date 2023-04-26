@@ -30,7 +30,7 @@
         <v-btn
           rounded="lg"
           elevation="0"
-          class="text-none buttonGradient ml-auto text-white font-weight-bold"
+          class="text-none buttonCancel ml-auto text-white font-weight-bold"
           @click="closeViewAllDialog()">
           Close
         </v-btn>

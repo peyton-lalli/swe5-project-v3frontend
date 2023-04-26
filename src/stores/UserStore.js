@@ -294,7 +294,7 @@ export const useUserStore = defineStore("user", {
       let composer = {};
       await ComposerDataService.getId(id)
         .then((response) => {
-          composer = response.data;
+          composer = response.data.Composers[0];
         })
         .catch((e) => {
           console.log(e);
@@ -318,10 +318,10 @@ export const useUserStore = defineStore("user", {
       let composerItem = {
         composerId: data.composerId,
         name: composerInfo.Composers[0].name,
-        birthyear: composerInfo.Composers[0].birthyear,
-        deathyear: composerInfo.Composers[0].deathyear,
-        createdAt: composerInfo.Composers[0].createdAt,
-        updatedAt: composerInfo.Composers[0].updatedAt,
+        birthyear: composerInfo.birthyear,
+        deathyear: composerInfo.deathyear,
+        createdAt: composerInfo.createdAt,
+        updatedAt: composerInfo.updatedAt,
       };
       pieceInfo.composer = {
         ...composerItem,
@@ -337,8 +337,7 @@ export const useUserStore = defineStore("user", {
       await PieceDataService.update(id, data).catch((e) => {
         console.log(e);
       });
-      let composerInfo = await this.getComposerInfo(data.composerId)
-        .Composer[0];
+      let composerInfo = await this.getComposerInfo(data.composerId);
       delete pieceInfo.composerId;
       pieceInfo.pieceId = id;
       delete pieceInfo.id;
@@ -349,6 +348,7 @@ export const useUserStore = defineStore("user", {
         deathyear: composerInfo.deathyear,
         createdAt: composerInfo.createdAt,
         updatedAt: composerInfo.updatedAt,
+        picture: composerInfo.picture,
       };
       pieceInfo.composer = {
         ...composerItem,
@@ -358,6 +358,7 @@ export const useUserStore = defineStore("user", {
           (repertoire) => repertoire.repertoireId === data.repertoireId
         )[0]
         .pieces.findIndex((piece) => piece.pieceId === id);
+
       this.userRoleInfo.repertoires.filter(
         (repertoire) => repertoire.repertoireId === data.repertoireId
       )[0].pieces[indexPiece] = pieceInfo;
@@ -439,7 +440,6 @@ export const useUserStore = defineStore("user", {
       if (this.userInfo.roles.default.roleId === 1) {
         await StudentsDataService.update(id, user)
           .then(() => {
-            console.log(this.userRoleInfo);
             this.userRoleInfo.major = user.major;
             this.userRoleInfo.classification = user.classification;
             this.userRoleInfo.semesters = user.semesters;

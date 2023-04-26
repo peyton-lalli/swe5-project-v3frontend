@@ -40,7 +40,7 @@
                 <v-col cols="2">
                   <v-btn
                     rounded="lg"
-                    class="mr-3 mainBlur buttonCancel text-none font-weight-bold"
+                    class="mr-3 mainBlur buttonDelete text-none font-weight-bold"
                     @click="removeAvailabilitySlot(index)">
                     Delete
                   </v-btn>

@@ -285,6 +285,11 @@
 }
 
 .buttonCancel {
+  background-color: #898989 !important;
+  color: white !important;
+}
+
+.buttonDelete {
   background-color: #da9b9b !important;
   color: white !important;
 }
